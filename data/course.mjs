@@ -16,7 +16,7 @@
  */
 
 export const META = {
-  "version": "v1.0",
+  "version": "v1.0.0",
   "date": "2026-10-31",
   "title": "从 0 到上线：网站建设实训课",
   "basis": "素材基准：llc-design-tool（构建型单页应用，CI 推送）与 wx-seastar（零构建多页站 + 内容后台）",
