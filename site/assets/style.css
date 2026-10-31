@@ -379,11 +379,30 @@ code {
 .foot { border-top: 1px solid var(--surface-2); margin-top: 20px; padding: 44px 0 40px; }
 .foot .row { display: flex; gap: 40px; justify-content: space-between; flex-wrap: wrap; }
 .foot .brand b { font-size: 13.5px; }
-.foot .ver { font-family: var(--font-mono); font-size: 10px; color: var(--text-3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; }
 .foot .meta { margin-top: 12px; font-size: 12px; color: var(--text-3); line-height: 1.9; }
 .foot .links { display: flex; gap: 18px; font-size: 12.5px; flex-wrap: wrap; }
 .foot .links a { color: var(--text-2); }
 .foot .links a:hover { color: var(--brand-light); }
+
+/* 底部条：版权在左，「版本号 + GitHub」在右 —— 与站群页脚右下角同一位置、同一层级。
+   版本号用等宽字，GitHub 用「图标 + 文字」，都取次级灰，hover 才提亮。 */
+.foot .bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap;
+  margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--surface-2);
+  font-size: 12.5px; color: var(--text-3);
+}
+.foot .bar .meta-right { display: flex; align-items: center; gap: 20px; }
+.foot .bar .ver {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .02em;
+  color: var(--text-3); cursor: default;
+}
+.foot .bar .gh {
+  display: inline-flex; align-items: center; gap: 7px;
+  color: var(--text-3); transition: color .18s;
+}
+.foot .bar .gh:hover { color: var(--text-2); }
+.foot .bar .gh-i { width: 16px; height: 16px; display: block; flex: 0 0 auto; }
 /* 免责声明分两栏：一段是「免责」，一段是「版权」，正好一栏一段。
    单栏拉到 1180px 一行近 100 个汉字，读起来费劲；两栏各约 50 字，接近理想行宽。 */
 .foot .disc { margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--surface-2); font-size: 11.5px; color: var(--text-3); line-height: 1.85; }
@@ -628,6 +647,10 @@ ul.check input:checked + label { color: var(--text-3); text-decoration: line-thr
   .tl-body .t { order: 1; }
   .tl-body .d { order: 2; }
   .tl-body .o { order: 3; margin-left: 0; width: 100%; }
+
+  /* 窄屏上底部条挤成一行会很紧（版权和版本号只隔十几像素），改成两行左对齐 */
+  .foot .bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .foot .bar .meta-right { gap: 16px; }
 }
 
 /* ============================ 打印 / 离线 ============================ */
