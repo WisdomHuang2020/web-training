@@ -16,7 +16,7 @@
  */
 
 export const META = {
-  "version": "v1.5.0",
+  "version": "v1.5.1",
   "date": "2026-10-31",
   "title": "从 0 到上线：网站建设实训课",
   "basis": "素材基准：llc-design-tool（构建型单页应用，CI 推送）与 wx-seastar（零构建多页站 + 内容后台）",
@@ -2016,19 +2016,6 @@ export const SOP = {
           ]
         ]
       },
-      {
-        "type": "h",
-        "text": "8. 发布纪律"
-      },
-      {
-        "type": "steps",
-        "items": [
-          "改完先 git diff --numstat 核增删行数是否与你打算改的一致 —— 不一致说明混进了别人的改动，先恢复再重放",
-          "不要 git add -A；用 git commit 明确列出路径",
-          "权威判据是 git rev-parse HEAD 与 git ls-remote origin main 是否相等，不是终端里的那行“成功”",
-          "多台机器要各自更新：拉取式站点推送即生效，手工站不推就不会变 —— 别以为推了 GitHub 就等于上线了"
-        ]
-      }
     ]
   },
 };

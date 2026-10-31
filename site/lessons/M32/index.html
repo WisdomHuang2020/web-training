@@ -193,8 +193,6 @@ grep -c &quot;&lt;canvas&quot; dom.html      # ≥1 说明底图渲染了</pre>
           <thead><tr><th>现象</th><th>原因</th><th>判定 / 处理</th></tr></thead>
           <tbody><tr><td>高德标签不显示</td><td>key 缺失，或安全密钥 jscode 没填</td><td>页面逻辑：key 存在且 jscode 非空才显示</td></tr><tr><td>高德报 INVALID_USER_KEY（10001）</td><td>key 不存在 / 已删 / 未生效</td><td>REST 探测返回 10001 就是废 key，重建</td></tr><tr><td>高德 REST 返回 USERKEY_PLAT_NOMATCH（10009）</td><td>key 是「Web端」类型（这其实是好消息）</td><td>Web端 key 本来就不能调 REST，用它做内嵌即可</td></tr><tr><td>腾讯地图白屏、不报错</td><td>浏览器不支持 WebGL</td><td>代码已自动切高德；访客可开启「使用硬件加速」</td></tr><tr><td>同一份代码 A 域名正常、B 域名失败</td><td>B 域名下浏览器缓存了旧 key 文件</td><td>改文件名（v2/v3）穿透缓存，再让用户强刷</td></tr><tr><td>点百度外链后「没有定位」</td><td>链接是关键词搜索，按访客 IP 城市检索</td><td>换成带坐标的 marker 链接</td></tr><tr><td>改了 key 但页面没变</td><td>浏览器或代理缓存</td><td>先确认响应头，再考虑改名；服务器侧用 curl 复核实际内容</td></tr></tbody>
         </table></div>
-<h3>8. 发布纪律</h3>
-<ol class="steps"><li>改完先 git diff --numstat 核增删行数是否与你打算改的一致 —— 不一致说明混进了别人的改动，先恢复再重放</li><li>不要 git add -A；用 git commit 明确列出路径</li><li>权威判据是 git rev-parse HEAD 与 git ls-remote origin main 是否相等，不是终端里的那行“成功”</li><li>多台机器要各自更新：拉取式站点推送即生效，手工站不推就不会变 —— 别以为推了 GitHub 就等于上线了</li></ol>
       </section>
 
       <section class="lsec" id="s5">
@@ -322,7 +320,7 @@ grep -c &quot;&lt;canvas&quot; dom.html      # ≥1 说明底图渲染了</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.5.0</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.5.1</span>
         <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
       </span>
     </div>
