@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>从 0 到上线：网站建设实训课</title>
+<meta name="description" content="一条从本机到访客屏幕的完整链路：10 个阶段、31 讲，覆盖版本管理、服务器、备案、nginx、HTTPS、自动化部署、权限密钥、合规与维护。">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="从 0 到上线：网站建设实训课">
+<meta property="og:description" content="一条从本机到访客屏幕的完整链路：10 个阶段、31 讲，覆盖版本管理、服务器、备案、nginx、HTTPS、自动化部署、权限密钥、合规与维护。">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="home" data-total="31">
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="index.html" aria-current="page">总览</a>
+      <a href="#map">课程地图</a>
+      <a href="gates.html">门禁与红线</a>
+      <a href="glossary.html">术语表</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 31</span>
+    </span>
+  </div>
+</header>
+<a class="skip" href="#main">跳到正文</a>
+
+<main id="main">
+<section class="hero">
+  <div class="shell">
+    <div class="kicker">Power Knowledge · 实训课</div>
+    <h1>从 0 到上线<br><span class="grad">网站建设实训课</span></h1>
+    <p class="lead">一条<b>能照做跑通</b>的完整链路：本地 → 仓库 → 服务器 → 域名 → 备案 → 上线 → 维护。
+      及格线只有一条 —— <b>学完能独立把站从域名做到上线，并在出故障时知道先查哪一层</b>。</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="lessons/M01.html">从第 1 讲开始 <span class="ar">→</span></a>
+      <a class="btn btn-ghost" href="#map">看课程地图</a>
+    </div>
+    <div class="stats"><div><b>10</b><span>个阶段</span></div><div><b>31</b><span>讲</span></div><div><b>4</b><span>条学习路径</span></div><div><b>11</b><span>条通用红线</span></div></div>
+  </div>
+</section>
+
+<section class="sec" id="about">
+  <div class="shell">
+    <div class="sec-head"><span class="idx">01</span><h2>这门课是什么 / 不是什么</h2></div>
+    <p class="sec-desc">边界先划清：它不追求讲全，只保证讲到的部分能照着做、做完了能自己验证。</p>
+    <div class="compare">
+      <div class="yes">
+        <h3>是</h3>
+        <ul><li>一条<b>能照做跑通</b>的完整链路：本地 → 仓库 → 服务器 → 域名 → 备案 → 上线 → 维护</li>
+          <li>每个模块都有<b>能力目标、产出物、验收判据、练习</b></li>
+          <li>把<b>踩过的坑</b>当教材，每条坑都写清后果</li>
+          <li><b>两条路线对照</b>：构建型 / 零构建，失败模式正好相反</li></ul>
+      </div>
+      <div class="no">
+        <h3>不是</h3>
+        <ul><li>面面俱到的百科 —— 每个技术只讲到「够用且不出事」</li>
+          <li>「点这里点那里」的截图流水账</li>
+          <li>通用 AI 生成的模板教程</li>
+          <li>只讲一种做法，换个项目就废</li></ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;padding:4px 0">
+      <div class="deflist">
+        <div><span>读者</span><p>能装软件、会看命令行输出即可；不要求会写代码</p></div>
+        <div><span>设备</span><p>按 Windows + Git Bash 讲，坑位也是这个环境的</p></div>
+        <div><span>账号</span><p>GitHub、云厂商、域名注册（建议域名与服务器同一家买）</p></div>
+        <div><span>预算</span><p>域名数十元/年 + 轻量云数十至百元/月 + 证书免费。价格随活动波动，以官网为准，本课不给具体金额</p></div>
+        <div><span>心理</span><p>备案是唯一无法用技术绕过的时间成本，必须提前排进计划</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="routes">
+  <div class="shell">
+    <div class="sec-head"><span class="idx">02</span><h2>两条技术路线</h2></div>
+    <p class="sec-desc">本站所有模块都同时覆盖这两条路。<b>为什么两条都讲</b>：它们的失败模式完全相反 —— 只学一条，遇到另一类站就会用错排障方向。</p>
+    <div class="routes">
+      <div class="route build">
+        <h3>构建型 · 单页应用</h3>
+        <div class="sub">llc-design-tool</div>
+        <dl><dt>本机</dt><dd>需要构建（tsc + vite + 后处理）</dd><dt>上线</dt><dd>Actions 构建后 SSH 推送到服务器</dd><dt>延迟</dt><dd>约 4~5 分钟（含构建与传输）</dd><dt>失败主因</dt><dd>runner 到服务器链路不稳</dd><dt>适合</dt><dd>有交互、有计算、组件多</dd></dl>
+      </div>
+      <div class="route zero">
+        <h3>零构建 · 多页站</h3>
+        <div class="sub">wx-seastar</div>
+        <dl><dt>本机</dt><dd>仓库根目录就是发布产物</dd><dt>上线</dt><dd>服务器定时自己拉取发布</dd><dt>延迟</dt><dd>≤2 分钟（巡检周期，不是端到端实测）</dd><dt>失败主因</dt><dd>白名单与实际文件不同步</dd><dt>适合</dt><dd>官网、介绍页、内容站</dd></dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="map">
+  <div class="shell">
+    <div class="sec-head"><span class="idx">03</span><h2>课程地图</h2><span class="note">10 阶段 · 31 讲</span></div>
+    <p class="sec-desc">每讲都有：能力目标 → 要讲清的事 → 照着做的步骤 → 产出物与验收判据 → 练习 → 踩坑 → 自检表。</p>
+    <div class="filters">
+      <button class="fbtn" type="button" data-path="ALL" aria-pressed="true">全部<span class="n">31</span></button>
+      <button class="fbtn qq" type="button" data-path="Q" aria-pressed="false">最短闭环<span class="n">7</span></button>
+      <button class="fbtn" type="button" data-path="A" aria-pressed="false">A 最小可用站<span class="n">19</span></button>
+      <button class="fbtn" type="button" data-path="B" aria-pressed="false">B 工程化站<span class="n">28</span></button>
+      <button class="fbtn" type="button" data-path="C" aria-pressed="false">C 带数据与后台<span class="n">31</span></button>
+      <input class="search" id="q" type="search" placeholder="搜模块、关键词…" aria-label="搜索模块">
+    </div>
+    <p class="fhint" id="fhint"></p>
+    <div id="map-list">
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S0</span>
+        <h3>起手式</h3>
+        <span class="cnt" data-visible>3 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M01.html" data-mod="M01" data-p="Q A B C" data-kw="全景地图与路线选型 一个网站由哪几件东西组成，我该走哪条路 独立写出自己站点的《方案卡》，并说清失败时先查哪一层 五件套：域名 / 解析 / 备案 / 服务器 / 程序 两条路线对比与选择依据 「谁的机器在干活」决定排障方向 一页《站点方案卡》：站点类型、路线、域名、服务器规格、是否需要数据库 拿一张纸画出你的站从你电脑到访客屏幕的完整路径，每一步标出「这是谁的机器」。">
+        <span class="no">M01 · 01/31</span>
+        <h4>全景地图与路线选型</h4>
+        <p>一个网站由哪几件东西组成，我该走哪条路</p>
+        <span class="tags"><i class="q">Q</i><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M02.html" data-mod="M02" data-p="A B C" data-kw="WorkBuddy 实操底座 怎么让它真的干活，而又不失控 指挥它完成一次改动，并能自己证明改动真的发生了 工作区就是项目边界；能读文件和能跑命令是两种权限，要分清 三条纪律：先只读（让它先复述现状）→ 改前确认（说清改哪几处）→ 每步回读（自己看一眼结果） 识别「假完成」：看 diff、看构建、看页面，三种验证缺一不可 技能与记忆让它记住项目规矩，不必每次重讲；MCP 把外部系统接成它能调的工具 一次可复述的完整改动记录（改了什么、怎么验的） 让它改掉首页一句文案，然后用三种方式（diff / 构建 / 页面）证明它真的改了。">
+        <span class="no">M02 · 02/31</span>
+        <h4>WorkBuddy 实操底座</h4>
+        <p>怎么让它真的干活，而又不失控</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M03.html" data-mod="M03" data-p="A B C" data-kw="本地环境与网络通道 GitHub 访问不稳时，这台机器到底能不能推代码 在访问不稳的网络里 10 分钟内给出「能推 / 只能读 / 都不行」的结论 Node / Python / Git 的版本与 PATH 优先级 三条通道按稳定性排序：SSH:22 最稳 → ssh.github.com:443 备用 → HTTPS:443 最不稳 先测通道再谈报错：443 能通不等于能推，判据是 push --dry-run 的退出码 代理变量 http_proxy / https_proxy 如何影响 git 与 curl 《本机通道体检报告》 分别用 HTTPS、SSH:22、ssh.github.com:443 各推一次空提交，记录三条通道的成败与耗时，排出你自己的可用顺序。">
+        <span class="no">M03 · 03/31</span>
+        <h4>本地环境与网络通道</h4>
+        <p>GitHub 访问不稳时，这台机器到底能不能推代码</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S1</span>
+        <h3>版本管理</h3>
+        <span class="cnt" data-visible>4 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M04.html" data-mod="M04" data-p="A B C" data-kw="Git 心智模型与提交纪律 提交是存档点，不是上传按钮 把一次混杂的改动拆成干净的一到两个提交，并能解释「为什么提交完别人还看不见」 心智模型＝你脑子里对「这工具怎么运作」的简化图；模型错了，命令背得再熟也会乱试 四层搬运：工作区（改了）→ 暂存区（这次记哪几处）→ 本地仓库（快照）→ 远端（别人可见） 一次 commit ＝ 给整个仓库拍一张带说明的快照，不是一份差异补丁；push 才同步到远端 一次提交只做一件事；提交信息写「为什么」；分步 add → commit → push，禁用一条龙脚本 3~5 个语义化提交组成的干净历史 把一次「改文案 + 改样式」混在一起的改动，拆成两个独立提交。">
+        <span class="no">M04 · 04/31</span>
+        <h4>Git 心智模型与提交纪律</h4>
+        <p>提交是存档点，不是上传按钮</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M05.html" data-mod="M05" data-p="A B C" data-kw="GitHub 仓库与 SSH 打通 用密钥认证取代密码 在一台新机器上从零配好推送权限 账号 2FA；ed25519 密钥与 ssh-agent 账号密钥 vs Deploy Key（只读）的分工 remote 用 SSH；.gitignore 与仓库可见性 一个可推送的空仓库 删掉本地密钥重新生成一次，把整套授权流程走完。">
+        <span class="no">M05 · 05/31</span>
+        <h4>GitHub 仓库与 SSH 打通</h4>
+        <p>用密钥认证取代密码</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M06.html" data-mod="M06" data-p="B C" data-kw="版本号单一来源与发版 版本号只许有一个源头 独立完成一次发版，并自查版本号四处一致 版本号只在 package.json 一处，构建时注入前端 annotated tag 与自动创建 Release 发版三部曲：推 main → 打 tag → push tag 一次完整发版：tag + Release + 线上可查版本 故意漏掉 push tag，观察会发生什么——答案是没有任何报错。">
+        <span class="no">M06 · 06/31</span>
+        <h4>版本号单一来源与发版</h4>
+        <p>版本号只许有一个源头</p>
+        <span class="tags"><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M07.html" data-mod="M07" data-p="B C" data-kw="回读纪律与事故处置 怎么确认「真的上线了」 10 分钟内判断一次改动到底上线了没 每步回读 git 状态 见到非自己的提交先停先报，不 revert 不 reset 回滚走备份或快照；结论必须写「已上线 / 未上线」 一份事故处置 SOP 翻一次历史发布，只凭线上与仓库证据判断它到底上线没有。">
+        <span class="no">M07 · 07/31</span>
+        <h4>回读纪律与事故处置</h4>
+        <p>怎么确认「真的上线了」</p>
+        <span class="tags"><i class="">B</i><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S2</span>
+        <h3>买与备</h3>
+        <span class="cnt" data-visible>6 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M08.html" data-mod="M08" data-p="Q A B C" data-kw="云服务器选购（腾讯云轻量） 在腾讯云轻量买什么规格、怎么留后路 独立买一台轻量服务器，并把它变成随时可回滚的状态 只讲腾讯云轻量应用服务器，不横向对比其他厂商（避免截图与口径分叉） 规格起步 2C2G；带宽按峰值或按流量两种计费；地域影响备案接入 买完先做两件事：记录实例 ID 与公网 IP，打一张初始快照 先配自动快照策略，再看到期与续费提醒 一台可登录机器 + 一张可用快照 故意改坏一个配置，再从快照恢复，记录恢复耗时。">
+        <span class="no">M08 · 08/31</span>
+        <h4>云服务器选购（腾讯云轻量）</h4>
+        <p>在腾讯云轻量买什么规格、怎么留后路</p>
+        <span class="tags"><i class="q">Q</i><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M09.html" data-mod="M09" data-p="A B C" data-kw="首次登录与加固 把门锁好，再搬东西进去 把一台裸机加固到只剩三个端口对外开放 密钥登录；禁 root 密码登录 安全组只开 22 / 80 / 443 时区、swap、运维用户 + sudo 加固后的机器 在保持第二个会话不断开的前提下改 sshd，验证自己没被锁在门外。">
+        <span class="no">M09 · 09/31</span>
+        <h4>首次登录与加固</h4>
+        <p>把门锁好，再搬东西进去</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M10.html" data-mod="M10" data-p="Q A B C" data-kw="域名购买与解析 域名、DNS、主域规范 把一个域名正确指向服务器，并选定唯一主域 后缀选择与实名认证 A / CNAME / TTL 与生效时间 主域唯一：裸域与 www 二选一，另一个做 301 域名 + 一张解析记录表 把 www 与裸域都配上，再做一条 301，观察跳转方向。">
+        <span class="no">M10 · 10/31</span>
+        <h4>域名购买与解析</h4>
+        <p>域名、DNS、主域规范</p>
+        <span class="tags"><i class="q">Q</i><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M11.html" data-mod="M11" data-p="Q A B C" data-kw="ICP 备案 境内服务器绕不过的门 独立走完备案流程，并知道每一步会卡在哪 主体备案 vs 网站备案 必须经接入商提交；服务器需实名且在本账号下 幕布或人脸核验；管局审核周期；备案号展示规范 ICP 备案号 准备一套备案材料，列出被驳回的三个最常见原因。">
+        <span class="no">M11 · 11/31</span>
+        <h4>ICP 备案</h4>
+        <p>境内服务器绕不过的门</p>
+        <span class="tags"><i class="q">Q</i><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M12.html" data-mod="M12" data-p="A B C" data-kw="公安备案 上线之后 30 日内必须做 在时限内完成公安备案并正确悬挂网站标识 全国互联网安全管理服务平台 需先有 ICP 号 网站标识码挂页脚；信息变更要更新 公安备案号 + 网站标识 从 ICP 号出发，把公安备案要填的字段列成一张表。">
+        <span class="no">M12 · 12/31</span>
+        <h4>公安备案</h4>
+        <p>上线之后 30 日内必须做</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M13.html" data-mod="M13" data-p="A B C" data-kw="站点合规四件套 隐私政策、使用条款、网站地图、Cookie，一个都不能少 在自己的站上把四件套建齐、挂到页脚，并说清每一份是给谁看的 隐私政策：收集什么、为什么收、存多久、谁能看、怎么删——有表单就必须有 使用条款：内容版权归谁、允许怎么用、免责与责任边界、争议怎么处理 网站地图：给人看的人读版（sitemap.html）＋ 给爬虫看的 sitemap.xml ＋ robots.txt 指路 Cookie 与同意：分类（必要／统计／营销）、默认只开必要、可撤回；非必要脚本在同意前不加载 页脚四件套是最低配置：四项缺一项，就等于没告知；链接要能点开、内容要和本站实际对得上 同意前不得加载统计类脚本——先加载再补弹窗，等于「未告知即收集」，是最常见的违规 四个页脚链接 + cookie 分类清单 + 一份「收集项／用途／保存期」信息表 把四个链接挂到页脚逐个点开；再关掉 cookie 同意，用开发者工具确认统计脚本没有被加载。">
+        <span class="no">M13 · 13/31</span>
+        <h4>站点合规四件套</h4>
+        <p>隐私政策、使用条款、网站地图、Cookie，一个都不能少</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S3</span>
+        <h3>上线</h3>
+        <span class="cnt" data-visible>4 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M14.html" data-mod="M14" data-p="A B C" data-kw="服务器环境与目录规划 多站共存的目录与属主 在一台已有多个站的服务器上安全地新增一个站 nginx 安装与 /var/www/站点 目录规划 属主归 nginx 运行用户 sites-available / sites-enabled；日志路径与切分 站点清单以服务器 sites-enabled 现值为准，不照抄任何文档 目录结构 + 一份当前站点清单 在不动其他站的前提下加一个只有一页的站，再删掉，确认老站无变化。">
+        <span class="no">M14 · 14/31</span>
+        <h4>服务器环境与目录规划</h4>
+        <p>多站共存的目录与属主</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M15.html" data-mod="M15" data-p="Q A B C" data-kw="nginx 配置实战 单页站和多页站的两份模板 不看模板写出正确的两种 server 块，并说清差别 server 块最小骨架 单页站回落 index.html；多页站必须真 404 gzip、静态缓存头、裸域 301 502 / 403 / 404 各自的归因 两份可复用模板（单页 / 多页） 把同一个目录先配成单页模式再配成多页模式，用 curl 对比不存在的路径分别返回什么。">
+        <span class="no">M15 · 15/31</span>
+        <h4>nginx 配置实战</h4>
+        <p>单页站和多页站的两份模板</p>
+        <span class="tags"><i class="q">Q</i><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M16.html" data-mod="M16" data-p="Q A B C" data-kw="HTTPS 与证书 免费证书 + 自动续期 让一个域名稳定跑在 https 上，并知道它什么时候过期 免费 DV 证书；DNS-01 与 HTTP-01 的区别 自动续期与到期监控 强制 301 到 https；HSTS 的副作用 全站 https 用 --resolve 直连 IP 访问，分辨问题是 DNS 还是证书。">
+        <span class="no">M16 · 16/31</span>
+        <h4>HTTPS 与证书</h4>
+        <p>免费证书 + 自动续期</p>
+        <span class="tags"><i class="q">Q</i><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M17.html" data-mod="M17" data-p="Q A B C" data-kw="首次手工上线 先手动跑通，再谈自动化 把本地文件安全送到服务器，并证明它生效了 rsync 或 tar over ssh；白名单部署 --no-same-owner 再 chown，别把本地 uid 带到线上 不部署 .md 与 git 元数据 三层核验：状态码 / 线上内容 / 服务器落盘哨兵 第一个真实可访问的站点 故意传一个 .md 上去确认不可访问；再故意传错属主，观察 403。">
+        <span class="no">M17 · 17/31</span>
+        <h4>首次手工上线</h4>
+        <p>先手动跑通，再谈自动化</p>
+        <span class="tags"><i class="q">Q</i><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S4</span>
+        <h3>自动化</h3>
+        <span class="cnt" data-visible>2 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M18.html" data-mod="M18" data-p="B C" data-kw="CI 自动部署与测试环境 push 即上线，但要能排障 写出一条可排障的流水线，并知道它什么时候在骗你 workflow 骨架与 Secrets 命名 构建 + 传输步骤；降级护栏（产物版本低于线上即中止） 测试环境：先用子域或端口跑预发布，验过再切主域 步骤级排障，不看 run 的绿勾 一条可用流水线 + 一个预发布地址 故意把版本号改小再 push，观察降级护栏是否把你拦下。">
+        <span class="no">M18 · 18/31</span>
+        <h4>CI 自动部署与测试环境</h4>
+        <p>push 即上线，但要能排障</p>
+        <span class="tags"><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M19.html" data-mod="M19" data-p="B C" data-kw="拉取式部署 runner 不靠谱时的兜底 在 CI 完全不可用时照常上线 为什么放弃 runner 直推 systemd timer + 部署脚本；Deploy Key 只读 已部署提交记录；journalctl 排障；手动触发不等待 两条通道并存：快通道 + 兜底通道 断掉 CI，只用服务器侧通道发一次版。">
+        <span class="no">M19 · 19/31</span>
+        <h4>拉取式部署</h4>
+        <p>runner 不靠谱时的兜底</p>
+        <span class="tags"><i class="">B</i><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S5</span>
+        <h3>后台 · 数据 · 权限 · 密钥 · 打通</h3>
+        <span class="cnt" data-visible>5 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M20.html" data-mod="M20" data-p="C" data-kw="后台形态选择 静态站的边界在哪 判断自己的需求该不该上后台，并画出数据流向 五种形态：纯静态 / 静态+本地存储 / 表单外挂 / 轻量后端+数据库 / 云托管 判据：要不要多人同时写、要不要持久化、要不要登录、维护成本 静态站的真实边界：数据只存在访客浏览器里 《数据流向图》+ 选型结论 拿自己的需求走一遍这五问，写下结论以及「不选其它四种的理由」。">
+        <span class="no">M20 · 20/31</span>
+        <h4>后台形态选择</h4>
+        <p>静态站的边界在哪</p>
+        <span class="tags"><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M21.html" data-mod="M21" data-p="C" data-kw="数据库 什么情况才值得上库 建库建表，并且能从备份把它恢复回来 云数据库 vs 服务器自建；Node 内置 SQLite 这类零依赖方案也够用 账号最小权限；连接串管理 备份与恢复演练；表结构变更纪律 一次成功的「备份 → 恢复」演练 删掉一张表再恢复，记录耗时与丢了哪些数据。">
+        <span class="no">M21 · 21/31</span>
+        <h4>数据库</h4>
+        <p>什么情况才值得上库</p>
+        <span class="tags"><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M22.html" data-mod="M22" data-p="B C" data-kw="权限体系 谁能改什么 写出一张权限矩阵，并实际阻止一次越权 Linux 用户 / 组 / 文件权限位 nginx 运行用户不可写代码目录 sudo 白名单；GitHub 角色与分支保护；Deploy Key 只读 多站资源上限：磁盘、带宽、进程，一站被打爆不拖垮全机 一张权限矩阵表 建一个只能读代码目录的用户，验证它能读不能写。">
+        <span class="no">M22 · 22/31</span>
+        <h4>权限体系</h4>
+        <p>谁能改什么</p>
+        <span class="tags"><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M23.html" data-mod="M23" data-p="B C" data-kw="密钥管理 密钥分层、轮换、应急 15 分钟内完成一次密钥轮换 五类密钥：账号密钥 / 部署密钥 / CI Secrets / API Token / MCP 凭据 台账只记用途与日期，不记密钥本体 轮换周期与吊销流程；泄露应急五步 密钥台账（不含密钥本体） 换一把部署密钥，走完「生成 → 部署 → 验证 → 吊销旧的」全流程。">
+        <span class="no">M23 · 23/31</span>
+        <h4>密钥管理</h4>
+        <p>密钥分层、轮换、应急</p>
+        <span class="tags"><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M24.html" data-mod="M24" data-p="B C" data-kw="打通与连接 怎么让工具真的能操作服务器、仓库和外部系统 画出「谁能对什么做什么」的连接图，并把权限削到最小 三种打通：SSH（工具→服务器）、Deploy Key 与 Token（工具→仓库）、MCP（工具→外部服务） 分清「能读」与「能写」：先给只读，确实需要再放写权限 权限边界：部署密钥只能推代码、不能改 nginx；运维账号不做日常部署 凭据放在环境变量或密钥库，不放代码、不进截图 一张连接图 + 一份权限边界表 给同一个仓库配一把只读 Deploy Key，验证它不能 push。">
+        <span class="no">M24 · 24/31</span>
+        <h4>打通与连接</h4>
+        <p>怎么让工具真的能操作服务器、仓库和外部系统</p>
+        <span class="tags"><i class="">B</i><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S6</span>
+        <h3>数据合规与风险</h3>
+        <span class="cnt" data-visible>2 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M25.html" data-mod="M25" data-p="A B C" data-kw="访问监控与日志 有人访问、有人攻击，你怎么知道 能看到「谁来了、看了什么、出没出异常」，并知道这些记录本身也是个人信息 三类监控：访问日志（nginx access.log）、可用性探活、业务统计（PV / UV / 来源） 日志至少记：时间、来源 IP、UA、请求路径、状态码、耗时；保留期按需要定，常见 6 个月起 告警要发到人能看到的地方：证书到期、磁盘满、5xx 突增、探活失败 日志与统计都在处理个人信息（IP 属于个人信息），必须写进隐私政策 一份监控清单 + 一条真能叫醒人的告警 给站点配一条探活告警，然后故意把 nginx 停掉，掐表看多久收到通知。">
+        <span class="no">M25 · 25/31</span>
+        <h4>访问监控与日志</h4>
+        <p>有人访问、有人攻击，你怎么知道</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M26.html" data-mod="M26" data-p="A B C" data-kw="隐私保护与脱敏 收来的信息，怎么用才不越线 画出「哪些字段进系统、谁能看、存多久、怎么删」，并把日志与截图里的敏感信息脱掉 最小必要：能不加的字段就不加；身份证、住址、与目的无关的字段一律不收集 脱敏三处：日志（IP 打掉末段、手机号中间四位）、截图（打码后再进文档与课件）、导出（给外部前先脱敏） 权限与留存：谁能看、看多久、到期怎么删；人员变动时权限要回收 法律风险三张网：个人信息保护法（告知同意、最小必要、泄露报告）、网络安全法（日志留存）、数据安全法（分类分级）；不满 14 周岁需监护人同意 字段清单（收集项 / 用途 / 保存期 / 可见角色）+ 一份脱敏规则 从服务器日志里抽 20 行，按规则把 IP 与 UA 脱敏，再逐行检查有没有漏。">
+        <span class="no">M26 · 26/31</span>
+        <h4>隐私保护与脱敏</h4>
+        <p>收来的信息，怎么用才不越线</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S7</span>
+        <h3>维护</h3>
+        <span class="cnt" data-visible>3 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M27.html" data-mod="M27" data-p="A B C" data-kw="日常巡检与资产台账 别靠「想起来才看」 写出一个体检脚本，让问题在你发现之前先被报出来 证书到期 / 磁盘 / 日志 / uptime / 版本哨兵 资产到期台账：域名、服务器、证书各自何时到期、谁负责续费 脚本退出码分三档：正常 / 告警 / 故障 体检脚本 + 每周巡检表 + 资产台账 故意把磁盘塞到 90%，看脚本会不会报。">
+        <span class="no">M27 · 27/31</span>
+        <h4>日常巡检与资产台账</h4>
+        <p>别靠「想起来才看」</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M28.html" data-mod="M28" data-p="B C" data-kw="备份 · 回滚 · 复盘 没演练过的备份不算备份 5 分钟内把站点回滚到上一个可用版本 快照 + 站点压缩包 + 保留份数 回滚演练 复盘模板：现象 / 时间线 / 根因 / 改动 / 防复发 一次真实回滚演练记录 部署一个坏版本，再回滚，全程掐表。">
+        <span class="no">M28 · 28/31</span>
+        <h4>备份 · 回滚 · 复盘</h4>
+        <p>没演练过的备份不算备份</p>
+        <span class="tags"><i class="">B</i><i class="">C</i></span>
+      </a>
+      <a class="mod" href="lessons/M29.html" data-mod="M29" data-p="A B C" data-kw="上线后 30 天 站上线了，然后呢 让「有没有人来」变成可观测的数字 站长验证与收录提交（百度、必应、谷歌各做一次） 统计代码及其合规：统计属个人信息处理，必须写进隐私政策与 cookie 说明 站点地图与 robots 由 M13 建好，这里只做提交与定期重提 错链与 404 定期清扫；「有没有人来」要变成可看的数字，而不是感觉 收录 + 统计 + 一周巡检表 提交 sitemap 后一周内，观察收录数与 404 数量变化。">
+        <span class="no">M29 · 29/31</span>
+        <h4>上线后 30 天</h4>
+        <p>站上线了，然后呢</p>
+        <span class="tags"><i class="">A</i><i class="">B</i><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S8</span>
+        <h3>综合</h3>
+        <span class="cnt" data-visible>1 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M30.html" data-mod="M30" data-p="B C" data-kw="两个样板站对照走查 同一目标，两种做法 照文档独立发布一次别人的站 构建型：CI 推送 + 版本哨兵 + 静态托管兜底 零构建：拉取式 + 单源清单 + 内容后台 四要素交接表：仓库 / 工作流 / 目标 / 验证 一页交接文档 只读文档、不看代码，把样板站发一次版。">
+        <span class="no">M30 · 30/31</span>
+        <h4>两个样板站对照走查</h4>
+        <p>同一目标，两种做法</p>
+        <span class="tags"><i class="">B</i><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-h">
+        <span class="sid">S9</span>
+        <h3>通知与触达</h3>
+        <span class="cnt" data-visible>1 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      <a class="mod" href="lessons/M31.html" data-mod="M31" data-p="C" data-kw="表单通知与邮件通道 留言进来了，怎么让它在 1 分钟内找到人 独立配通一条发信通道，并用四条证据证明它真的能送达 两个角色必须分开：收件人（谁该收到）在后台改、即时生效；发信账号（用谁的名义发）在服务器环境变量里 —— 凭据放进后台面板，等于把「冒充公司发信」的能力交给任何一个后台账号 客户端专用密码 ≠ 网页登录密码：账号开了「安全登录」后，用网页密码连 SMTP 一定失败 535 Authentication failed 是通用认证失败码，不能反推原因。判据是「账户安全」里那行按钮显示「已开启」还是「需先绑定微信」，不是报错码本身 改配置只替换 MAIL_* / SMTP_* 那几行，别整文件重写 —— 否则 SITE_NAME 这类含空格的值会被改坏；改前备份、改后重启并回读自检 验证要四条证据：后台状态灯、测试邮件、真实留言链路（含「点回复，收件人应是访客填的邮箱」）、日志里的 [mail] 已通知 N 位收件人 一条能送达的发信通道 + 一份「收件人 / 发信账号」职责边界说明 + 故障对照表 故意用网页登录密码去配 SMTP，先撞出一次 535；然后不看报错码，去「账户安全」看那行按钮的状态判断是哪种原因，再换成客户端专用密码修好。">
+        <span class="no">M31 · 31/31</span>
+        <h4>表单通知与邮件通道</h4>
+        <p>留言进来了，怎么让它在 1 分钟内找到人</p>
+        <span class="tags"><i class="">C</i></span>
+      </a>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="path">
+  <div class="shell">
+    <div class="sec-head"><span class="idx">04</span><h2>关键路径与四道门禁</h2></div>
+    <p class="sec-desc">这条线上有四个环节，<b>卡住时不是代码问题</b> —— 去改代码只会浪费时间。它们分别是备案、解析、证书与公安备案。</p>
+    <div class="card" style="padding:8px 22px">
+      <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">立项</span><span class="o">《站点方案卡》</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">本地环境与通道自检</span><span class="o">通道体检报告</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">建仓 · 首个提交</span><span class="o">可推送的空仓库</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">买服务器</span><span class="o">可用快照</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">买域名 + 实名</span><span class="o">解析记录表</span></div>
+    </div>
+    <div class="tl-item gate">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">门禁① ICP 备案</span><span class="o">备案号</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">服务器初始化</span><span class="o">环境自检通过</span></div>
+    </div>
+    <div class="tl-item gate">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">门禁② 解析生效</span><span class="o">dig 返回目标 IP</span></div>
+    </div>
+    <div class="tl-item gate">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">门禁③ 证书 + 强制 HTTPS</span><span class="o">全站 https</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">首次手工上线</span><span class="o">三层核验全过</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">自动化</span><span class="o">一条可用流水线</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">发版</span><span class="o">tag + Release</span></div>
+    </div>
+    <div class="tl-item gate">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">门禁④ 公安备案</span><span class="o">两个备案号</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+      <div class="tl-body"><span class="t">维护循环</span><span class="o">体检脚本</span></div>
+    </div>
+      </div>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-ghost" href="gates.html">四道门禁的归因表 + 十次破坏性演练 <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="paths">
+  <div class="shell">
+    <div class="sec-head"><span class="idx">05</span><h2>四条学习路径</h2><span class="note">按耐心排，不按知识结构排</span></div>
+    <p class="sec-desc">同一套 31 讲，按目标裁剪。<b>Q 是最短闭环</b>：先一个下午跑通一个能打开的站，拿到正反馈，再回头补工程化。</p>
+    <div class="paths">
+      <div class="path q">
+        <div class="ph">
+          <span class="key">Q</span>
+          <h3>最短闭环</h3>
+          <span class="num">7 讲</span>
+        </div>
+        <p>5 个动作、7 个模块，一个下午跑通一个能打开的站。先拿到正反馈，再回头补工程化。</p>
+        <div class="chips"><a href="lessons/M01.html">M01</a><a href="lessons/M08.html">M08</a><a href="lessons/M10.html">M10</a><a href="lessons/M11.html">M11</a><a href="lessons/M15.html">M15</a><a href="lessons/M16.html">M16</a><a href="lessons/M17.html">M17</a></div>
+      </div>
+      <div class="path ">
+        <div class="ph">
+          <span class="key">A</span>
+          <h3>最小可用站</h3>
+          <span class="num">19 讲</span>
+        </div>
+        <p>只把一个静态站挂上去，不折腾自动化。备案、解析、证书、nginx 一次学会。</p>
+        <div class="chips"><a href="lessons/M01.html">M01</a><a href="lessons/M02.html">M02</a><a href="lessons/M03.html">M03</a><a href="lessons/M04.html">M04</a><a href="lessons/M05.html">M05</a><a href="lessons/M08.html">M08</a><a href="lessons/M09.html">M09</a><a href="lessons/M10.html">M10</a><a href="lessons/M11.html">M11</a><a href="lessons/M12.html">M12</a><a href="lessons/M13.html">M13</a><a href="lessons/M14.html">M14</a><a href="lessons/M15.html">M15</a><a href="lessons/M16.html">M16</a><a href="lessons/M17.html">M17</a><a href="lessons/M25.html">M25</a><a href="lessons/M26.html">M26</a><a href="lessons/M27.html">M27</a><a href="lessons/M29.html">M29</a></div>
+      </div>
+      <div class="path ">
+        <div class="ph">
+          <span class="key">B</span>
+          <h3>工程化站</h3>
+          <span class="num">28 讲</span>
+        </div>
+        <p>要长期维护、要发版、要交接。加了版本管理、自动部署、权限与密钥、打通。</p>
+        <div class="chips"><a href="lessons/M01.html">M01</a><a href="lessons/M02.html">M02</a><a href="lessons/M03.html">M03</a><a href="lessons/M04.html">M04</a><a href="lessons/M05.html">M05</a><a href="lessons/M06.html">M06</a><a href="lessons/M07.html">M07</a><a href="lessons/M08.html">M08</a><a href="lessons/M09.html">M09</a><a href="lessons/M10.html">M10</a><a href="lessons/M11.html">M11</a><a href="lessons/M12.html">M12</a><a href="lessons/M13.html">M13</a><a href="lessons/M14.html">M14</a><a href="lessons/M15.html">M15</a><a href="lessons/M16.html">M16</a><a href="lessons/M17.html">M17</a><a href="lessons/M18.html">M18</a><a href="lessons/M19.html">M19</a><a href="lessons/M22.html">M22</a><a href="lessons/M23.html">M23</a><a href="lessons/M24.html">M24</a><a href="lessons/M25.html">M25</a><a href="lessons/M26.html">M26</a><a href="lessons/M27.html">M27</a><a href="lessons/M28.html">M28</a><a href="lessons/M29.html">M29</a><a href="lessons/M30.html">M30</a></div>
+      </div>
+      <div class="path ">
+        <div class="ph">
+          <span class="key">C</span>
+          <h3>带数据与后台</h3>
+          <span class="num">30 讲</span>
+        </div>
+        <p>需要表单入库、内容管理、登录。上线那套一次学会，后台只是多了一层数据。</p>
+        <div class="chips"><a href="lessons/M01.html">M01</a><a href="lessons/M02.html">M02</a><a href="lessons/M03.html">M03</a><a href="lessons/M04.html">M04</a><a href="lessons/M05.html">M05</a><a href="lessons/M06.html">M06</a><a href="lessons/M07.html">M07</a><a href="lessons/M08.html">M08</a><a href="lessons/M09.html">M09</a><a href="lessons/M10.html">M10</a><a href="lessons/M11.html">M11</a><a href="lessons/M12.html">M12</a><a href="lessons/M13.html">M13</a><a href="lessons/M14.html">M14</a><a href="lessons/M15.html">M15</a><a href="lessons/M16.html">M16</a><a href="lessons/M17.html">M17</a><a href="lessons/M18.html">M18</a><a href="lessons/M19.html">M19</a><a href="lessons/M20.html">M20</a><a href="lessons/M21.html">M21</a><a href="lessons/M22.html">M22</a><a href="lessons/M23.html">M23</a><a href="lessons/M24.html">M24</a><a href="lessons/M25.html">M25</a><a href="lessons/M26.html">M26</a><a href="lessons/M27.html">M27</a><a href="lessons/M28.html">M28</a><a href="lessons/M29.html">M29</a><a href="lessons/M30.html">M30</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="redlines">
+  <div class="shell">
+    <div class="sec-head"><span class="idx">06</span><h2>十一条通用红线</h2><span class="note">不分阶段，全程适用</span></div>
+    <p class="sec-desc">这些不是「最佳实践」，是底线。违反其中任何一条，出了问题都不该算意外。</p>
+    <ol class="redlines">
+      <li>改前先读，改后回读。不接受「应该改好了」。</li>
+      <li>一次只改一件事，一次只提交一件事。</li>
+      <li>密钥永不进仓库，永不出现在截图里。</li>
+      <li>生产目录只允许部署脚本写，人上服务器只读优先。</li>
+      <li>没演练过的备份，不算备份。</li>
+      <li>发布必须给「已上线 / 未上线」的结论，不拿绿勾当证据。</li>
+      <li>多站共存时，只动自己的 web 根目录。</li>
+      <li>权限最小化：能只读就别给写。</li>
+      <li>不确定就停下问，不猜、不编、不用「通常」糊过去。</li>
+      <li>任何「顺手优化」都要先回答：不改会怎样。</li>
+      <li>自造的词必须在使用处给定义，否则就是给别人留债。</li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="glossary">
+  <div class="shell">
+    <div class="sec-head"><span class="idx">07</span><h2>术语表</h2><span class="note">共 28 条</span></div>
+    <p class="sec-desc">自造的词必须在使用处给定义 —— 这是第 11 条红线。这里集中放一份，讲义页会各自列出本讲用到的术语。</p>
+    <div class="gloss">
+      <div><dt>构建型 / 零构建</dt><dd>构建型指源码要经过打包才能变成可发布的文件；零构建指仓库里的文件本身就是发布产物。</dd></div>
+      <div><dt>v1 / v2 后台</dt><dd>本项目自造的阶段叫法。v1 = 纯静态站；v2 = 加了内容管理后台（登录、数据库、上传）。不是技术名词。</dd></div>
+      <div><dt>哨兵文件</dt><dd>服务器上一个记录当前已部署版本的小文件。查线上到底跑的是哪一版，看它最准。</dd></div>
+      <div><dt>假绿</dt><dd>CI 显示成功，但关键步骤其实被跳过了。配置缺失时最容易出现。</dd></div>
+      <div><dt>降级护栏</dt><dd>上传前把本次产物版本与线上比对，产物更旧就中止，防止旧版本覆盖新版本。</dd></div>
+      <div><dt>三层核验</dt><dd>状态码 / 线上内容 / 服务器落盘哨兵。三层都过才算上线成功。</dd></div>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-ghost" href="glossary.html">全部 28 条术语 <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+          <span class="ver">v1.0</span>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 31 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="index.html">总览</a>
+          <a href="index.html#map">课程地图</a>
+          <a href="gates.html">门禁与红线</a>
+          <a href="glossary.html">术语表</a>
+          <a href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>
+        </div>
+      </div>
+    </div>
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M31 表单通知与邮件通道 · 从 0 到上线</title>
+<meta name="description" content="留言进来了，怎么让它在 1 分钟内找到人。学完能做到：独立配通一条发信通道，并用四条证据证明它真的能送达。产出物：一条能送达的发信通道 + 一份「收件人 / 发信账号」职责边界说明 + 故障对照表（S9 通知与触达）">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M31.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="M31 表单通知与邮件通道 · 从 0 到上线">
+<meta property="og:description" content="留言进来了，怎么让它在 1 分钟内找到人。学完能做到：独立配通一条发信通道，并用四条证据证明它真的能送达。产出物：一条能送达的发信通道 + 一份「收件人 / 发信账号」职责边界说明 + 故障对照表（S9 通知与触达）">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M31.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="lesson" data-total="31" data-mod="M31">
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../index.html">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../index.html">总览</a>
+      <a href="../index.html#map">课程地图</a>
+      <a href="../gates.html">门禁与红线</a>
+      <a href="../glossary.html">术语表</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 31</span>
+    </span>
+  </div>
+</header>
+<a class="skip" href="#main">跳到正文</a>
+
+<div class="shell lesson">
+  <div class="lesson-grid">
+    <main class="lesson-main" id="main">
+      <div class="crumb">
+        <a href="../index.html">总览</a><span class="sep">/</span>
+        <a href="../index.html#map">课程地图</a><span class="sep">/</span>
+        <span>S9 通知与触达</span>
+      </div>
+
+      <h1><span class="num">M31</span>表单通知与邮件通道</h1>
+      <div class="meta">
+        <span class="tag hi">所属路径 C</span>
+        <span class="tag">第 31 / 31 讲</span>
+        <span class="tag">S9 通知与触达</span>
+      </div>
+
+      <section class="lsec" id="s1">
+        <div class="lede">
+          <div class="q">留言进来了，怎么让它在 1 分钟内找到人</div>
+          <div class="ability"><b>学完能</b>独立配通一条发信通道，并用四条证据证明它真的能送达</div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s2">
+        <h2><span class="i">01</span>为什么重要</h2>
+        <div class="why">表单是黑洞：留言进了库，但没人知道，等于没收。通知通道是「后台从数据变成消息」的那一步，也是第一次把外部服务的凭据接进系统——这一步凭据怎么摆，决定了以后「改个通知邮箱」会不会变成「交出公司发信权」。</div>
+      </section>
+
+      <section class="lsec" id="s3">
+        <h2><span class="i">02</span>要讲清的 5 件事<span class="n">核心要点</span></h2>
+        <ul class="pts">
+          <li>两个角色必须分开：收件人（谁该收到）在后台改、即时生效；发信账号（用谁的名义发）在服务器环境变量里 —— 凭据放进后台面板，等于把「冒充公司发信」的能力交给任何一个后台账号</li>
+          <li>客户端专用密码 ≠ 网页登录密码：账号开了「安全登录」后，用网页密码连 SMTP 一定失败</li>
+          <li>535 Authentication failed 是通用认证失败码，不能反推原因。判据是「账户安全」里那行按钮显示「已开启」还是「需先绑定微信」，不是报错码本身</li>
+          <li>改配置只替换 MAIL_* / SMTP_* 那几行，别整文件重写 —— 否则 SITE_NAME 这类含空格的值会被改坏；改前备份、改后重启并回读自检</li>
+          <li>验证要四条证据：后台状态灯、测试邮件、真实留言链路（含「点回复，收件人应是访客填的邮箱」）、日志里的 [mail] 已通知 N 位收件人</li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s4">
+        <h2><span class="i">03</span>照着做：6 步<span class="n">操作顺序</span></h2>
+        <ol class="steps">
+          <li>建一个专用发信账号（别用个人邮箱），设好显示名——这是收件人看到的发件人</li>
+          <li>登录该账号，确认 SMTP 已开启，生成「客户端专用密码」并保存</li>
+          <li>先看「账户安全」那行按钮状态，判断到底该用哪种密码</li>
+          <li>在每台服务器跑一次配置命令，只替换 MAIL_* / SMTP_*，脚本会备份并重启回读</li>
+          <li>后台看状态灯 → 发测试邮件 → 到联系页真发一条留言，确认「点回复」指向访客邮箱</li>
+          <li>出问题先查 journalctl 里的 [mail] 记录，再对着故障对照表定位</li>
+        </ol>
+        <div class="code-wrap">
+        <button class="copy" type="button" aria-label="复制命令">复制</button>
+        <pre class="code"><span class="cm"># 1) 先在邮箱后台建专用发信账号、开 SMTP、生成「客户端专用密码」</span>
+<span class="cm"># 2) 每台服务器跑一次（脚本只替换 MAIL_* / SMTP_* 那几行）</span>
+sudo bash /opt/&lt;站点&gt;/repo/deploy/setup-mail.sh \
+  smtp.exmail.qq.com 465 msg.website@你的域名 '客户端专用密码'
+
+<span class="cm"># 3) 排障：先看日志，再对着故障对照表定位</span>
+journalctl -u &lt;服务名&gt; -n 80 --no-pager | grep -i mail
+nc -zv smtp.exmail.qq.com 465</pre>
+      </div>
+      </section>
+
+      <section class="lsec" id="s5">
+        <h2><span class="i">04</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <div class="kv2">
+          <div class="kv">
+            <h3>产出物</h3>
+            <p>一条能送达的发信通道 + 一份「收件人 / 发信账号」职责边界说明 + 故障对照表</p>
+          </div>
+          <div class="kv">
+            <h3>验收判据</h3>
+            <div class="acc-line"><span class="chip h">可验</span><span>后台状态灯显示「已配置发信通道」，测试邮件与真实留言都能收到，日志里有 [mail] 记录</span></div>
+            <div class="acc-line"><span class="chip s">人评</span><span>能说清「为什么发信账号不放后台」，并解释 535 的两种成因怎么区分</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s6">
+        <h2><span class="i">05</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <div class="drill">故意用网页登录密码去配 SMTP，先撞出一次 535；然后不看报错码，去「账户安全」看那行按钮的状态判断是哪种原因，再换成客户端专用密码修好。</div>
+      </section>
+
+      <section class="lsec" id="s7">
+        <h2><span class="i">06</span>最容易踩的坑</h2>
+        <div class="pit">把 535 一律当成「缺客户端专用密码」，照着这个结论反复重生密码<div class="cost">后果：留言躺在库里没人知道，客户等三天没回音；更糟的是反过来——为了「方便」把邮箱密码填进后台面板，此后任何一个后台账号都能拿它对外发信。</div></div>
+      </section>
+
+      <section class="lsec" id="s8">
+        <h2><span class="i">07</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <div class="check-top">
+          <span class="ptxt" id="ptxt">0 / 9</span>
+          <span class="pbar"><i id="pbar"></i></span>
+        </div>
+        <ul class="check">
+          <li><input type="checkbox" id="c0" data-k="0"><label for="c0"><span class="grp">步骤</span>我已完成：建一个专用发信账号（别用个人邮箱），设好显示名——这是收件人看到的发件人</label></li>
+          <li><input type="checkbox" id="c1" data-k="1"><label for="c1"><span class="grp">步骤</span>我已完成：登录该账号，确认 SMTP 已开启，生成「客户端专用密码」并保存</label></li>
+          <li><input type="checkbox" id="c2" data-k="2"><label for="c2"><span class="grp">步骤</span>我已完成：先看「账户安全」那行按钮状态，判断到底该用哪种密码</label></li>
+          <li><input type="checkbox" id="c3" data-k="3"><label for="c3"><span class="grp">步骤</span>我已完成：在每台服务器跑一次配置命令，只替换 MAIL_* / SMTP_*，脚本会备份并重启回读</label></li>
+          <li><input type="checkbox" id="c4" data-k="4"><label for="c4"><span class="grp">步骤</span>我已完成：后台看状态灯 → 发测试邮件 → 到联系页真发一条留言，确认「点回复」指向访客邮箱</label></li>
+          <li><input type="checkbox" id="c5" data-k="5"><label for="c5"><span class="grp">步骤</span>我已完成：出问题先查 journalctl 里的 [mail] 记录，再对着故障对照表定位</label></li>
+          <li><input type="checkbox" id="c6" data-k="6"><label for="c6"><span class="grp">验收</span>我能用命令证明：后台状态灯显示「已配置发信通道」，测试邮件与真实留言都能收到，日志里有 [mail] 记录</label></li>
+          <li><input type="checkbox" id="c7" data-k="7"><label for="c7"><span class="grp">验收</span>我能讲清：能说清「为什么发信账号不放后台」，并解释 535 的两种成因怎么区分</label></li>
+          <li><input type="checkbox" id="c8" data-k="8"><label for="c8"><span class="grp">避坑</span>我确认没有出现：把 535 一律当成「缺客户端专用密码」，照着这个结论反复重生密码</label></li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s9">
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../glossary.html">全部 28 条</a></span></h2>
+        <ul class="pts">
+          <li><b><a href="../glossary.html#g02">v1 / v2 后台</a></b>：本项目自造的阶段叫法。v1 = 纯静态站；v2 = 加了内容管理后台（登录、数据库、上传）。不是技术名词。</li>
+          <li><b><a href="../glossary.html#g24">台账</a></b>：只记「有什么、什么时候到期、谁负责」的清单；密钥台账不记密钥本体。</li>
+          <li><b><a href="../glossary.html#g27">发信账号 / 收件人</a></b>：发信账号＝真正把邮件发出去的那个邮箱，配置在服务器环境变量里；收件人＝谁该收到通知，在后台改、即时生效。两者刻意分开：一个管凭据，一个管日常运维。</li>
+          <li><b><a href="../glossary.html#g28">客户端专用密码</a></b>：开启「安全登录」的邮箱账号，供 SMTP / IMAP 这类第三方客户端使用的独立密码。和网页登录密码不是一回事，混用会一直报 535。</li>
+        </ul>
+      </section>
+
+      <div class="pager">
+        <a class="prev" href="M30.html"><span class="dir">← 上一讲</span><span class="tt">M30 两个样板站对照走查</span></a>
+        <span class="sp"></span>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="blk">
+        <p class="rail-h">本讲目录</p>
+        <ol class="toc">
+          <li><a href="#s1">这一讲解决什么</a></li>
+          <li><a href="#s2">为什么重要</a></li>
+          <li><a href="#s3">要讲清的 5 件事</a></li>
+          <li><a href="#s4">照着做：6 步</a></li>
+          <li><a href="#s5">产出物与验收</a></li>
+          <li><a href="#s6">练习</a></li>
+          <li><a href="#s7">最容易踩的坑</a></li>
+          <li><a href="#s8">自检表</a></li>
+          <li><a href="#s9">本讲术语</a></li>
+        </ol>
+      </div>
+      <div class="blk">
+        <p class="rail-h">S9 通知与触达</p>
+        <ol>
+          <li><a href="M31.html" class="on" aria-current="page">M31 表单通知与邮件通道</a></li>
+        </ol>
+      </div>
+      
+    </aside>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+          <span class="ver">v1.0</span>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 31 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../index.html">总览</a>
+          <a href="../index.html#map">课程地图</a>
+          <a href="../gates.html">门禁与红线</a>
+          <a href="../glossary.html">术语表</a>
+          <a href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>
+        </div>
+      </div>
+    </div>
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="../assets/app.js"></script>
+</body>
+</html>

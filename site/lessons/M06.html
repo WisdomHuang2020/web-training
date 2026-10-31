@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M06 版本号单一来源与发版 · 从 0 到上线</title>
+<meta name="description" content="版本号只许有一个源头。学完能做到：独立完成一次发版，并自查版本号四处一致。产出物：一次完整发版：tag + Release + 线上可查版本（S1 版本管理）">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M06.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="M06 版本号单一来源与发版 · 从 0 到上线">
+<meta property="og:description" content="版本号只许有一个源头。学完能做到：独立完成一次发版，并自查版本号四处一致。产出物：一次完整发版：tag + Release + 线上可查版本（S1 版本管理）">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M06.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="lesson" data-total="31" data-mod="M06">
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../index.html">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../index.html">总览</a>
+      <a href="../index.html#map">课程地图</a>
+      <a href="../gates.html">门禁与红线</a>
+      <a href="../glossary.html">术语表</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 31</span>
+    </span>
+  </div>
+</header>
+<a class="skip" href="#main">跳到正文</a>
+
+<div class="shell lesson">
+  <div class="lesson-grid">
+    <main class="lesson-main" id="main">
+      <div class="crumb">
+        <a href="../index.html">总览</a><span class="sep">/</span>
+        <a href="../index.html#map">课程地图</a><span class="sep">/</span>
+        <span>S1 版本管理</span>
+      </div>
+
+      <h1><span class="num">M06</span>版本号单一来源与发版</h1>
+      <div class="meta">
+        <span class="tag hi">所属路径 B / C</span>
+        <span class="tag">第 6 / 31 讲</span>
+        <span class="tag">S1 版本管理</span>
+      </div>
+
+      <section class="lsec" id="s1">
+        <div class="lede">
+          <div class="q">版本号只许有一个源头</div>
+          <div class="ability"><b>学完能</b>独立完成一次发版，并自查版本号四处一致</div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s2">
+        <h2><span class="i">01</span>为什么重要</h2>
+        <div class="why">版本号一旦有两个出处，就一定会漂移。单一来源的意义不是好看，是让「线上跑的是哪一版」这个问题有唯一答案。</div>
+      </section>
+
+      <section class="lsec" id="s3">
+        <h2><span class="i">02</span>要讲清的 3 件事<span class="n">核心要点</span></h2>
+        <ul class="pts">
+          <li>版本号只在 package.json 一处，构建时注入前端</li>
+          <li>annotated tag 与自动创建 Release</li>
+          <li>发版三部曲：推 main → 打 tag → push tag</li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s4">
+        <h2><span class="i">03</span>照着做：4 步<span class="n">操作顺序</span></h2>
+        <ol class="steps">
+          <li>确认版本号只写在 package.json 一处</li>
+          <li>推 main，等构建与部署完成</li>
+          <li>打 annotated tag，写一句说明</li>
+          <li>push tag，核对 Release 自动建出来</li>
+        </ol>
+        <div class="code-wrap">
+        <button class="copy" type="button" aria-label="复制命令">复制</button>
+        <pre class="code">git tag -a v0.1.0 -m &quot;首版&quot;
+git push origin v0.1.0
+git ls-remote --tags origin | tail -3</pre>
+      </div>
+      </section>
+
+      <section class="lsec" id="s5">
+        <h2><span class="i">04</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <div class="kv2">
+          <div class="kv">
+            <h3>产出物</h3>
+            <p>一次完整发版：tag + Release + 线上可查版本</p>
+          </div>
+          <div class="kv">
+            <h3>验收判据</h3>
+            <div class="acc-line"><span class="chip h">可验</span><span>四方一致性审计退出码 0（版本文件 / tag / Release / 线上哨兵）</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s6">
+        <h2><span class="i">05</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <div class="drill">故意漏掉 push tag，观察会发生什么——答案是没有任何报错。</div>
+      </section>
+
+      <section class="lsec" id="s7">
+        <h2><span class="i">06</span>最容易踩的坑</h2>
+        <div class="pit">漏 push tag 静默无感；比对时忘剥 tag 的 v 前缀会误判不一致<div class="cost">后果：漏了 push tag：本地有标签、远端没有、Release 也不建——而且全程不报错，你以为发了。</div></div>
+      </section>
+
+      <section class="lsec" id="s8">
+        <h2><span class="i">07</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <div class="check-top">
+          <span class="ptxt" id="ptxt">0 / 6</span>
+          <span class="pbar"><i id="pbar"></i></span>
+        </div>
+        <ul class="check">
+          <li><input type="checkbox" id="c0" data-k="0"><label for="c0"><span class="grp">步骤</span>我已完成：确认版本号只写在 package.json 一处</label></li>
+          <li><input type="checkbox" id="c1" data-k="1"><label for="c1"><span class="grp">步骤</span>我已完成：推 main，等构建与部署完成</label></li>
+          <li><input type="checkbox" id="c2" data-k="2"><label for="c2"><span class="grp">步骤</span>我已完成：打 annotated tag，写一句说明</label></li>
+          <li><input type="checkbox" id="c3" data-k="3"><label for="c3"><span class="grp">步骤</span>我已完成：push tag，核对 Release 自动建出来</label></li>
+          <li><input type="checkbox" id="c4" data-k="4"><label for="c4"><span class="grp">验收</span>我能用命令证明：四方一致性审计退出码 0（版本文件 / tag / Release / 线上哨兵）</label></li>
+          <li><input type="checkbox" id="c5" data-k="5"><label for="c5"><span class="grp">避坑</span>我确认没有出现：漏 push tag 静默无感；比对时忘剥 tag 的 v 前缀会误判不一致</label></li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s9">
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../glossary.html">全部 28 条</a></span></h2>
+        <ul class="pts">
+          <li><b><a href="../glossary.html#g16">单一来源</a></b>：同一个信息只允许有一个权威出处（如版本号只写在 package.json），别处都从它派生。</li>
+          <li><b><a href="../glossary.html#g17">tag 与 Release</a></b>：tag 是给某次提交起的固定名字（如 v1.2.0）；Release 是挂在 tag 上的发布页，可附说明与附件。</li>
+        </ul>
+      </section>
+
+      <div class="pager">
+        <a class="prev" href="M05.html"><span class="dir">← 上一讲</span><span class="tt">M05 GitHub 仓库与 SSH 打通</span></a>
+        <a class="next" href="M07.html"><span class="dir">下一讲 →</span><span class="tt">M07 回读纪律与事故处置</span></a>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="blk">
+        <p class="rail-h">本讲目录</p>
+        <ol class="toc">
+          <li><a href="#s1">这一讲解决什么</a></li>
+          <li><a href="#s2">为什么重要</a></li>
+          <li><a href="#s3">要讲清的 3 件事</a></li>
+          <li><a href="#s4">照着做：4 步</a></li>
+          <li><a href="#s5">产出物与验收</a></li>
+          <li><a href="#s6">练习</a></li>
+          <li><a href="#s7">最容易踩的坑</a></li>
+          <li><a href="#s8">自检表</a></li>
+          <li><a href="#s9">本讲术语</a></li>
+        </ol>
+      </div>
+      <div class="blk">
+        <p class="rail-h">S1 版本管理</p>
+        <ol>
+          <li><a href="M04.html">M04 Git 心智模型与提交纪律</a></li>
+          <li><a href="M05.html">M05 GitHub 仓库与 SSH 打通</a></li>
+          <li><a href="M06.html" class="on" aria-current="page">M06 版本号单一来源与发版</a></li>
+          <li><a href="M07.html">M07 回读纪律与事故处置</a></li>
+        </ol>
+      </div>
+      <div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="M07.html"><span>M07</span>回读纪律与事故处置</a></div>
+    </aside>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+          <span class="ver">v1.0</span>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 31 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../index.html">总览</a>
+          <a href="../index.html#map">课程地图</a>
+          <a href="../gates.html">门禁与红线</a>
+          <a href="../glossary.html">术语表</a>
+          <a href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>
+        </div>
+      </div>
+    </div>
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="../assets/app.js"></script>
+</body>
+</html>

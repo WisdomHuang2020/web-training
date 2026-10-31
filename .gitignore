@@ -1,0 +1,25 @@
+# ── 本地 / 内部，不进公开仓库 ────────────────────────────────
+.workbuddy/
+_chk/
+_shots/
+*.log
+node_modules/
+.DS_Store
+Thumbs.db
+
+# ── 已被取代的旧素材（2026-10-31 起不再作为数据源）──────────────
+# 内容已全部并入 data/course.mjs；留着会让后来的人分不清该改哪份。
+培训总览.html
+/lessons/
+build-lessons.mjs
+content-a.mjs
+content-b.mjs
+tools/extract-data.mjs
+
+# ── 课件与 PPT 源文件（含讲者备注，单独管理）────────────────────
+网站建设实训课/
+网站建设实训课-SEASTAR模板.pptx
+seastar-deck/
+
+# ── 历史审核记录（针对 v0.5 的 25 讲版本，已过期）──────────────
+01-审核意见-v0.1.md

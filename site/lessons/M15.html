@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M15 nginx 配置实战 · 从 0 到上线</title>
+<meta name="description" content="单页站和多页站的两份模板。学完能做到：不看模板写出正确的两种 server 块，并说清差别。产出物：两份可复用模板（单页 / 多页）（S3 上线）">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M15.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="M15 nginx 配置实战 · 从 0 到上线">
+<meta property="og:description" content="单页站和多页站的两份模板。学完能做到：不看模板写出正确的两种 server 块，并说清差别。产出物：两份可复用模板（单页 / 多页）（S3 上线）">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M15.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="lesson" data-total="31" data-mod="M15">
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../index.html">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../index.html">总览</a>
+      <a href="../index.html#map">课程地图</a>
+      <a href="../gates.html">门禁与红线</a>
+      <a href="../glossary.html">术语表</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 31</span>
+    </span>
+  </div>
+</header>
+<a class="skip" href="#main">跳到正文</a>
+
+<div class="shell lesson">
+  <div class="lesson-grid">
+    <main class="lesson-main" id="main">
+      <div class="crumb">
+        <a href="../index.html">总览</a><span class="sep">/</span>
+        <a href="../index.html#map">课程地图</a><span class="sep">/</span>
+        <span>S3 上线</span>
+      </div>
+
+      <h1><span class="num">M15</span>nginx 配置实战</h1>
+      <div class="meta">
+        <span class="tag hi">所属路径 Q / A / B / C</span>
+        <span class="tag">第 15 / 31 讲</span>
+        <span class="tag">S3 上线</span>
+      </div>
+
+      <section class="lsec" id="s1">
+        <div class="lede">
+          <div class="q">单页站和多页站的两份模板</div>
+          <div class="ability"><b>学完能</b>不看模板写出正确的两种 server 块，并说清差别</div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s2">
+        <h2><span class="i">01</span>为什么重要</h2>
+        <div class="why">单页站和多页站对「不存在的路径」要求正好相反：单页要回落到 index.html，多页必须返回真 404。配错的那一种，会给访客一个 200 的假页面。</div>
+      </section>
+
+      <section class="lsec" id="s3">
+        <h2><span class="i">02</span>要讲清的 4 件事<span class="n">核心要点</span></h2>
+        <ul class="pts">
+          <li>server 块最小骨架</li>
+          <li>单页站回落 index.html；多页站必须真 404</li>
+          <li>gzip、静态缓存头、裸域 301</li>
+          <li>502 / 403 / 404 各自的归因</li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s4">
+        <h2><span class="i">03</span>照着做：4 步<span class="n">操作顺序</span></h2>
+        <ol class="steps">
+          <li>先判定这是单页站还是多页站</li>
+          <li>按类型写 try_files 与 404 处理</li>
+          <li>加 gzip 与静态缓存头</li>
+          <li>curl 一个不存在的路径，确认返回符合预期</li>
+        </ol>
+        <div class="code-wrap">
+        <button class="copy" type="button" aria-label="复制命令">复制</button>
+        <pre class="code">curl -s -o /dev/null -w &quot;%{http_code}\n&quot; https://你的域名/一个不存在的路径
+<span class="cm"># 多页站要 404；单页站要 200</span></pre>
+      </div>
+      </section>
+
+      <section class="lsec" id="s5">
+        <h2><span class="i">04</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <div class="kv2">
+          <div class="kv">
+            <h3>产出物</h3>
+            <p>两份可复用模板（单页 / 多页）</p>
+          </div>
+          <div class="kv">
+            <h3>验收判据</h3>
+            <div class="acc-line"><span class="chip h">可验</span><span>多页站访问不存在路径返回 404；单页站深链刷新不 404</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s6">
+        <h2><span class="i">05</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <div class="drill">把同一个目录先配成单页模式再配成多页模式，用 curl 对比不存在的路径分别返回什么。</div>
+      </section>
+
+      <section class="lsec" id="s7">
+        <h2><span class="i">06</span>最容易踩的坑</h2>
+        <div class="pit">把多页站配成单页回落：假页面返回 200，误导访客还伤搜索引擎<div class="cost">后果：多页站配成单页回落，搜索引擎会收录一堆根本不存在的地址。</div></div>
+      </section>
+
+      <section class="lsec" id="s8">
+        <h2><span class="i">07</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <div class="check-top">
+          <span class="ptxt" id="ptxt">0 / 6</span>
+          <span class="pbar"><i id="pbar"></i></span>
+        </div>
+        <ul class="check">
+          <li><input type="checkbox" id="c0" data-k="0"><label for="c0"><span class="grp">步骤</span>我已完成：先判定这是单页站还是多页站</label></li>
+          <li><input type="checkbox" id="c1" data-k="1"><label for="c1"><span class="grp">步骤</span>我已完成：按类型写 try_files 与 404 处理</label></li>
+          <li><input type="checkbox" id="c2" data-k="2"><label for="c2"><span class="grp">步骤</span>我已完成：加 gzip 与静态缓存头</label></li>
+          <li><input type="checkbox" id="c3" data-k="3"><label for="c3"><span class="grp">步骤</span>我已完成：curl 一个不存在的路径，确认返回符合预期</label></li>
+          <li><input type="checkbox" id="c4" data-k="4"><label for="c4"><span class="grp">验收</span>我能用命令证明：多页站访问不存在路径返回 404；单页站深链刷新不 404</label></li>
+          <li><input type="checkbox" id="c5" data-k="5"><label for="c5"><span class="grp">避坑</span>我确认没有出现：把多页站配成单页回落：假页面返回 200，误导访客还伤搜索引擎</label></li>
+        </ul>
+      </section>
+
+      <div class="pager">
+        <a class="prev" href="M14.html"><span class="dir">← 上一讲</span><span class="tt">M14 服务器环境与目录规划</span></a>
+        <a class="next" href="M16.html"><span class="dir">下一讲 →</span><span class="tt">M16 HTTPS 与证书</span></a>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="blk">
+        <p class="rail-h">本讲目录</p>
+        <ol class="toc">
+          <li><a href="#s1">这一讲解决什么</a></li>
+          <li><a href="#s2">为什么重要</a></li>
+          <li><a href="#s3">要讲清的 4 件事</a></li>
+          <li><a href="#s4">照着做：4 步</a></li>
+          <li><a href="#s5">产出物与验收</a></li>
+          <li><a href="#s6">练习</a></li>
+          <li><a href="#s7">最容易踩的坑</a></li>
+          <li><a href="#s8">自检表</a></li>
+        </ol>
+      </div>
+      <div class="blk">
+        <p class="rail-h">S3 上线</p>
+        <ol>
+          <li><a href="M14.html">M14 服务器环境与目录规划</a></li>
+          <li><a href="M15.html" class="on" aria-current="page">M15 nginx 配置实战</a></li>
+          <li><a href="M16.html">M16 HTTPS 与证书</a></li>
+          <li><a href="M17.html">M17 首次手工上线</a></li>
+        </ol>
+      </div>
+      <div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="M16.html"><span>M16</span>HTTPS 与证书</a></div>
+    </aside>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+          <span class="ver">v1.0</span>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 31 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../index.html">总览</a>
+          <a href="../index.html#map">课程地图</a>
+          <a href="../gates.html">门禁与红线</a>
+          <a href="../glossary.html">术语表</a>
+          <a href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>
+        </div>
+      </div>
+    </div>
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="../assets/app.js"></script>
+</body>
+</html>

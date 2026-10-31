@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M30 两个样板站对照走查 · 从 0 到上线</title>
+<meta name="description" content="同一目标，两种做法。学完能做到：照文档独立发布一次别人的站。产出物：一页交接文档（S8 综合）">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M30.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="M30 两个样板站对照走查 · 从 0 到上线">
+<meta property="og:description" content="同一目标，两种做法。学完能做到：照文档独立发布一次别人的站。产出物：一页交接文档（S8 综合）">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M30.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="lesson" data-total="31" data-mod="M30">
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../index.html">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../index.html">总览</a>
+      <a href="../index.html#map">课程地图</a>
+      <a href="../gates.html">门禁与红线</a>
+      <a href="../glossary.html">术语表</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 31</span>
+    </span>
+  </div>
+</header>
+<a class="skip" href="#main">跳到正文</a>
+
+<div class="shell lesson">
+  <div class="lesson-grid">
+    <main class="lesson-main" id="main">
+      <div class="crumb">
+        <a href="../index.html">总览</a><span class="sep">/</span>
+        <a href="../index.html#map">课程地图</a><span class="sep">/</span>
+        <span>S8 综合</span>
+      </div>
+
+      <h1><span class="num">M30</span>两个样板站对照走查</h1>
+      <div class="meta">
+        <span class="tag hi">所属路径 B / C</span>
+        <span class="tag">第 30 / 31 讲</span>
+        <span class="tag">S8 综合</span>
+      </div>
+
+      <section class="lsec" id="s1">
+        <div class="lede">
+          <div class="q">同一目标，两种做法</div>
+          <div class="ability"><b>学完能</b>照文档独立发布一次别人的站</div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s2">
+        <h2><span class="i">01</span>为什么重要</h2>
+        <div class="why">判断一次交接是否成功，标准只有一个：换个人只看文档、不看代码，能不能独立发一次版。做不到，说明文档写的是「我知道的东西」，不是「别人需要的东西」。</div>
+      </section>
+
+      <section class="lsec" id="s3">
+        <h2><span class="i">02</span>要讲清的 3 件事<span class="n">核心要点</span></h2>
+        <ul class="pts">
+          <li>构建型：CI 推送 + 版本哨兵 + 静态托管兜底</li>
+          <li>零构建：拉取式 + 单源清单 + 内容后台</li>
+          <li>四要素交接表：仓库 / 工作流 / 目标 / 验证</li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s4">
+        <h2><span class="i">03</span>照着做：4 步<span class="n">操作顺序</span></h2>
+        <ol class="steps">
+          <li>只读文档、不看代码</li>
+          <li>列出四要素：仓库、工作流、目标、验证</li>
+          <li>照文档独立发一次版</li>
+          <li>核对线上与仓库是否一致</li>
+        </ol>
+        <div class="code-wrap">
+        <button class="copy" type="button" aria-label="复制命令">复制</button>
+        <pre class="code">git log --oneline -5
+curl -s https://你的域名/ | grep -o &quot;&lt;title&gt;[^&lt;]*&quot;
+curl -s https://你的域名/.deployed-version</pre>
+      </div>
+      </section>
+
+      <section class="lsec" id="s5">
+        <h2><span class="i">04</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <div class="kv2">
+          <div class="kv">
+            <h3>产出物</h3>
+            <p>一页交接文档</p>
+          </div>
+          <div class="kv">
+            <h3>验收判据</h3>
+            <div class="acc-line"><span class="chip s">人评</span><span>换个人照文档能独立发布一次</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s6">
+        <h2><span class="i">05</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <div class="drill">只读文档、不看代码，把样板站发一次版。</div>
+      </section>
+
+      <section class="lsec" id="s7">
+        <h2><span class="i">06</span>最容易踩的坑</h2>
+        <div class="pit">文档里写死 IP 和路径，机器一换全失效<div class="cost">后果：文档写死 IP 和路径，机器一换全部失效——接手的人第一步就卡住。</div></div>
+      </section>
+
+      <section class="lsec" id="s8">
+        <h2><span class="i">07</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <div class="check-top">
+          <span class="ptxt" id="ptxt">0 / 6</span>
+          <span class="pbar"><i id="pbar"></i></span>
+        </div>
+        <ul class="check">
+          <li><input type="checkbox" id="c0" data-k="0"><label for="c0"><span class="grp">步骤</span>我已完成：只读文档、不看代码</label></li>
+          <li><input type="checkbox" id="c1" data-k="1"><label for="c1"><span class="grp">步骤</span>我已完成：列出四要素：仓库、工作流、目标、验证</label></li>
+          <li><input type="checkbox" id="c2" data-k="2"><label for="c2"><span class="grp">步骤</span>我已完成：照文档独立发一次版</label></li>
+          <li><input type="checkbox" id="c3" data-k="3"><label for="c3"><span class="grp">步骤</span>我已完成：核对线上与仓库是否一致</label></li>
+          <li><input type="checkbox" id="c4" data-k="4"><label for="c4"><span class="grp">验收</span>我能讲清：换个人照文档能独立发布一次</label></li>
+          <li><input type="checkbox" id="c5" data-k="5"><label for="c5"><span class="grp">避坑</span>我确认没有出现：文档里写死 IP 和路径，机器一换全失效</label></li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s9">
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../glossary.html">全部 28 条</a></span></h2>
+        <ul class="pts">
+          <li><b><a href="../glossary.html#g01">构建型 / 零构建</a></b>：构建型指源码要经过打包才能变成可发布的文件；零构建指仓库里的文件本身就是发布产物。</li>
+          <li><b><a href="../glossary.html#g02">v1 / v2 后台</a></b>：本项目自造的阶段叫法。v1 = 纯静态站；v2 = 加了内容管理后台（登录、数据库、上传）。不是技术名词。</li>
+          <li><b><a href="../glossary.html#g03">哨兵文件</a></b>：服务器上一个记录当前已部署版本的小文件。查线上到底跑的是哪一版，看它最准。</li>
+          <li><b><a href="../glossary.html#g08">拉取式部署</a></b>：服务器定时自己从仓库拉取并发布，不依赖 CI 主动推。</li>
+          <li><b><a href="../glossary.html#g21">CI 与 Actions</a></b>：CI＝每次提交后自动跑构建与检查；GitHub Actions 是它的一种实现，配置写在 .github/workflows/。</li>
+        </ul>
+      </section>
+
+      <div class="pager">
+        <a class="prev" href="M29.html"><span class="dir">← 上一讲</span><span class="tt">M29 上线后 30 天</span></a>
+        <a class="next" href="M31.html"><span class="dir">下一讲 →</span><span class="tt">M31 表单通知与邮件通道</span></a>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="blk">
+        <p class="rail-h">本讲目录</p>
+        <ol class="toc">
+          <li><a href="#s1">这一讲解决什么</a></li>
+          <li><a href="#s2">为什么重要</a></li>
+          <li><a href="#s3">要讲清的 3 件事</a></li>
+          <li><a href="#s4">照着做：4 步</a></li>
+          <li><a href="#s5">产出物与验收</a></li>
+          <li><a href="#s6">练习</a></li>
+          <li><a href="#s7">最容易踩的坑</a></li>
+          <li><a href="#s8">自检表</a></li>
+          <li><a href="#s9">本讲术语</a></li>
+        </ol>
+      </div>
+      <div class="blk">
+        <p class="rail-h">S8 综合</p>
+        <ol>
+          <li><a href="M30.html" class="on" aria-current="page">M30 两个样板站对照走查</a></li>
+        </ol>
+      </div>
+      <div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="M31.html"><span>M31</span>表单通知与邮件通道</a></div>
+    </aside>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+          <span class="ver">v1.0</span>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 31 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../index.html">总览</a>
+          <a href="../index.html#map">课程地图</a>
+          <a href="../gates.html">门禁与红线</a>
+          <a href="../glossary.html">术语表</a>
+          <a href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>
+        </div>
+      </div>
+    </div>
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M03 本地环境与网络通道 · 从 0 到上线</title>
+<meta name="description" content="GitHub 访问不稳时，这台机器到底能不能推代码。学完能做到：在访问不稳的网络里 10 分钟内给出「能推 / 只能读 / 都不行」的结论。产出物：《本机通道体检报告》（S0 起手式）">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M03.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="M03 本地环境与网络通道 · 从 0 到上线">
+<meta property="og:description" content="GitHub 访问不稳时，这台机器到底能不能推代码。学完能做到：在访问不稳的网络里 10 分钟内给出「能推 / 只能读 / 都不行」的结论。产出物：《本机通道体检报告》（S0 起手式）">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M03.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="lesson" data-total="31" data-mod="M03">
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../index.html">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../index.html">总览</a>
+      <a href="../index.html#map">课程地图</a>
+      <a href="../gates.html">门禁与红线</a>
+      <a href="../glossary.html">术语表</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 31</span>
+    </span>
+  </div>
+</header>
+<a class="skip" href="#main">跳到正文</a>
+
+<div class="shell lesson">
+  <div class="lesson-grid">
+    <main class="lesson-main" id="main">
+      <div class="crumb">
+        <a href="../index.html">总览</a><span class="sep">/</span>
+        <a href="../index.html#map">课程地图</a><span class="sep">/</span>
+        <span>S0 起手式</span>
+      </div>
+
+      <h1><span class="num">M03</span>本地环境与网络通道</h1>
+      <div class="meta">
+        <span class="tag hi">所属路径 A / B / C</span>
+        <span class="tag">第 3 / 31 讲</span>
+        <span class="tag">S0 起手式</span>
+      </div>
+
+      <section class="lsec" id="s1">
+        <div class="lede">
+          <div class="q">GitHub 访问不稳时，这台机器到底能不能推代码</div>
+          <div class="ability"><b>学完能</b>在访问不稳的网络里 10 分钟内给出「能推 / 只能读 / 都不行」的结论</div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s2">
+        <h2><span class="i">01</span>为什么重要</h2>
+        <div class="why">本机推不上 GitHub，九成不是网速问题，是通道问题。三条通道稳定性不同，而且「curl 通」和「能推送」是两件事——前者只证明网络可达，后者还要求凭据正确。</div>
+      </section>
+
+      <section class="lsec" id="s3">
+        <h2><span class="i">02</span>要讲清的 4 件事<span class="n">核心要点</span></h2>
+        <ul class="pts">
+          <li>Node / Python / Git 的版本与 PATH 优先级</li>
+          <li>三条通道按稳定性排序：SSH:22 最稳 → ssh.github.com:443 备用 → HTTPS:443 最不稳</li>
+          <li>先测通道再谈报错：443 能通不等于能推，判据是 push --dry-run 的退出码</li>
+          <li>代理变量 http_proxy / https_proxy 如何影响 git 与 curl</li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s4">
+        <h2><span class="i">03</span>照着做：4 步<span class="n">操作顺序</span></h2>
+        <ol class="steps">
+          <li>记录 git / node 的版本与 PATH 顺序</li>
+          <li>依次测 HTTPS:443、SSH:22、ssh.github.com:443</li>
+          <li>看 git push --dry-run 的退出码，不看状态码</li>
+          <li>把可用通道与结论写进体检报告</li>
+        </ol>
+        <div class="code-wrap">
+        <button class="copy" type="button" aria-label="复制命令">复制</button>
+        <pre class="code">ssh -T git@github.com
+git push --dry-run; echo &quot;rc=$?&quot;
+ssh -T -p 443 git@ssh.github.com</pre>
+      </div>
+      </section>
+
+      <section class="lsec" id="s5">
+        <h2><span class="i">04</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <div class="kv2">
+          <div class="kv">
+            <h3>产出物</h3>
+            <p>《本机通道体检报告》</p>
+          </div>
+          <div class="kv">
+            <h3>验收判据</h3>
+            <div class="acc-line"><span class="chip h">可验</span><span>git push --dry-run 得到明确退出码（0 为通）</span></div>
+            <div class="acc-line"><span class="chip s">人评</span><span>能解释为什么是这个结论</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s6">
+        <h2><span class="i">05</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <div class="drill">分别用 HTTPS、SSH:22、ssh.github.com:443 各推一次空提交，记录三条通道的成败与耗时，排出你自己的可用顺序。</div>
+      </section>
+
+      <section class="lsec" id="s7">
+        <h2><span class="i">06</span>最容易踩的坑</h2>
+        <div class="pit">只看 443 能通就断言可用——网络可达不等于有凭据；PowerShell 吞输出，排障改用 Bash<div class="cost">后果：把 curl 返回 200 当成「能推」，然后在一个没有凭据的仓库上耗掉半天。</div></div>
+      </section>
+
+      <section class="lsec" id="s8">
+        <h2><span class="i">07</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <div class="check-top">
+          <span class="ptxt" id="ptxt">0 / 7</span>
+          <span class="pbar"><i id="pbar"></i></span>
+        </div>
+        <ul class="check">
+          <li><input type="checkbox" id="c0" data-k="0"><label for="c0"><span class="grp">步骤</span>我已完成：记录 git / node 的版本与 PATH 顺序</label></li>
+          <li><input type="checkbox" id="c1" data-k="1"><label for="c1"><span class="grp">步骤</span>我已完成：依次测 HTTPS:443、SSH:22、ssh.github.com:443</label></li>
+          <li><input type="checkbox" id="c2" data-k="2"><label for="c2"><span class="grp">步骤</span>我已完成：看 git push --dry-run 的退出码，不看状态码</label></li>
+          <li><input type="checkbox" id="c3" data-k="3"><label for="c3"><span class="grp">步骤</span>我已完成：把可用通道与结论写进体检报告</label></li>
+          <li><input type="checkbox" id="c4" data-k="4"><label for="c4"><span class="grp">验收</span>我能用命令证明：git push --dry-run 得到明确退出码（0 为通）</label></li>
+          <li><input type="checkbox" id="c5" data-k="5"><label for="c5"><span class="grp">验收</span>我能讲清：能解释为什么是这个结论</label></li>
+          <li><input type="checkbox" id="c6" data-k="6"><label for="c6"><span class="grp">避坑</span>我确认没有出现：只看 443 能通就断言可用——网络可达不等于有凭据；PowerShell 吞输出，排障改用 Bash</label></li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s9">
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../glossary.html">全部 28 条</a></span></h2>
+        <ul class="pts">
+          <li><b><a href="../glossary.html#g20">dry-run</a></b>：试运行：命令完整走一遍但不真正生效，用来验证权限与路径（如 git push --dry-run）。</li>
+        </ul>
+      </section>
+
+      <div class="pager">
+        <a class="prev" href="M02.html"><span class="dir">← 上一讲</span><span class="tt">M02 WorkBuddy 实操底座</span></a>
+        <a class="next" href="M04.html"><span class="dir">下一讲 →</span><span class="tt">M04 Git 心智模型与提交纪律</span></a>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="blk">
+        <p class="rail-h">本讲目录</p>
+        <ol class="toc">
+          <li><a href="#s1">这一讲解决什么</a></li>
+          <li><a href="#s2">为什么重要</a></li>
+          <li><a href="#s3">要讲清的 4 件事</a></li>
+          <li><a href="#s4">照着做：4 步</a></li>
+          <li><a href="#s5">产出物与验收</a></li>
+          <li><a href="#s6">练习</a></li>
+          <li><a href="#s7">最容易踩的坑</a></li>
+          <li><a href="#s8">自检表</a></li>
+          <li><a href="#s9">本讲术语</a></li>
+        </ol>
+      </div>
+      <div class="blk">
+        <p class="rail-h">S0 起手式</p>
+        <ol>
+          <li><a href="M01.html">M01 全景地图与路线选型</a></li>
+          <li><a href="M02.html">M02 WorkBuddy 实操底座</a></li>
+          <li><a href="M03.html" class="on" aria-current="page">M03 本地环境与网络通道</a></li>
+        </ol>
+      </div>
+      <div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="M04.html"><span>M04</span>Git 心智模型与提交纪律</a></div>
+    </aside>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+          <span class="ver">v1.0</span>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 31 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../index.html">总览</a>
+          <a href="../index.html#map">课程地图</a>
+          <a href="../gates.html">门禁与红线</a>
+          <a href="../glossary.html">术语表</a>
+          <a href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>
+        </div>
+      </div>
+    </div>
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="../assets/app.js"></script>
+</body>
+</html>
