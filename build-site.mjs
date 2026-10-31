@@ -137,12 +137,12 @@ ${extra}<link rel="stylesheet" href="${prefix}assets/style.css">
 </head>`;
 }
 
-function topbar({ prefix, current, home }) {
+function topbar({ prefix, current, home, map }) {
   const item = (href, label, key) =>
     `<a href="${href}"${current === key ? ' aria-current="page"' : ''}>${label}</a>`;
-  // 只有首页能吃到纯 #hash；其余页面（含讲义）必须指回首页目录 + #map，
-  // 否则会产生一个指向本页、但本页并不存在的锚点（tools/check-links.mjs 会报）。
-  const mapHref = current === 'home' ? '#map' : home + '#map';
+  // 课程地图是独立页面 /map（不再用首页的 #map 锚点）。
+  // 用相对形式（./map、../map）而非绝对 /map：万一将来挂到子路径也能用。
+  const mapHref = map;
   return `<header class="topbar">
   <div class="shell">
     <a class="brand" href="${home}">
@@ -164,7 +164,7 @@ function topbar({ prefix, current, home }) {
 </header>`;
 }
 
-function footer({ prefix, home }) {
+function footer({ prefix, home, map }) {
   return `<footer class="foot">
   <div class="shell">
     <div class="row">
@@ -187,7 +187,7 @@ function footer({ prefix, home }) {
       <div>
         <div class="links">
           <a href="${home}">总览</a>
-          <a href="${home}#map">课程地图</a>
+          <a href="${map}">课程地图</a>
           <a href="${prefix}gates.html">门禁与红线</a>
           <a href="${prefix}glossary.html">术语表</a>
         </div>
@@ -232,20 +232,14 @@ function modCard(m) {
 }
 
 function renderHome() {
-  const stages = STAGES.map(st => {
-    const cards = st.mods.map(modCard).join('\n      ');
-    return `<div class="stage">
-      <div class="stage-h">
-        <span class="sid">${st.id}</span>
-        <h3>${esc(st.name)}</h3>
-        <span class="cnt" data-visible>${st.mods.length} 讲</span>
-        <span class="ln"></span>
-      </div>
-      <div class="mod-grid">
-      ${cards}
-      </div>
-    </div>`;
-  }).join('\n    ');
+  // 首页只放 9 行阶段索引，31 张卡在 /map —— 首页原先是 7700px 长，主要就是这堆卡撑的
+  const stageIndex = STAGES.map(st => `<a class="si" href="./map#${st.id.toLowerCase()}">
+      <span class="si-id">${st.id}</span>
+      <span class="si-body">
+        <span class="si-name">${esc(st.name)}<b>${st.mods.length} 讲</b></span>
+        <span class="si-mods">${st.mods.map(m => `${m.no} ${esc(m.t)}`).join(' · ')}</span>
+      </span>
+    </a>`).join('\n      ');
 
   const pathCards = Object.entries(PATHS).map(([k, p]) => {
     const chips = p.mods.map(no => `<a href="lessons/${no}.html">${no}</a>`).join('');
@@ -293,7 +287,7 @@ function renderHome() {
     canon: '/',
   })}
 <body data-page="home" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'home', home: './' })}
+${topbar({ prefix: '', current: 'home', home: './', map: './map' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -305,7 +299,7 @@ ${topbar({ prefix: '', current: 'home', home: './' })}
       及格线只有一条 —— <b>${esc(PASS_LINE.replace(/。$/, ''))}</b>。</p>
     <div class="cta">
       <a class="btn btn-primary" href="lessons/M01.html">从第 1 讲开始 <span class="ar">→</span></a>
-      <a class="btn btn-ghost" href="#map">看课程地图</a>
+      <a class="btn btn-ghost" href="./map">看课程地图</a>
     </div>
     <div class="stats">${stats}</div>
   </div>
@@ -347,16 +341,13 @@ ${topbar({ prefix: '', current: 'home', home: './' })}
 <section class="sec" id="map">
   <div class="shell">
     <div class="sec-head"><span class="idx">03</span><h2>课程地图</h2><span class="note">${STAGES.length} 阶段 · ${TOTAL} 讲</span></div>
-    <p class="sec-desc">每讲都有：能力目标 → 要讲清的事 → 照着做的步骤 → 产出物与验收判据 → 练习 → 踩坑 → 自检表。</p>
-    <div class="filters">
-      <button class="fbtn" type="button" data-path="ALL" aria-pressed="true">全部<span class="n">${TOTAL}</span></button>
-      ${Object.entries(PATHS).map(([k, p]) =>
-        `<button class="fbtn${k === 'Q' ? ' qq' : ''}" type="button" data-path="${k}" aria-pressed="false">${esc(p.label)}<span class="n">${PATH_COUNT[k]}</span></button>`).join('\n      ')}
-      <input class="search" id="q" type="search" placeholder="搜模块、关键词…" aria-label="搜索模块">
+    <p class="sec-desc">按 ${STAGES.length} 个阶段推进。每讲都有：能力目标 → 要讲清的事 → 照着做的步骤 → 产出物与验收判据 → 练习 → 踩坑 → 自检表。</p>
+    <div class="stage-index">
+      ${stageIndex}
     </div>
-    <p class="fhint" id="fhint"></p>
-    <div id="map-list">
-    ${stages}
+    <div class="cta-row">
+      <a class="btn btn-primary" href="./map">打开完整课程地图 <span class="ar">→</span></a>
+      <span class="cta-note">31 讲全在这里，可按路径 Q / A / B / C 筛选，也能按关键词搜</span>
     </div>
   </div>
 </section>
@@ -410,7 +401,7 @@ ${topbar({ prefix: '', current: 'home', home: './' })}
 </section>
 </main>
 
-${footer({ prefix: '', home: './' })}
+${footer({ prefix: '', home: './', map: './map' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
 <script src="assets/app.js"></script>
 </body>
@@ -519,7 +510,7 @@ function lessonPage(mod, stage) {
     canon: `/lessons/${mod.no}.html`,
   })}
 <body data-page="lesson" data-total="${TOTAL}" data-mod="${mod.no}">
-${topbar({ prefix: '../', current: '', home: '../' })}
+${topbar({ prefix: '../', current: '', home: '../', map: '../map' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <div class="shell lesson">
@@ -527,7 +518,7 @@ ${topbar({ prefix: '../', current: '', home: '../' })}
     <main class="lesson-main" id="main">
       <div class="crumb">
         <a href="../">总览</a><span class="sep">/</span>
-        <a href="../#map">课程地图</a><span class="sep">/</span>
+        <a href="../map">课程地图</a><span class="sep">/</span>
         <span>${stage.id} ${esc(stage.name)}</span>
       </div>
 
@@ -632,9 +623,79 @@ ${terms.length ? `
   </div>
 </div>
 
-${footer({ prefix: '../', home: '../' })}
+${footer({ prefix: '../', home: '../', map: '../map' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
 <script src="../assets/app.js"></script>
+</body>
+</html>
+`;
+}
+
+/* ============================== 课程地图页（/map） ============================== */
+
+/**
+ * 课程地图做成独立页面，而不是首页的 #map 锚点。
+ *
+ * 原因：锚点地址没法单独分享、也不会被搜索引擎当成一个页面；
+ * 而 31 讲本身就是一张需要筛选和搜索的索引，值得有自己的地址。
+ * 首页只保留 9 行阶段索引 + 入口，避免同一个列表在两处各维护一遍。
+ */
+function renderMapPage() {
+  const stages = STAGES.map(st => {
+    const cards = st.mods.map(modCard).join('\n      ');
+    return `<div class="stage" id="${st.id.toLowerCase()}">
+      <div class="stage-h">
+        <span class="sid">${st.id}</span>
+        <h3>${esc(st.name)}</h3>
+        <span class="cnt" data-visible>${st.mods.length} 讲</span>
+        <span class="ln"></span>
+      </div>
+      <div class="mod-grid">
+      ${cards}
+      </div>
+    </div>`;
+  }).join('\n    ');
+
+  return `${head({
+    title: `课程地图 · 从 0 到上线`,
+    desc: `${STAGES.length} 个阶段 ${TOTAL} 讲的完整索引，可按学习路径 Q / A / B / C 筛选，也能按关键词搜索。每讲含能力目标、操作步骤、产出物与验收判据。`,
+    prefix: './',
+    canon: '/map',
+  })}
+<body data-page="map" data-total="${TOTAL}">
+${topbar({ prefix: '', current: 'map', home: './', map: './map' })}
+<a class="skip" href="#main">跳到正文</a>
+
+<main id="main">
+<section class="hero sm">
+  <div class="shell">
+    <div class="kicker">Course Map · ${TOTAL} 讲</div>
+    <h1>课程地图</h1>
+    <p class="lead">${STAGES.length} 个阶段、${TOTAL} 讲。按顺序走是主线；按路径筛，是给「只想先跑通一个站」的人准备的捷径。</p>
+  </div>
+</section>
+
+<section class="sec" id="list">
+  <div class="shell">
+    <div class="filters">
+      <button class="fbtn" type="button" data-path="ALL" aria-pressed="true">全部<span class="n">${TOTAL}</span></button>
+      ${Object.entries(PATHS).map(([k, p]) =>
+        `<button class="fbtn${k === 'Q' ? ' qq' : ''}" type="button" data-path="${k}" aria-pressed="false">${esc(p.label)}<span class="n">${PATH_COUNT[k]}</span></button>`).join('\n      ')}
+      <input class="search" id="q" type="search" placeholder="搜模块、关键词…" aria-label="搜索模块">
+    </div>
+    <!-- 阶段标题是 h3、卡片是 h4，中间缺一层 h2 会判为跳级；这里给列表一个（视觉隐藏的）层级 -->
+    <h2 class="sr-only">全部 ${TOTAL} 讲</h2>
+    <p class="fhint" id="fhint"></p>
+    <div id="map-list">
+    ${stages}
+    </div>
+  </div>
+</section>
+</main>
+
+${footer({ prefix: '', home: './', map: './map' })}
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="assets/app.js"></script>
 </body>
 </html>
 `;
@@ -672,7 +733,7 @@ function gatesPage() {
     canon: '/gates.html',
   })}
 <body data-page="gates" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'gates', home: './' })}
+${topbar({ prefix: '', current: 'gates', home: './', map: './map' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -733,7 +794,7 @@ ${topbar({ prefix: '', current: 'gates', home: './' })}
 </section>
 </main>
 
-${footer({ prefix: '', home: './' })}
+${footer({ prefix: '', home: './', map: './map' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
 <script src="assets/app.js"></script>
 </body>
@@ -763,7 +824,7 @@ function glossaryPage() {
     canon: '/glossary.html',
   })}
 <body data-page="glossary" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'glossary', home: './' })}
+${topbar({ prefix: '', current: 'glossary', home: './', map: './map' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -794,7 +855,7 @@ ${topbar({ prefix: '', current: 'glossary', home: './' })}
 </section>
 </main>
 
-${footer({ prefix: '', home: './' })}
+${footer({ prefix: '', home: './', map: './map' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
 <script src="assets/app.js"></script>
 </body>
@@ -823,7 +884,7 @@ function notFoundPage() {
     extra: '<meta name="robots" content="noindex">',
   })}
 <body data-page="404" data-total="${TOTAL}">
-${topbar({ prefix: '/', current: '', home: '/' })}
+${topbar({ prefix: '/', current: '', home: '/', map: '/map' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -834,7 +895,7 @@ ${topbar({ prefix: '/', current: '', home: '/' })}
     <p class="lead">可能是链接打错了一个字，也可能这页还没写。下面三个入口都能回到正题。</p>
     <div class="cta">
       <a class="btn btn-primary" href="/">回课程总览 <span class="ar">→</span></a>
-      <a class="btn btn-ghost" href="/#map">看课程地图</a>
+      <a class="btn btn-ghost" href="/map">看课程地图</a>
       <a class="btn btn-ghost" href="/glossary.html">术语表</a>
     </div>
   </div>
@@ -850,7 +911,7 @@ ${topbar({ prefix: '/', current: '', home: '/' })}
 </section>
 </main>
 
-${footer({ prefix: '/', home: '/' })}
+${footer({ prefix: '/', home: '/', map: '/map' })}
 <script src="/assets/app.js"></script>
 </body>
 </html>
@@ -879,11 +940,13 @@ STAGES.forEach(st => st.mods.forEach(m => {
 }));
 bytes += write('gates.html', gatesPage()); files.push('gates.html');
 bytes += write('glossary.html', glossaryPage()); files.push('glossary.html');
+bytes += write('map.html', renderMapPage()); files.push('map.html');
 bytes += write('404.html', notFoundPage()); files.push('404.html');
 
 /* ---- sitemap.xml / robots.txt：M13 与 M29 都在讲它们，本站自己没有就说不过去 ---- */
 const smEntries = [
   { loc: '/', pri: '1.0' },
+  { loc: '/map', pri: '0.9' },
   { loc: '/gates.html', pri: '0.8' },
   { loc: '/glossary.html', pri: '0.7' },
   ...MODULES.map(m => ({ loc: `/lessons/${m.no}.html`, pri: '0.6' })),
@@ -913,14 +976,17 @@ fs.writeFileSync(path.join(OUT, 'assets', 'favicon.svg'), FAVICON_SVG, 'utf8');
 /* ============================== 自检 ============================== */
 
 const checks = [];
-const need = ['index.html', 'gates.html', 'glossary.html', '404.html',
+const need = ['index.html', 'map.html', 'gates.html', 'glossary.html', '404.html',
   'sitemap.xml', 'robots.txt',
   ...MODULES.map(m => `lessons/${m.no}.html`)];
-checks.push([`页面数 = ${TOTAL + 4}`, files.length === TOTAL + 4]);
+checks.push([`页面数 = ${TOTAL + 5}`, files.length === TOTAL + 5]);
 checks.push(['文件全部落盘', need.every(f => fs.existsSync(path.join(OUT, f)))]);
 const home = fs.readFileSync(path.join(OUT, 'index.html'), 'utf8');
-checks.push([`首页含全部 ${TOTAL} 张卡`, (home.match(/class="mod" href=/g) || []).length === TOTAL]);
-checks.push(['首页路径计数与数据一致', Object.entries(PATH_COUNT).every(([k, v]) => home.includes(`data-path="${k}"`))]);
+const mapHtml = fs.readFileSync(path.join(OUT, 'map.html'), 'utf8');
+// 31 张卡在 /map 上（首页只剩 9 行阶段索引），这两项自检跟着搬过去
+checks.push([`地图页含全部 ${TOTAL} 张卡`, (mapHtml.match(/class="mod" href=/g) || []).length === TOTAL]);
+checks.push(['地图页路径计数与数据一致', Object.entries(PATH_COUNT).every(([k]) => mapHtml.includes(`data-path="${k}"`))]);
+checks.push(['首页只放阶段索引，不再重复卡片', !/class="mod" href=/.test(home)]);
 const m01 = fs.readFileSync(path.join(OUT, 'lessons', 'M01.html'), 'utf8');
 checks.push(['讲义页带 data-mod', m01.includes('data-mod="M01"')]);
 checks.push(['讲义页无「待补充」', !m01.includes('待补充')]);

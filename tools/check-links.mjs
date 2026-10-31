@@ -37,12 +37,17 @@ for (const p of pages) {
     const target = !href ? p
       : href.startsWith('/') ? path.join(SITE, href)
       : path.resolve(path.dirname(p), href);
-    if (!fs.existsSync(target)) {
+    // 干净 URL：/map 由 map.html 提供（nginx try_files $uri.html），检查时按同样规则回退
+    let resolvedTarget = target;
+    if (!fs.existsSync(target) && !path.extname(target) && fs.existsSync(target + '.html')) {
+      resolvedTarget = target + '.html';
+    }
+    if (!fs.existsSync(resolvedTarget)) {
       console.error(`✗ 文件不存在  ${path.relative(SITE, p)} → ${raw}`);
       bad++; continue;
     }
     // 指向目录的链接（./ 与 ../ 指向首页）等价于该目录下的 index.html，锚点要在它上面校验
-    const resolved = fs.statSync(target).isDirectory() ? path.join(target, 'index.html') : target;
+    const resolved = fs.statSync(resolvedTarget).isDirectory() ? path.join(resolvedTarget, 'index.html') : resolvedTarget;
     if (hash && idsOf.has(resolved) && !idsOf.get(resolved).has(hash)) {
       console.error(`✗ 锚点不存在  ${path.relative(SITE, p)} → ${raw}`);
       bad++;

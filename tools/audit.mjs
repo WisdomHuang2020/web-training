@@ -119,7 +119,14 @@ if (fs.existsSync(sitemapPath)) {
   const missing = pages
     .filter(p => !p.endsWith('404.html'))
     .map(p => '/' + path.relative(SITE, p).replace(/\\/g, '/'))
-    .filter(u => !listed.has(SITE_ORIGIN + u) && !listed.has(SITE_ORIGIN + u.replace(/index\.html$/, '')));
+    .filter(u => {
+      const abs = SITE_ORIGIN + u;
+      // 干净 URL 也算覆盖：/map.html 由 /map 提供，/index.html 由 / 提供
+      if (listed.has(abs)) return false;
+      if (listed.has(abs.replace(/index\.html$/, ''))) return false;
+      if (abs.endsWith('.html') && listed.has(abs.slice(0, -5))) return false;
+      return true;
+    });
   if (missing.length) problems.push(`${'(站级)'.padEnd(24)} sitemap 漏了 ${missing.length} 页：${missing.slice(0, 5).join(', ')}…`);
 }
 

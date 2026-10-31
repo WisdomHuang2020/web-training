@@ -35,10 +35,15 @@ http.createServer((req, res) => {
 
   fs.readFile(file, (err, buf) => {
     if (err) {
-      // 无扩展名的路径按目录处理
-      const alt = path.join(file, 'index.html');
-      if (!path.extname(file) && fs.existsSync(alt)) {
-        res.writeHead(200, { 'content-type': MIME['.html'] }).end(fs.readFileSync(alt));
+      // 无扩展名：先按「同名 .html」（对应 nginx 的 try_files $uri.html），再按目录
+      const asHtml = file + '.html';
+      if (!path.extname(file) && fs.existsSync(asHtml)) {
+        res.writeHead(200, { 'content-type': MIME['.html'] }).end(fs.readFileSync(asHtml));
+        return;
+      }
+      const asIndex = path.join(file, 'index.html');
+      if (!path.extname(file) && fs.existsSync(asIndex)) {
+        res.writeHead(200, { 'content-type': MIME['.html'] }).end(fs.readFileSync(asIndex));
         return;
       }
       res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' }).end('404 ' + url);

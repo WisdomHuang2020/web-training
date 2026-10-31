@@ -28,6 +28,7 @@ const VIEWPORTS = [
 ];
 const PAGES = [
   ['首页', '/'],
+  ['课程地图', '/map'],
   ['讲义 M01', '/lessons/M01.html'],
   ['讲义 M30', '/lessons/M30.html'],
   ['讲义 M31', '/lessons/M31.html'],

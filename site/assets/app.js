@@ -112,9 +112,9 @@
     paint();
   }
 
-  /* ---------------- 首页 ---------------- */
-  function initHome() {
-    var grid = document.getElementById('map');
+  /* ---------------- 课程地图页（/map）---------------- */
+  function initMapPage() {
+    var grid = document.getElementById('map-list');
     if (!grid) return;
 
     var btns = Array.prototype.slice.call(document.querySelectorAll('.fbtn[data-path]'));
@@ -242,12 +242,13 @@
   function boot() {
     var p = document.body.dataset.page;
     if (p === 'lesson') initLesson();
-    if (p === 'home') initHome();
+    if (p === 'map') initMapPage();
+    if (p === 'home') paintCoursePill();
     initToc();
     initCopy();
     initTop();
-    // 门禁 / 术语表没有"进度"这回事，直接把胶囊摘掉，别留个 0 在那杵着
-    if (p !== 'lesson' && p !== 'home') paintPill(0, 0, '');
+    // 门禁 / 术语表 / 404 没有"进度"这回事，直接把胶囊摘掉
+    if (p !== 'lesson' && p !== 'home' && p !== 'map') paintPill(0, 0, '');
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

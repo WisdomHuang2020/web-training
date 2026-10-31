@@ -315,6 +315,23 @@ code {
 .mod .tags i.q { color: var(--accent-light); border-color: rgba(245, 158, 11, .35); }
 .mod.done .no::after { content: " ✓"; color: var(--success); }
 
+/* ============================ 首页阶段索引 ============================ */
+/* 首页只放 9 行，31 张卡在 /map。列表做成一张卡片里的行，行与行之间是细线隔开。 */
+.stage-index { border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); overflow: hidden; }
+.si {
+  display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: start;
+  padding: 13px 18px; border-top: 1px solid var(--surface-2);
+  transition: background .16s;
+}
+.si:first-child { border-top: none; }
+.si:hover { background: var(--surface-2); }
+.si-id { font-family: var(--font-mono); font-size: 10.5px; color: var(--brand-light); padding-top: 3px; letter-spacing: .04em; }
+.si-name { display: block; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+.si:hover .si-name { color: var(--brand-light); }
+.si-name b { font-family: var(--font-mono); font-size: 10px; font-weight: 400; color: var(--text-3); margin-left: 9px; }
+.si-mods { display: block; font-size: 12.5px; color: var(--text-3); line-height: 1.7; }
+.cta-note { font-size: 12.5px; color: var(--text-3); align-self: center; }
+
 /* ============================ 门禁时间线 ============================ */
 .timeline { position: relative; padding-left: 0; }
 .tl-item { display: grid; grid-template-columns: 34px 1fr; gap: 16px; }
@@ -685,7 +702,8 @@ ul.check input:checked + label { color: var(--text-3); text-decoration: line-thr
   .chip.s { background: #f4f4f4; color: #555; }
   .acc-line, ul.check label { color: #222; }
   .check-top { display: none; }
-  .mod h4, .mod h3, .path h3, .stage-h h3, .tbl td:first-child { color: #111; }
+  .mod h4, .mod h3, .path h3, .stage-h h3, .tbl td:first-child, .si-name { color: #111; }
+  .si-mods, .si-id, .cta-note { color: #555; }
   .mod p, .path p, .sec-desc, .gloss dd, .tbl td { color: #333; }
   .mod .no, .stage-h .cnt, .mk { color: #666; }
   .tag { color: #444; border-color: #ccc; }
