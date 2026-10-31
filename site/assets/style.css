@@ -506,6 +506,42 @@ pre.code .cm { color: #6b7d8f; }
 .pit { background: rgba(239, 68, 68, .07); border: 1px solid rgba(239, 68, 68, .22); border-radius: 9px; padding: 17px 20px; font-size: 14.5px; line-height: 1.8; color: #fca5a5; }
 .pit .cost { margin-top: 9px; padding-top: 9px; border-top: 1px solid rgba(239, 68, 68, .18); font-size: 13.5px; color: rgba(252, 165, 165, .8); }
 
+/* ── 完整 SOP 区块（讲义内的一节，块类型见 data/course.mjs 的 SOP 注释）── */
+.sop .sop-p { font-size: 14.5px; line-height: 1.85; color: var(--text-2); margin-top: 12px; }
+.sop .sop-intro { color: var(--text); font-size: 15px; margin: 0 0 6px; padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 9px; }
+.sop h3 {
+  font-size: 15.5px; font-weight: 600; color: var(--text);
+  margin: 30px 0 10px; padding-left: 12px; border-left: 2px solid var(--brand-light);
+  line-height: 1.5;
+}
+.sop h3:first-of-type { margin-top: 6px; }
+.sop .steps, .sop .pts, .sop .code-wrap, .sop .tbl-wrap { margin-top: 12px; }
+.sop .tbl-wrap { padding: 18px 14px 6px; }
+
+/* 分级提示：tip 青 / warn 琥珀 / danger 红。
+   颜色只承担「严重程度」，不承担信息 —— 三种前面都有对应措辞，色盲也读得懂。 */
+.callout {
+  margin-top: 14px; padding: 14px 18px; border-radius: 9px;
+  font-size: 14px; line-height: 1.8; border: 1px solid;
+}
+.callout.tip { background: rgba(20, 184, 166, .06); border-color: rgba(20, 184, 166, .2); color: #b8f0e8; }
+.callout.warn { background: rgba(245, 158, 11, .07); border-color: rgba(245, 158, 11, .26); color: #f8d29a; }
+.callout.danger { background: rgba(239, 68, 68, .07); border-color: rgba(239, 68, 68, .24); color: #fca5a5; }
+.callout::before {
+  display: block; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .14em;
+  margin-bottom: 5px; opacity: .75;
+}
+.callout.tip::before { content: "提示"; }
+.callout.warn::before { content: "注意"; }
+.callout.danger::before { content: "易错"; }
+
+blockquote.sop-quote {
+  margin: 14px 0 0; padding: 12px 0 12px 18px;
+  border-left: 3px solid var(--brand-light);
+  font-size: 15px; line-height: 1.85; color: var(--text);
+}
+
 /* 自检表 */
 .check-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
 .check-top .ptxt { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-2); flex: 0 0 auto; }
@@ -615,7 +651,11 @@ ul.check input:checked + label { color: var(--text-3); text-decoration: line-thr
   .lede .ability { background: #eefaf7; color: #0b4f45; border-color: #cfe9e3; }
   .lede .ability b { color: #0f766e; }
   .why { color: #222; }
-  .drill { background: #eefaf7; color: #0b4f45; border-color: #cfe9e3; }
+  .drill, .callout.tip { background: #eefaf7; color: #0b4f45; border-color: #cfe9e3; }
+  .callout.warn { background: #fdf6e8; color: #7a4f0b; border-color: #efdcb4; }
+  .callout.danger { background: #fdf2f2; color: #7a2222; border-color: #f0d5d5; }
+  .sop-quote { color: #222; }
+  .sop h3 { color: #111; }
   .pit { background: #fdf2f2; color: #7a2222; border-color: #f0d5d5; }
   .pit .cost { color: #8a3a3a; border-color: #eccfcf; }
   .chip.h { background: #e8f7ee; color: #146c43; border-color: #bfe3cd; }

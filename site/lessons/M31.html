@@ -106,8 +106,67 @@ nc -zv smtp.exmail.qq.com 465</pre>
       </div>
       </section>
 
+
+      <section class="lsec sop" id="sop">
+        <h2><span class="i">04</span>完整 SOP<span class="n">照着能做</span></h2>
+        <p class="sop-p sop-intro">目标：官网收到客户留言后自动发邮件到指定收件箱，不用天天登后台翻。适用范围：每一台对外提供本站服务的机器都要配一次——少配一台，那台上的留言就不发信。</p>
+        <h3>0. 先分清两个角色（30 秒）</h3>
+<p class="sop-p">这套东西里有两个东西容易混：谁该收到信，和用谁的名义把信发出去。它们改的地方不一样，混了就会出安全问题。</p>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>概念</th><th>是什么</th><th>在哪改</th></tr></thead>
+          <tbody><tr><td>收件人</td><td>谁收到通知，可以多个，随时增删</td><td>后台 · 客户留言 → 邮件提醒面板</td></tr><tr><td>发信账号</td><td>用哪个邮箱把信发出去，一个就够</td><td>服务器 /etc/&lt;站点&gt;.env，不在后台</td></tr></tbody>
+        </table></div>
+<div class="callout warn">为什么发信账号不放在后台：邮箱密码是凭据。放进后台面板，等于把「冒充公司对外发信」的能力交给任何一个后台账号。</div>
+<h3>1. 创建发信账号（管理员操作，约 3 分钟）</h3>
+<p class="sop-p">前提：你必须有企业邮管理员权限。</p>
+<ol class="steps"><li>浏览器打开 https://exmail.qq.com ，用管理员账号登录</li><li>进入「管理后台」（通常在右上角或左侧），找「成员与群组」/「通讯录」</li><li>添加成员：账号填 msg.website，域名填你的域名，姓名填「官网留言通知」——这是收件人在收件箱里看到的发件人名字，最后设一个初始密码</li><li>保存</li></ol>
+<div class="callout tip">也可以直接复用已有账号，但别用个人邮箱：以后改密码、人员变动会把通知断掉。</div>
+<h3>2. 开启 SMTP 并生成「客户端专用密码」（约 2 分钟）</h3>
+<ol class="steps"><li>用刚建的发信账号登录 https://exmail.qq.com （首次登录可能要改密码、绑手机，按提示做完）</li><li>右上角「设置」→ 找「客户端设置」。部分版本叫「账号与安全」或「收发信设置」；找不到就在设置页的搜索框里搜「客户端」</li><li>确认 SMTP 服务已开启</li><li>点「生成客户端专用密码」</li><li>弹出的那串字母数字复制保存好 —— 第 3 步要填的密码就是它</li></ol>
+<div class="callout warn">最常见卡点：账号开了「安全登录」后，用网页登录密码连 SMTP 一定失败，必须用这个「客户端专用密码」。报错是 535 Authentication failed。</div>
+<div class="callout danger">但 535 不能反推出「就是缺专用密码」。它是通用认证失败码，下面两类原因都报 535 —— 照着「缺密码」这个结论反复重生密码，折腾半天还是 535。</div>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>原因</th><th>怎么区分</th></tr></thead>
+          <tbody><tr><td>A. 开了安全登录，必须用客户端专用密码</td><td>设置 → 账户 → 账户安全，「设置」那一行显示「已开启」</td></tr><tr><td>B. 密码不对 / 账号未激活 / 管理员禁用了客户端登录</td><td>同一行显示「需先绑定微信」（即未开启）</td></tr></tbody>
+        </table></div>
+<div class="callout tip">判据是那一行按钮的状态，不是报错码本身。另外，安全登录是按账号设置的：拿 A 账号的页面状态去推断 B 账号，会得出错误结论。</div>
+<h3>3. 在服务器上配置（每台一次，一条命令）</h3>
+<p class="sop-p">SSH 到服务器后执行。注意是最小替换，不是整文件重写。</p>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code"><span class="cm"># 端口 465 = SMTP over SSL。换端口前先确认服务商支持哪一种，别凭印象填</span>
+sudo bash /opt/&lt;站点&gt;/repo/deploy/setup-mail.sh \
+  smtp.exmail.qq.com 465 msg.website@你的域名 '客户端专用密码'</pre>
+        </div>
+<p class="sop-p">脚本会做四件事：</p>
+<ol class="steps"><li>把原配置备份到 /root/&lt;站点&gt;.env.bak-mail-日期</li><li>只替换 MAIL_* / SMTP_* 那几行，其余变量原样保留 —— 不会碰坏 SITE_NAME 这类含空格的值</li><li>权限保持 600 root:root（systemd 以 root 读取，不需要放宽）</li><li>重启服务并回读自检</li></ol>
+<h3>4. 验证（必须做，别只看「命令没报错」）</h3>
+<p class="sop-p">四步都要过，少一步都可能是「配置写了但没生效」。</p>
+<ol class="steps"><li>看状态灯：登录 https://你的域名/admin/ → 左侧「客户留言」→ 页面底部「新留言邮件提醒」。绿色「已配置发信通道」= 成功；琥珀色「未配置」会列出缺哪几项</li><li>点「发送测试邮件」。两个收件箱都应收到「[官网留言] 测试邮件 —— 收到说明通知已生效」</li><li>走一次真实链路：到联系页真发一条留言，确认收件箱收到「[官网留言] 你的名字」，并且点邮件里的「回复」，收件人自动是访客填的邮箱（不是你自己）</li><li>查日志：出问题时它是第一现场</li></ol>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code">journalctl -u &lt;服务名&gt; -n 80 --no-pager | grep -i mail
+<span class="cm"># 正常长这样：</span>
+<span class="cm"># [mail] 已通知 2 位收件人，messageId=&lt;...&gt;</span></pre>
+        </div>
+<div class="callout tip">测试邮件没收到先查垃圾箱 —— 第一次发信可能被判可疑。真实链路那步的「点回复指向访客邮箱」别跳过：它验的是 Reply-To 有没有写对，写错了你回信会发给自己。</div>
+<h3>5. 日常维护</h3>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>要做的事</th><th>怎么做</th></tr></thead>
+          <tbody><tr><td>加 / 删收件人</td><td>后台 → 客户留言 → 邮件提醒面板 → 输入框添加 / 点 × 删除。即时生效，不用重启</td></tr><tr><td>换发信密码</td><td>邮箱后台重新生成客户端专用密码 → 每台各跑一次第 3 步的命令</td></tr><tr><td>换发信账号</td><td>同上，把命令里的账号和密码一起换掉</td></tr><tr><td>临时停掉邮件通知</td><td>每台改成 MAIL_ENABLED=false（在 /etc/&lt;站点&gt;.env），重启服务。留言照常入库，只是不发信</td></tr></tbody>
+        </table></div>
+<div class="callout tip">收件人改动会写审计日志（settings:mail.recipients），能查到谁在什么时候改的。</div>
+<h3>6. 故障对照表</h3>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>现象</th><th>大概率原因</th><th>处理</th></tr></thead>
+          <tbody><tr><td>后台显示「未配置」</td><td>有台没配，或配了没重启</td><td>查 /etc/&lt;站点&gt;.env 里有没有 SMTP_*，然后 systemctl restart &lt;服务名&gt;</td></tr><tr><td>535 Authentication failed</td><td>用了网页密码而不是客户端专用密码</td><td>重新生成专用密码；仍失败则按第 2 节的 A/B 表继续查</td></tr><tr><td>550 Sender rejected</td><td>发件人地址与认证账号不一致</td><td>MAIL_FROM 必须等于 SMTP_USER</td></tr><tr><td>发送超时</td><td>服务器出网被封</td><td>nc -zv smtp.exmail.qq.com 465 测连通性</td></tr><tr><td>收件箱进垃圾邮件</td><td>首次发信，或内容像营销</td><td>收件人把发件人加白名单；这条链路走企业邮，SPF / DKIM 本来就是对的</td></tr><tr><td>留言有，但没收到邮件</td><td>发信异常被吞掉了</td><td>journalctl 搜 [mail]，日志里有明确的失败原因</td></tr></tbody>
+        </table></div>
+<h3>7. 一句话记住</h3>
+<blockquote class="sop-quote">收件人在后台改，发信账号在服务器改。前者是日常运维，后者是凭据管理 —— 刻意分开，就是为了不让「改个通知邮箱」变成「交出公司发信权」。</blockquote>
+      </section>
+
       <section class="lsec" id="s5">
-        <h2><span class="i">04</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <h2><span class="i">05</span>产出物与验收<span class="n">做完怎么算过</span></h2>
         <div class="kv2">
           <div class="kv">
             <h3>产出物</h3>
@@ -122,17 +181,17 @@ nc -zv smtp.exmail.qq.com 465</pre>
       </section>
 
       <section class="lsec" id="s6">
-        <h2><span class="i">05</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <h2><span class="i">06</span>练习<span class="n">15 分钟内可做完</span></h2>
         <div class="drill">故意用网页登录密码去配 SMTP，先撞出一次 535；然后不看报错码，去「账户安全」看那行按钮的状态判断是哪种原因，再换成客户端专用密码修好。</div>
       </section>
 
       <section class="lsec" id="s7">
-        <h2><span class="i">06</span>最容易踩的坑</h2>
+        <h2><span class="i">07</span>最容易踩的坑</h2>
         <div class="pit">把 535 一律当成「缺客户端专用密码」，照着这个结论反复重生密码<div class="cost">后果：留言躺在库里没人知道，客户等三天没回音；更糟的是反过来——为了「方便」把邮箱密码填进后台面板，此后任何一个后台账号都能拿它对外发信。</div></div>
       </section>
 
       <section class="lsec" id="s8">
-        <h2><span class="i">07</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <h2><span class="i">08</span>自检表<span class="n">进度存在本机浏览器</span></h2>
         <div class="check-top">
           <span class="ptxt" id="ptxt">0 / 9</span>
           <span class="pbar"><i id="pbar"></i></span>
@@ -151,7 +210,7 @@ nc -zv smtp.exmail.qq.com 465</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../glossary.html">全部 28 条</a></span></h2>
+        <h2><span class="i">09</span>本讲术语<span class="n"><a href="../glossary.html">全部 28 条</a></span></h2>
         <ul class="pts">
           <li><b><a href="../glossary.html#g02">v1 / v2 后台</a></b>：本项目自造的阶段叫法。v1 = 纯静态站；v2 = 加了内容管理后台（登录、数据库、上传）。不是技术名词。</li>
           <li><b><a href="../glossary.html#g24">台账</a></b>：只记「有什么、什么时候到期、谁负责」的清单；密钥台账不记密钥本体。</li>
@@ -174,6 +233,7 @@ nc -zv smtp.exmail.qq.com 465</pre>
           <li><a href="#s2">为什么重要</a></li>
           <li><a href="#s3">要讲清的 5 件事</a></li>
           <li><a href="#s4">照着做：6 步</a></li>
+          <li><a href="#sop">完整 SOP</a></li>
           <li><a href="#s5">产出物与验收</a></li>
           <li><a href="#s6">练习</a></li>
           <li><a href="#s7">最容易踩的坑</a></li>

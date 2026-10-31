@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   META, STAGES, PATHS, REDLINES, GLOSSARY, RICH, STEPS, STAGE_DRILLS,
-  MODULES, PATH_COUNT, ROUTES, FLOW, GATES,
+  MODULES, PATH_COUNT, ROUTES, FLOW, GATES, SOP,
 } from './data/course.mjs';
 import { IS_ISNOT, AUDIENCE, PASS_LINE } from './data/structure.mjs';
 
@@ -402,6 +402,58 @@ ${footer({ prefix: '' })}
 `;
 }
 
+/* ============================== 完整 SOP 区块 ============================== */
+
+/**
+ * 把 SOP 的块数组渲染成讲义里的一节。
+ *
+ * 单独做这一层的原因：讲义顶部那套「要点 / 照着做」是速览，装不下分级提示与对照表。
+ * 一份真实运维 SOP 压成 5 条要点，就从「照着能做」降级成「大概知道」。
+ *
+ * 所有文本都过 esc()：数据里出现 < > & 也只当文字，不引入 HTML 注入面。
+ */
+function renderSop(mod, idx) {
+  const sop = SOP[mod.no];
+  if (!sop) return '';
+
+  const blocks = sop.blocks.map(b => {
+    switch (b.type) {
+      case 'h':
+        return `<h3>${esc(b.text)}</h3>`;
+      case 'p':
+        return `<p class="sop-p">${esc(b.text)}</p>`;
+      case 'list':
+        return `<ul class="pts">${b.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>`;
+      case 'steps':
+        return `<ol class="steps">${b.items.map(i => `<li>${esc(i)}</li>`).join('')}</ol>`;
+      case 'table':
+        return `<div class="tbl-wrap"><table class="tbl">
+          <thead><tr>${b.head.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>
+          <tbody>${b.rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+        </table></div>`;
+      case 'code':
+        return `<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code">${esc(b.text).split('\n').map(l => /^\s*#/.test(l) ? `<span class="cm">${l}</span>` : l).join('\n')}</pre>
+        </div>`;
+      case 'note':
+        return `<div class="callout ${b.kind}">${esc(b.text)}</div>`;
+      case 'quote':
+        return `<blockquote class="sop-quote">${esc(b.text)}</blockquote>`;
+      default:
+        return '';
+    }
+  }).join('\n');
+
+  return `
+      <section class="lsec sop" id="sop">
+        <h2><span class="i">${idx}</span>完整 SOP<span class="n">照着能做</span></h2>
+        ${sop.intro ? `<p class="sop-p sop-intro">${esc(sop.intro)}</p>` : ''}
+        ${blocks}
+      </section>
+`;
+}
+
 /* ============================== 讲义页 ============================== */
 
 function lessonPage(mod, stage) {
@@ -425,12 +477,17 @@ function lessonPage(mod, stage) {
     ['s2', '为什么重要'],
     ['s3', `要讲清的 ${mod.pts.length} 件事`],
     ['s4', `照着做：${steps.length} 步`],
+    ...(SOP[mod.no] ? [['sop', '完整 SOP']] : []),
     ['s5', '产出物与验收'],
     ['s6', '练习'],
     ['s7', '最容易踩的坑'],
     ['s8', '自检表'],
   ];
   if (terms.length) toc.push(['s9', '本讲术语']);
+
+  // 章节序号自增：插入新章节（如完整 SOP）时不用手改后面每一节的编号
+  let sec = 0;
+  const num = () => String(++sec).padStart(2, '0');
 
   const codeHtml = rich.cmd
     ? `<div class="code-wrap">
@@ -473,27 +530,28 @@ ${topbar({ prefix: '../', current: '' })}
       </section>
 
       <section class="lsec" id="s2">
-        <h2><span class="i">01</span>为什么重要</h2>
+        <h2><span class="i">${num()}</span>为什么重要</h2>
         <div class="why">${esc(rich.why || '')}</div>
       </section>
 
       <section class="lsec" id="s3">
-        <h2><span class="i">02</span>要讲清的 ${mod.pts.length} 件事<span class="n">核心要点</span></h2>
+        <h2><span class="i">${num()}</span>要讲清的 ${mod.pts.length} 件事<span class="n">核心要点</span></h2>
         <ul class="pts">
           ${mod.pts.map(p => `<li>${esc(p)}</li>`).join('\n          ')}
         </ul>
       </section>
 
       <section class="lsec" id="s4">
-        <h2><span class="i">03</span>照着做：${steps.length} 步<span class="n">操作顺序</span></h2>
+        <h2><span class="i">${num()}</span>照着做：${steps.length} 步<span class="n">操作顺序</span></h2>
         <ol class="steps">
           ${steps.map(s => `<li>${esc(s)}</li>`).join('\n          ')}
         </ol>
         ${codeHtml}
       </section>
 
+${renderSop(mod, SOP[mod.no] ? num() : '')}
       <section class="lsec" id="s5">
-        <h2><span class="i">04</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <h2><span class="i">${num()}</span>产出物与验收<span class="n">做完怎么算过</span></h2>
         <div class="kv2">
           <div class="kv">
             <h3>产出物</h3>
@@ -507,17 +565,17 @@ ${topbar({ prefix: '../', current: '' })}
       </section>
 
       <section class="lsec" id="s6">
-        <h2><span class="i">05</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <h2><span class="i">${num()}</span>练习<span class="n">15 分钟内可做完</span></h2>
         <div class="drill">${esc(mod.drill)}</div>
       </section>
 
       <section class="lsec" id="s7">
-        <h2><span class="i">06</span>最容易踩的坑</h2>
+        <h2><span class="i">${num()}</span>最容易踩的坑</h2>
         <div class="pit">${esc(mod.pit)}${rich.cost ? `<div class="cost">后果：${esc(rich.cost)}</div>` : ''}</div>
       </section>
 
       <section class="lsec" id="s8">
-        <h2><span class="i">07</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <h2><span class="i">${num()}</span>自检表<span class="n">进度存在本机浏览器</span></h2>
         <div class="check-top">
           <span class="ptxt" id="ptxt">0 / ${checks.length}</span>
           <span class="pbar"><i id="pbar"></i></span>
@@ -528,7 +586,7 @@ ${topbar({ prefix: '../', current: '' })}
       </section>
 ${terms.length ? `
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../glossary.html">全部 ${GLOSSARY.length} 条</a></span></h2>
+        <h2><span class="i">${num()}</span>本讲术语<span class="n"><a href="../glossary.html">全部 ${GLOSSARY.length} 条</a></span></h2>
         <ul class="pts">
           ${terms.map(t => `<li><b><a href="../glossary.html#${t.id}">${esc(t.name)}</a></b>：${esc(t.desc)}</li>`).join('\n          ')}
         </ul>
