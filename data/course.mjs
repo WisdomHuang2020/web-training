@@ -16,7 +16,7 @@
  */
 
 export const META = {
-  "version": "v1.4.0",
+  "version": "v1.5.0",
   "date": "2026-10-31",
   "title": "从 0 到上线：网站建设实训课",
   "basis": "素材基准：llc-design-tool（构建型单页应用，CI 推送）与 wx-seastar（零构建多页站 + 内容后台）",
@@ -872,7 +872,7 @@ export const STAGES = [
   },
   {
     "id": "S9",
-    "name": "通知与触达",
+    "name": "外部服务对接",
     "mods": [
       {
         "no": "M31",
@@ -900,6 +900,36 @@ export const STAGES = [
         "drill": "故意用网页登录密码去配 SMTP，先撞出一次 535；然后不看报错码，去「账户安全」看那行按钮的状态判断是哪种原因，再换成客户端专用密码修好。",
         "pit": "把 535 一律当成「缺客户端专用密码」，照着这个结论反复重生密码",
         "p": [
+          "C"
+        ]
+      },
+{
+        "no": "M32",
+        "t": "在页面里加地图",
+        "q": "客户说「要能看到我们在哪」，地图怎么加才不出事",
+        "can": "独立接入一家合规地图服务，并在它不可用时自动降级，而不是白屏",
+        "pts": [
+          "服务商只能用合规白名单：腾讯位置服务 / 高德 / 百度 / 天地图。境外底图（Google、Apple、Bing 境外版、Mapbox、OSM 境外瓦片）一律不用，这是合规红线，不是偏好问题",
+          "key 绝不进 git（仓库历史会永久留痕），只写在服务器上的 js/map-keys.*.js，该文件不入库；页面读不到 key 就整块隐藏 —— 降级不能变成报错",
+          "外链一律带坐标，不用关键词搜索：关键词会按访客 IP 所在城市检索，海外客户直接搜不到，页面看起来像没定位",
+          "内嵌容器必须有固定高度，否则不渲染；腾讯 GL 依赖 WebGL，老显卡 / 远程桌面 / 关了硬件加速会白屏且控制台不报错，必须探测后自动切高德",
+          "坐标要双源核实（腾讯 WebService + 高德 REST 返回值一致才采信），不手工编造；三家经纬度顺序不同，高德是「经度,纬度」"
+        ],
+        "out": "内嵌地图 + 三家外链按钮 + 一份「key 放哪、谁维护、怎么换」的说明",
+        "acc": [
+          [
+            "h",
+            "页面 canvas ≥ 1、信息窗显示名称与地址、控制台 0 报错；把地图 SDK 拦成 404 后能自动切另一家并仍渲染"
+          ],
+          [
+            "s",
+            "能说清为什么外链不带关键词、为什么 key 不进仓库"
+          ]
+        ],
+        "drill": "在开发者工具里把地图 SDK 的域名拦成 404 并刷新，确认它自动切到另一家、地图仍然出来；再把 getContext('webgl') 覆写成返回 null，确认同样能切 —— 两条都是「不报错但白屏」的真实故障。",
+        "pit": "外链用关键词搜索型链接（如 map.baidu.com/search/公司名），海外客户点开一片空白",
+        "p": [
+          "B",
           "C"
         ]
       }
@@ -1302,6 +1332,11 @@ export const RICH = {
     "why": "表单是黑洞：留言进了库，但没人知道，等于没收。通知通道是「后台从数据变成消息」的那一步，也是第一次把外部服务的凭据接进系统——这一步凭据怎么摆，决定了以后「改个通知邮箱」会不会变成「交出公司发信权」。",
     "cmd": "# 1) 先在邮箱后台建专用发信账号、开 SMTP、生成「客户端专用密码」\n# 2) 每台服务器跑一次（脚本只替换 MAIL_* / SMTP_* 那几行）\nsudo bash /opt/<站点>/repo/deploy/setup-mail.sh \\\n  smtp.exmail.qq.com 465 msg.website@你的域名 '客户端专用密码'\n\n# 3) 排障：先看日志，再对着故障对照表定位\njournalctl -u <服务名> -n 80 --no-pager | grep -i mail\nnc -zv smtp.exmail.qq.com 465",
     "cost": "留言躺在库里没人知道，客户等三天没回音；更糟的是反过来——为了「方便」把邮箱密码填进后台面板，此后任何一个后台账号都能拿它对外发信。"
+  },
+  "M32": {
+      "why": "地图是客户第一眼判断「你在不在」的组件，也是最容易出事的一类：key 泄露、白名单没配、浏览器不支持 WebGL 直接白屏、外链搜不到。它的价值不在「画出来」，而在「画不出来时怎么退」——地图挂了页面不能跟着挂。",
+      "cmd": "# key 只放服务器，不进仓库（每台各一份）\n/var/www/<站点>/js/map-keys.v2.js\n\n# 这个文件会变、文件名又带不上 ?v=，只能靠响应头禁缓存\nlocation = /js/map-keys.v2.js {\n    add_header Cache-Control \"no-cache, must-revalidate\" always;\n}\n\n# 验收：数 canvas 比肉眼看可靠\nchrome --headless=new --disable-gpu --virtual-time-budget=15000 \\\n  --dump-dom \"https://你的域名/contact\" | grep -c \"<canvas\"",
+      "cost": "腾讯 GL 在没 WebGL 的机器上白屏且控制台不报错——客户看到一片空白，以为官网坏了；或者 key 硬编码进仓库，泄露后配额被刷爆，账单来了才发现。"
   }
 };
 
@@ -1493,6 +1528,14 @@ export const STEPS = {
     "在每台服务器跑一次配置命令，只替换 MAIL_* / SMTP_*，脚本会备份并重启回读",
     "后台看状态灯 → 发测试邮件 → 到联系页真发一条留言，确认「点回复」指向访客邮箱",
     "出问题先查 journalctl 里的 [mail] 记录，再对着故障对照表定位"
+  ],
+  "M32": [
+      "定形态：内嵌地图 + 三家外链按钮都要（外链零依赖，是保底）",
+      "申请 key：腾讯 lbs.qq.com 选「JS GL / Web端」；高德 console.amap.com 选「Web端 JS API」，同时拿到安全密钥 jscode；两家都配域名白名单",
+      "把 key 写到服务器的 js/map-keys.v2.js（不入库），页面读不到就整块隐藏，不报错",
+      "给这个文件加 no-cache；换 key 时把文件名升一级（v2→v3），穿透浏览器里已缓存的旧文件",
+      "容器给固定高度，脚本懒加载 + POI 检索 + 一家挂了自动换另一家 + 最后显示「请用下方按钮导航」",
+      "三家外链都用坐标（高德是经度在前），发完按清单验收：canvas ≥1、控制台 0 报错、拦截 SDK 能自动切"
   ]
 };
 
@@ -1506,7 +1549,7 @@ export const STAGE_DRILLS = {
   "S6": "从服务器日志抽 20 行原样存成 txt，再按脱敏规则处理一遍，逐行比对找出漏掉的字段。漏在哪，说明你的规则少了一条。",
   "S7": "把测试机磁盘塞到 90%，看体检脚本退出码是否从「正常」跳到「告警」。跳了才算接通，没跳说明阈值写错了。",
   "S8": "照交接文档发一次版，故意跳过其中一步，记录「漏了会怎样」。交接文档的价值，全在别人漏掉一步时还能不能被发现。",
-  "S9": "把邮件通知开关关掉（MAIL_ENABLED=false）重启服务，再提交一条留言：确认留言照常入库、只是不发信。这条演练是为了记住「通知失败 ≠ 数据丢失」——很多人一停邮件就以为表单坏了。"
+  "S9": "两件都做：① 把邮件通知关掉（MAIL_ENABLED=false）重启服务，提交一条留言，确认留言照常入库、只是不发信；② 在开发者工具里把地图 SDK 的域名拦成 404，刷新页面，确认地图自动换一家而不是白屏。两条验的是同一件事——外部服务挂了，你的页面不能跟着挂。"
 };
 
 /**
@@ -1724,5 +1767,268 @@ export const SOP = {
       { type: 'h', text: '7. 一句话记住' },
       { type: 'quote', text: '收件人在后台改，发信账号在服务器改。前者是日常运维，后者是凭据管理 —— 刻意分开，就是为了不让「改个通知邮箱」变成「交出公司发信权」。' },
     ],
+  },
+  "M32": {
+    "intro": "目标：联系页上放一张能用的地图，并且在地图服务挂掉时页面仍然完整可用。",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "这份 SOP 来自一次真实接入：客户要在联系页放地图。全程踩过 WebGL 白屏、浏览器缓存旧 key、百度外链按访客城市检索这几个坑，下面按能照做的顺序写。"
+      },
+      {
+        "type": "note",
+        "kind": "danger",
+        "text": "三条铁律，违反就是合规风险或线上事故：① 地图服务商只能用合规白名单（腾讯位置服务 / 高德 / 百度 / 天地图），境外底图一律不用；② 真实 key 绝不进 git，仓库历史会永久留痕；③ 外链一律用坐标，不用关键词。"
+      },
+      {
+        "type": "h",
+        "text": "0. 先判断：你要加的是哪一种地图"
+      },
+      {
+        "type": "table",
+        "head": [
+          "形态",
+          "说明",
+          "是否需要 key"
+        ],
+        "rows": [
+          [
+            "内嵌地图",
+            "页面里直接显示可缩放的底图 + 标记 + 信息窗，可切换服务商",
+            "需要（Web端 / JS API 类型）"
+          ],
+          [
+            "外链按钮",
+            "点击跳到厂商网页或 App 并定位到该点",
+            "不需要（官方 URI 免 key）"
+          ]
+        ]
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "两个都要做：外链是保底（零依赖、永不失败），内嵌是体验（需要 key，可能失败，由自动切换兜底）。"
+      },
+      {
+        "type": "h",
+        "text": "1. 申请 key"
+      },
+      {
+        "type": "p",
+        "text": "腾讯位置服务：控制台 lbs.qq.com → 创建应用 → 添加 Key，类型选支持「JavaScript GL / Web端」的那一项；拿到 Key 后在设置里填域名白名单，把所有对外域名逐个列全。"
+      },
+      {
+        "type": "p",
+        "text": "高德开放平台：控制台 console.amap.com → 应用 → 添加 Key → 服务平台选「Web端 (JS API)」。这个 key 会同时生成安全密钥 jscode —— JS API 2.0 必须有它，缺了页面上的高德标签会自动隐藏。"
+      },
+      {
+        "type": "note",
+        "kind": "warn",
+        "text": "key 类型不能串用：「Web服务」类型的 key 只能调 REST，不能用于页面内嵌；反之「Web端」key 调 REST 会被拒。判断方法见第 7 节速查表。"
+      },
+      {
+        "type": "h",
+        "text": "2. 把 key 放到服务器（不进 git）"
+      },
+      {
+        "type": "p",
+        "text": "在每台服务器上写 /var/www/<站点>/js/map-keys.v2.js："
+      },
+      {
+        "type": "code",
+        "text": "window.SITE_MAP_KEYS = {\n  tencent: \"YOUR_TENCENT_KEY\",\n  amap: \"YOUR_AMAP_KEY\",\n  amapSecret: \"YOUR_AMAP_JSCODE\"\n};"
+      },
+      {
+        "type": "p",
+        "text": "页面用 <script src=\"js/map-keys.v2.js\"></script> 读取。任何一项为空或缺失 → 对应标签自动隐藏、页面外观不变，属于零风险降级。"
+      },
+      {
+        "type": "p",
+        "text": "这个文件不进 git，也打不上 ?v= 版本戳，所以要让浏览器立刻拿到新 key，必须两步都做：① nginx 对该路径禁缓存；② 换 key 时把文件名升一级（v2 → v3），同步改 HTML 里的 src。"
+      },
+      {
+        "type": "code",
+        "text": "location = /js/map-keys.v2.js {\n    add_header Cache-Control \"no-cache, must-revalidate\" always;\n}"
+      },
+      {
+        "type": "note",
+        "kind": "warn",
+        "text": "实测教训：只加 no-cache 头不够 —— 浏览器里已经缓存过的旧文件仍会在启发式有效期内被直接复用，表现为「同一个页面在 A 域名正常、B 域名失败」。改文件名是唯一可靠办法。"
+      },
+      {
+        "type": "h",
+        "text": "3. 内嵌地图组件"
+      },
+      {
+        "type": "code",
+        "text": "<div id=\"mapEmbed\" style=\"display:none\">\n  <div role=\"tablist\">\n    <button id=\"mapTabTencent\" role=\"tab\">腾讯地图</button>\n    <button id=\"mapTabAmap\" role=\"tab\">高德地图</button>\n  </div>\n  <div id=\"mapBox\" style=\"height:360px;border-radius:12px;overflow:hidden\"></div>\n</div>"
+      },
+      {
+        "type": "note",
+        "kind": "warn",
+        "text": "容器必须有固定高度（这里 360px），否则地图不渲染 —— 尤其在 flex 布局里，高度塌陷时你会以为是 SDK 没加载。"
+      },
+      {
+        "type": "table",
+        "head": [
+          "机制",
+          "作用"
+        ],
+        "rows": [
+          [
+            "懒加载",
+            "IntersectionObserver（rootMargin 300px）滚到附近才加载 SDK，省流量与配额"
+          ],
+          [
+            "POI 检索",
+            "腾讯 searchRegion、高德 PlaceSearch 按关键词检索；坐标由地图库返回，不手工编造"
+          ],
+          [
+            "本地缓存",
+            "检索结果存 localStorage，减少配额消耗"
+          ],
+          [
+            "兜底坐标",
+            "检索失败但 SDK 可用时，用双源核实过的坐标渲染，位置仍然正确"
+          ],
+          [
+            "SDK 加固",
+            "脚本 8 秒超时 + 自动重试一次；onload 后轮询全局变量再检索"
+          ],
+          [
+            "自动换一家",
+            "某家不可用（SDK 没出来 / 渲染抛错 / 需要 WebGL 而浏览器不支持）自动切另一家并翻转标签选中态"
+          ],
+          [
+            "最后兜底",
+            "两家都失败才显示「地图服务加载失败，请用下方按钮导航」"
+          ]
+        ]
+      },
+      {
+        "type": "note",
+        "kind": "danger",
+        "text": "腾讯 GL JS 依赖 WebGL。访客禁用硬件加速、老显卡、远程桌面环境下，new TMap.Map() 会白屏且不报错。必须在渲染前探测 WebGL，不支持就判腾讯不可用、自动切高德（2D 不需要 WebGL）。"
+      },
+      {
+        "type": "h",
+        "text": "4. 外链按钮（三家都要带坐标）"
+      },
+      {
+        "type": "code",
+        "text": "# 腾讯：marker URI，GCJ-02\nhttps://apis.map.qq.com/uri/v1/marker?marker=coord:31.230416,121.473701;title:公司名;addr:地址&referer=你的站点标识\n\n# 高德：position 是 经度,纬度（与腾讯顺序相反）\nhttps://uri.amap.com/marker?position=121.473701,31.230416&name=公司名&address=地址&src=你的站点标识&coordinate=gaode&callnative=1\n\n# 百度：location 传 GCJ-02，由百度自行转 BD-09\nhttps://api.map.baidu.com/marker?location=31.230416,121.473701&title=公司名&content=地址&output=html&coord_type=gcj02&src=你的站点标识"
+      },
+      {
+        "type": "p",
+        "text": "（示例坐标取上海人民广场，仅示范格式与顺序。）HTML 属性里的 & 必须写成 &amp;，中文参数统一百分号编码。"
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "实测跳转结果（都应 302 到落地页）：腾讯 → tools/poimarker；高德 → ditu.amap.com/regeo?lng=..&lat=..；百度 → map.baidu.com/?latlng=..&autoOpen=true。发布前逐个点一遍。"
+      },
+      {
+        "type": "note",
+        "kind": "danger",
+        "text": "不要用关键词搜索型链接（如 map.baidu.com/search/公司名）。实测百度会按访客 IP 所在城市检索，访客不在当地（尤其海外客户）就搜不到，页面看起来像「没有定位」。"
+      },
+      {
+        "type": "h",
+        "text": "5. 坐标怎么来：必须双源核实"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "腾讯 WebService：/ws/place/v1/search?keyword=关键词&boundary=region(城市,0)&page_size=1&key=…",
+          "高德 REST（需要「Web服务」类型的 key）：/v3/place/text?key=…&keywords=关键词&city=城市",
+          "两家返回的 POI 名称与经纬度一致才采信，写进兜底坐标，并在代码注释里记下来源与日期"
+        ]
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "坐标属于「编错一个字就指到别人家」的数据：单源结果一律不采信，也不能凭地图上目测的位置手填。"
+      },
+      {
+        "type": "h",
+        "text": "6. 验收清单"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "页面能 grep 到三个外链（腾讯 / 高德 / 百度 marker）",
+          "/js/map-keys.v2.js 返回 200，响应头带 Cache-Control: no-cache",
+          "真实浏览器滚到地图处：canvas ≥ 1、信息窗显示名称与地址、控制台 0 报错",
+          "两个标签都可见（说明 key 与安全密钥都配齐）",
+          "模拟故障：拦截地图 SDK 域名（返回 404）→ 应自动切另一家并渲染；把 getContext('webgl') 覆写成 null → 同样应自动切"
+        ]
+      },
+      {
+        "type": "code",
+        "text": "# 无头浏览器快速体检：数 canvas，比肉眼看可靠\nchrome --headless=new --disable-gpu --window-size=1400,9000 \\\n  --virtual-time-budget=15000 --dump-dom \"https://你的域名/contact\" > dom.html\ngrep -c \"<canvas\" dom.html      # ≥1 说明底图渲染了"
+      },
+      {
+        "type": "h",
+        "text": "7. 故障排查速查表"
+      },
+      {
+        "type": "table",
+        "head": [
+          "现象",
+          "原因",
+          "判定 / 处理"
+        ],
+        "rows": [
+          [
+            "高德标签不显示",
+            "key 缺失，或安全密钥 jscode 没填",
+            "页面逻辑：key 存在且 jscode 非空才显示"
+          ],
+          [
+            "高德报 INVALID_USER_KEY（10001）",
+            "key 不存在 / 已删 / 未生效",
+            "REST 探测返回 10001 就是废 key，重建"
+          ],
+          [
+            "高德 REST 返回 USERKEY_PLAT_NOMATCH（10009）",
+            "key 是「Web端」类型（这其实是好消息）",
+            "Web端 key 本来就不能调 REST，用它做内嵌即可"
+          ],
+          [
+            "腾讯地图白屏、不报错",
+            "浏览器不支持 WebGL",
+            "代码已自动切高德；访客可开启「使用硬件加速」"
+          ],
+          [
+            "同一份代码 A 域名正常、B 域名失败",
+            "B 域名下浏览器缓存了旧 key 文件",
+            "改文件名（v2/v3）穿透缓存，再让用户强刷"
+          ],
+          [
+            "点百度外链后「没有定位」",
+            "链接是关键词搜索，按访客 IP 城市检索",
+            "换成带坐标的 marker 链接"
+          ],
+          [
+            "改了 key 但页面没变",
+            "浏览器或代理缓存",
+            "先确认响应头，再考虑改名；服务器侧用 curl 复核实际内容"
+          ]
+        ]
+      },
+      {
+        "type": "h",
+        "text": "8. 发布纪律"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "改完先 git diff --numstat 核增删行数是否与你打算改的一致 —— 不一致说明混进了别人的改动，先恢复再重放",
+          "不要 git add -A；用 git commit 明确列出路径",
+          "权威判据是 git rev-parse HEAD 与 git ls-remote origin main 是否相等，不是终端里的那行“成功”",
+          "多台机器要各自更新：拉取式站点推送即生效，手工站不推就不会变 —— 别以为推了 GitHub 就等于上线了"
+        ]
+      }
+    ]
   },
 };

@@ -32,6 +32,7 @@ const PAGES = [
   ['讲义 M01', '/lessons/M01'],
   ['讲义 M30', '/lessons/M30'],
   ['讲义 M31', '/lessons/M31'],
+  ['讲义 M32', '/lessons/M32'],
   ['门禁', '/gates'],
   ['术语表', '/glossary'],
   ['404', '/404.html'],

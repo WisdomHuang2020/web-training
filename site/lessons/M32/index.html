@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M32 在页面里加地图 · 从 0 到上线</title>
+<meta name="description" content="客户说「要能看到我们在哪」，地图怎么加才不出事。学完能做到：独立接入一家合规地图服务，并在它不可用时自动降级，而不是白屏。产出物：内嵌地图 + 三家外链按钮 + 一份「key 放哪、谁维护、怎么换」的说明（S9 外部服务对接）">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M32">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="M32 在页面里加地图 · 从 0 到上线">
+<meta property="og:description" content="客户说「要能看到我们在哪」，地图怎么加才不出事。学完能做到：独立接入一家合规地图服务，并在它不可用时自动降级，而不是白屏。产出物：内嵌地图 + 三家外链按钮 + 一份「key 放哪、谁维护、怎么换」的说明（S9 外部服务对接）">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M32">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="lesson" data-total="32" data-mod="M32">
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../../">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../../">总览</a>
+      <a href="../../map/">课程地图</a>
+      <a href="../../gates/">门禁与红线</a>
+      <a href="../../glossary/">术语表</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 32</span>
+    </span>
+  </div>
+</header>
+<a class="skip" href="#main">跳到正文</a>
+
+<div class="shell lesson">
+  <div class="lesson-grid">
+    <main class="lesson-main" id="main">
+      <div class="crumb">
+        <a href="../../">总览</a><span class="sep">/</span>
+        <a href="../../map/">课程地图</a><span class="sep">/</span>
+        <span>S9 外部服务对接</span>
+      </div>
+
+      <h1><span class="num">M32</span>在页面里加地图</h1>
+      <div class="meta">
+        <span class="tag hi">所属路径 B / C</span>
+        <span class="tag">第 32 / 32 讲</span>
+        <span class="tag">S9 外部服务对接</span>
+      </div>
+
+      <section class="lsec" id="s1">
+        <div class="lede">
+          <div class="q">客户说「要能看到我们在哪」，地图怎么加才不出事</div>
+          <div class="ability"><b>学完能</b>独立接入一家合规地图服务，并在它不可用时自动降级，而不是白屏</div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s2">
+        <h2><span class="i">01</span>为什么重要</h2>
+        <div class="why">地图是客户第一眼判断「你在不在」的组件，也是最容易出事的一类：key 泄露、白名单没配、浏览器不支持 WebGL 直接白屏、外链搜不到。它的价值不在「画出来」，而在「画不出来时怎么退」——地图挂了页面不能跟着挂。</div>
+      </section>
+
+      <section class="lsec" id="s3">
+        <h2><span class="i">02</span>要讲清的 5 件事<span class="n">核心要点</span></h2>
+        <ul class="pts">
+          <li>服务商只能用合规白名单：腾讯位置服务 / 高德 / 百度 / 天地图。境外底图（Google、Apple、Bing 境外版、Mapbox、OSM 境外瓦片）一律不用，这是合规红线，不是偏好问题</li>
+          <li>key 绝不进 git（仓库历史会永久留痕），只写在服务器上的 js/map-keys.*.js，该文件不入库；页面读不到 key 就整块隐藏 —— 降级不能变成报错</li>
+          <li>外链一律带坐标，不用关键词搜索：关键词会按访客 IP 所在城市检索，海外客户直接搜不到，页面看起来像没定位</li>
+          <li>内嵌容器必须有固定高度，否则不渲染；腾讯 GL 依赖 WebGL，老显卡 / 远程桌面 / 关了硬件加速会白屏且控制台不报错，必须探测后自动切高德</li>
+          <li>坐标要双源核实（腾讯 WebService + 高德 REST 返回值一致才采信），不手工编造；三家经纬度顺序不同，高德是「经度,纬度」</li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s4">
+        <h2><span class="i">03</span>照着做：6 步<span class="n">操作顺序</span></h2>
+        <ol class="steps">
+          <li>定形态：内嵌地图 + 三家外链按钮都要（外链零依赖，是保底）</li>
+          <li>申请 key：腾讯 lbs.qq.com 选「JS GL / Web端」；高德 console.amap.com 选「Web端 JS API」，同时拿到安全密钥 jscode；两家都配域名白名单</li>
+          <li>把 key 写到服务器的 js/map-keys.v2.js（不入库），页面读不到就整块隐藏，不报错</li>
+          <li>给这个文件加 no-cache；换 key 时把文件名升一级（v2→v3），穿透浏览器里已缓存的旧文件</li>
+          <li>容器给固定高度，脚本懒加载 + POI 检索 + 一家挂了自动换另一家 + 最后显示「请用下方按钮导航」</li>
+          <li>三家外链都用坐标（高德是经度在前），发完按清单验收：canvas ≥1、控制台 0 报错、拦截 SDK 能自动切</li>
+        </ol>
+        <div class="code-wrap">
+        <button class="copy" type="button" aria-label="复制命令">复制</button>
+        <pre class="code"><span class="cm"># key 只放服务器，不进仓库（每台各一份）</span>
+/var/www/&lt;站点&gt;/js/map-keys.v2.js
+
+<span class="cm"># 这个文件会变、文件名又带不上 ?v=，只能靠响应头禁缓存</span>
+location = /js/map-keys.v2.js {
+    add_header Cache-Control &quot;no-cache, must-revalidate&quot; always;
+}
+
+<span class="cm"># 验收：数 canvas 比肉眼看可靠</span>
+chrome --headless=new --disable-gpu --virtual-time-budget=15000 \
+  --dump-dom &quot;https://你的域名/contact&quot; | grep -c &quot;&lt;canvas&quot;</pre>
+      </div>
+      </section>
+
+
+      <section class="lsec sop" id="sop">
+        <h2><span class="i">04</span>完整 SOP<span class="n">照着能做</span></h2>
+        <p class="sop-p sop-intro">目标：联系页上放一张能用的地图，并且在地图服务挂掉时页面仍然完整可用。</p>
+        <p class="sop-p">这份 SOP 来自一次真实接入：客户要在联系页放地图。全程踩过 WebGL 白屏、浏览器缓存旧 key、百度外链按访客城市检索这几个坑，下面按能照做的顺序写。</p>
+<div class="callout danger">三条铁律，违反就是合规风险或线上事故：① 地图服务商只能用合规白名单（腾讯位置服务 / 高德 / 百度 / 天地图），境外底图一律不用；② 真实 key 绝不进 git，仓库历史会永久留痕；③ 外链一律用坐标，不用关键词。</div>
+<h3>0. 先判断：你要加的是哪一种地图</h3>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>形态</th><th>说明</th><th>是否需要 key</th></tr></thead>
+          <tbody><tr><td>内嵌地图</td><td>页面里直接显示可缩放的底图 + 标记 + 信息窗，可切换服务商</td><td>需要（Web端 / JS API 类型）</td></tr><tr><td>外链按钮</td><td>点击跳到厂商网页或 App 并定位到该点</td><td>不需要（官方 URI 免 key）</td></tr></tbody>
+        </table></div>
+<div class="callout tip">两个都要做：外链是保底（零依赖、永不失败），内嵌是体验（需要 key，可能失败，由自动切换兜底）。</div>
+<h3>1. 申请 key</h3>
+<p class="sop-p">腾讯位置服务：控制台 lbs.qq.com → 创建应用 → 添加 Key，类型选支持「JavaScript GL / Web端」的那一项；拿到 Key 后在设置里填域名白名单，把所有对外域名逐个列全。</p>
+<p class="sop-p">高德开放平台：控制台 console.amap.com → 应用 → 添加 Key → 服务平台选「Web端 (JS API)」。这个 key 会同时生成安全密钥 jscode —— JS API 2.0 必须有它，缺了页面上的高德标签会自动隐藏。</p>
+<div class="callout warn">key 类型不能串用：「Web服务」类型的 key 只能调 REST，不能用于页面内嵌；反之「Web端」key 调 REST 会被拒。判断方法见第 7 节速查表。</div>
+<h3>2. 把 key 放到服务器（不进 git）</h3>
+<p class="sop-p">在每台服务器上写 /var/www/&lt;站点&gt;/js/map-keys.v2.js：</p>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code">window.SITE_MAP_KEYS = {
+  tencent: &quot;YOUR_TENCENT_KEY&quot;,
+  amap: &quot;YOUR_AMAP_KEY&quot;,
+  amapSecret: &quot;YOUR_AMAP_JSCODE&quot;
+};</pre>
+        </div>
+<p class="sop-p">页面用 &lt;script src=&quot;js/map-keys.v2.js&quot;&gt;&lt;/script&gt; 读取。任何一项为空或缺失 → 对应标签自动隐藏、页面外观不变，属于零风险降级。</p>
+<p class="sop-p">这个文件不进 git，也打不上 ?v= 版本戳，所以要让浏览器立刻拿到新 key，必须两步都做：① nginx 对该路径禁缓存；② 换 key 时把文件名升一级（v2 → v3），同步改 HTML 里的 src。</p>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code">location = /js/map-keys.v2.js {
+    add_header Cache-Control &quot;no-cache, must-revalidate&quot; always;
+}</pre>
+        </div>
+<div class="callout warn">实测教训：只加 no-cache 头不够 —— 浏览器里已经缓存过的旧文件仍会在启发式有效期内被直接复用，表现为「同一个页面在 A 域名正常、B 域名失败」。改文件名是唯一可靠办法。</div>
+<h3>3. 内嵌地图组件</h3>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code">&lt;div id=&quot;mapEmbed&quot; style=&quot;display:none&quot;&gt;
+  &lt;div role=&quot;tablist&quot;&gt;
+    &lt;button id=&quot;mapTabTencent&quot; role=&quot;tab&quot;&gt;腾讯地图&lt;/button&gt;
+    &lt;button id=&quot;mapTabAmap&quot; role=&quot;tab&quot;&gt;高德地图&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;mapBox&quot; style=&quot;height:360px;border-radius:12px;overflow:hidden&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;</pre>
+        </div>
+<div class="callout warn">容器必须有固定高度（这里 360px），否则地图不渲染 —— 尤其在 flex 布局里，高度塌陷时你会以为是 SDK 没加载。</div>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>机制</th><th>作用</th></tr></thead>
+          <tbody><tr><td>懒加载</td><td>IntersectionObserver（rootMargin 300px）滚到附近才加载 SDK，省流量与配额</td></tr><tr><td>POI 检索</td><td>腾讯 searchRegion、高德 PlaceSearch 按关键词检索；坐标由地图库返回，不手工编造</td></tr><tr><td>本地缓存</td><td>检索结果存 localStorage，减少配额消耗</td></tr><tr><td>兜底坐标</td><td>检索失败但 SDK 可用时，用双源核实过的坐标渲染，位置仍然正确</td></tr><tr><td>SDK 加固</td><td>脚本 8 秒超时 + 自动重试一次；onload 后轮询全局变量再检索</td></tr><tr><td>自动换一家</td><td>某家不可用（SDK 没出来 / 渲染抛错 / 需要 WebGL 而浏览器不支持）自动切另一家并翻转标签选中态</td></tr><tr><td>最后兜底</td><td>两家都失败才显示「地图服务加载失败，请用下方按钮导航」</td></tr></tbody>
+        </table></div>
+<div class="callout danger">腾讯 GL JS 依赖 WebGL。访客禁用硬件加速、老显卡、远程桌面环境下，new TMap.Map() 会白屏且不报错。必须在渲染前探测 WebGL，不支持就判腾讯不可用、自动切高德（2D 不需要 WebGL）。</div>
+<h3>4. 外链按钮（三家都要带坐标）</h3>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code"><span class="cm"># 腾讯：marker URI，GCJ-02</span>
+https://apis.map.qq.com/uri/v1/marker?marker=coord:31.230416,121.473701;title:公司名;addr:地址&amp;referer=你的站点标识
+
+<span class="cm"># 高德：position 是 经度,纬度（与腾讯顺序相反）</span>
+https://uri.amap.com/marker?position=121.473701,31.230416&amp;name=公司名&amp;address=地址&amp;src=你的站点标识&amp;coordinate=gaode&amp;callnative=1
+
+<span class="cm"># 百度：location 传 GCJ-02，由百度自行转 BD-09</span>
+https://api.map.baidu.com/marker?location=31.230416,121.473701&amp;title=公司名&amp;content=地址&amp;output=html&amp;coord_type=gcj02&amp;src=你的站点标识</pre>
+        </div>
+<p class="sop-p">（示例坐标取上海人民广场，仅示范格式与顺序。）HTML 属性里的 &amp; 必须写成 &amp;amp;，中文参数统一百分号编码。</p>
+<div class="callout tip">实测跳转结果（都应 302 到落地页）：腾讯 → tools/poimarker；高德 → ditu.amap.com/regeo?lng=..&amp;lat=..；百度 → map.baidu.com/?latlng=..&amp;autoOpen=true。发布前逐个点一遍。</div>
+<div class="callout danger">不要用关键词搜索型链接（如 map.baidu.com/search/公司名）。实测百度会按访客 IP 所在城市检索，访客不在当地（尤其海外客户）就搜不到，页面看起来像「没有定位」。</div>
+<h3>5. 坐标怎么来：必须双源核实</h3>
+<ol class="steps"><li>腾讯 WebService：/ws/place/v1/search?keyword=关键词&amp;boundary=region(城市,0)&amp;page_size=1&amp;key=…</li><li>高德 REST（需要「Web服务」类型的 key）：/v3/place/text?key=…&amp;keywords=关键词&amp;city=城市</li><li>两家返回的 POI 名称与经纬度一致才采信，写进兜底坐标，并在代码注释里记下来源与日期</li></ol>
+<div class="callout tip">坐标属于「编错一个字就指到别人家」的数据：单源结果一律不采信，也不能凭地图上目测的位置手填。</div>
+<h3>6. 验收清单</h3>
+<ol class="steps"><li>页面能 grep 到三个外链（腾讯 / 高德 / 百度 marker）</li><li>/js/map-keys.v2.js 返回 200，响应头带 Cache-Control: no-cache</li><li>真实浏览器滚到地图处：canvas ≥ 1、信息窗显示名称与地址、控制台 0 报错</li><li>两个标签都可见（说明 key 与安全密钥都配齐）</li><li>模拟故障：拦截地图 SDK 域名（返回 404）→ 应自动切另一家并渲染；把 getContext('webgl') 覆写成 null → 同样应自动切</li></ol>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code"><span class="cm"># 无头浏览器快速体检：数 canvas，比肉眼看可靠</span>
+chrome --headless=new --disable-gpu --window-size=1400,9000 \
+  --virtual-time-budget=15000 --dump-dom &quot;https://你的域名/contact&quot; &gt; dom.html
+grep -c &quot;&lt;canvas&quot; dom.html      # ≥1 说明底图渲染了</pre>
+        </div>
+<h3>7. 故障排查速查表</h3>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>现象</th><th>原因</th><th>判定 / 处理</th></tr></thead>
+          <tbody><tr><td>高德标签不显示</td><td>key 缺失，或安全密钥 jscode 没填</td><td>页面逻辑：key 存在且 jscode 非空才显示</td></tr><tr><td>高德报 INVALID_USER_KEY（10001）</td><td>key 不存在 / 已删 / 未生效</td><td>REST 探测返回 10001 就是废 key，重建</td></tr><tr><td>高德 REST 返回 USERKEY_PLAT_NOMATCH（10009）</td><td>key 是「Web端」类型（这其实是好消息）</td><td>Web端 key 本来就不能调 REST，用它做内嵌即可</td></tr><tr><td>腾讯地图白屏、不报错</td><td>浏览器不支持 WebGL</td><td>代码已自动切高德；访客可开启「使用硬件加速」</td></tr><tr><td>同一份代码 A 域名正常、B 域名失败</td><td>B 域名下浏览器缓存了旧 key 文件</td><td>改文件名（v2/v3）穿透缓存，再让用户强刷</td></tr><tr><td>点百度外链后「没有定位」</td><td>链接是关键词搜索，按访客 IP 城市检索</td><td>换成带坐标的 marker 链接</td></tr><tr><td>改了 key 但页面没变</td><td>浏览器或代理缓存</td><td>先确认响应头，再考虑改名；服务器侧用 curl 复核实际内容</td></tr></tbody>
+        </table></div>
+<h3>8. 发布纪律</h3>
+<ol class="steps"><li>改完先 git diff --numstat 核增删行数是否与你打算改的一致 —— 不一致说明混进了别人的改动，先恢复再重放</li><li>不要 git add -A；用 git commit 明确列出路径</li><li>权威判据是 git rev-parse HEAD 与 git ls-remote origin main 是否相等，不是终端里的那行“成功”</li><li>多台机器要各自更新：拉取式站点推送即生效，手工站不推就不会变 —— 别以为推了 GitHub 就等于上线了</li></ol>
+      </section>
+
+      <section class="lsec" id="s5">
+        <h2><span class="i">05</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <div class="kv2">
+          <div class="kv">
+            <h3>产出物</h3>
+            <p>内嵌地图 + 三家外链按钮 + 一份「key 放哪、谁维护、怎么换」的说明</p>
+          </div>
+          <div class="kv">
+            <h3>验收判据</h3>
+            <div class="acc-line"><span class="chip h">可验</span><span>页面 canvas ≥ 1、信息窗显示名称与地址、控制台 0 报错；把地图 SDK 拦成 404 后能自动切另一家并仍渲染</span></div>
+            <div class="acc-line"><span class="chip s">人评</span><span>能说清为什么外链不带关键词、为什么 key 不进仓库</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s6">
+        <h2><span class="i">06</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <div class="drill">在开发者工具里把地图 SDK 的域名拦成 404 并刷新，确认它自动切到另一家、地图仍然出来；再把 getContext('webgl') 覆写成返回 null，确认同样能切 —— 两条都是「不报错但白屏」的真实故障。</div>
+      </section>
+
+      <section class="lsec" id="s7">
+        <h2><span class="i">07</span>最容易踩的坑</h2>
+        <div class="pit">外链用关键词搜索型链接（如 map.baidu.com/search/公司名），海外客户点开一片空白<div class="cost">后果：腾讯 GL 在没 WebGL 的机器上白屏且控制台不报错——客户看到一片空白，以为官网坏了；或者 key 硬编码进仓库，泄露后配额被刷爆，账单来了才发现。</div></div>
+      </section>
+
+      <section class="lsec" id="s8">
+        <h2><span class="i">08</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <div class="check-top">
+          <span class="ptxt" id="ptxt">0 / 9</span>
+          <span class="pbar"><i id="pbar"></i></span>
+        </div>
+        <ul class="check">
+          <li><input type="checkbox" id="c0" data-k="0"><label for="c0"><span class="grp">步骤</span>我已完成：定形态：内嵌地图 + 三家外链按钮都要（外链零依赖，是保底）</label></li>
+          <li><input type="checkbox" id="c1" data-k="1"><label for="c1"><span class="grp">步骤</span>我已完成：申请 key：腾讯 lbs.qq.com 选「JS GL / Web端」；高德 console.amap.com 选「Web端 JS API」，同时拿到安全密钥 jscode；两家都配域名白名单</label></li>
+          <li><input type="checkbox" id="c2" data-k="2"><label for="c2"><span class="grp">步骤</span>我已完成：把 key 写到服务器的 js/map-keys.v2.js（不入库），页面读不到就整块隐藏，不报错</label></li>
+          <li><input type="checkbox" id="c3" data-k="3"><label for="c3"><span class="grp">步骤</span>我已完成：给这个文件加 no-cache；换 key 时把文件名升一级（v2→v3），穿透浏览器里已缓存的旧文件</label></li>
+          <li><input type="checkbox" id="c4" data-k="4"><label for="c4"><span class="grp">步骤</span>我已完成：容器给固定高度，脚本懒加载 + POI 检索 + 一家挂了自动换另一家 + 最后显示「请用下方按钮导航」</label></li>
+          <li><input type="checkbox" id="c5" data-k="5"><label for="c5"><span class="grp">步骤</span>我已完成：三家外链都用坐标（高德是经度在前），发完按清单验收：canvas ≥1、控制台 0 报错、拦截 SDK 能自动切</label></li>
+          <li><input type="checkbox" id="c6" data-k="6"><label for="c6"><span class="grp">验收</span>我能用命令证明：页面 canvas ≥ 1、信息窗显示名称与地址、控制台 0 报错；把地图 SDK 拦成 404 后能自动切另一家并仍渲染</label></li>
+          <li><input type="checkbox" id="c7" data-k="7"><label for="c7"><span class="grp">验收</span>我能讲清：能说清为什么外链不带关键词、为什么 key 不进仓库</label></li>
+          <li><input type="checkbox" id="c8" data-k="8"><label for="c8"><span class="grp">避坑</span>我确认没有出现：外链用关键词搜索型链接（如 map.baidu.com/search/公司名），海外客户点开一片空白</label></li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s9">
+        <h2><span class="i">09</span>本讲术语<span class="n"><a href="../../glossary/">全部 28 条</a></span></h2>
+        <ul class="pts">
+          <li><b><a href="../../glossary/#g07">白名单部署</a></b>：只上传清单里列出的文件，不是整目录覆盖。清单通常要维护两处，容易不同步。</li>
+        </ul>
+      </section>
+
+      <div class="pager">
+        <a class="prev" href="../M31/"><span class="dir">← 上一讲</span><span class="tt">M31 表单通知与邮件通道</span></a>
+        <span class="sp"></span>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="blk">
+        <p class="rail-h">本讲目录</p>
+        <ol class="toc">
+          <li><a href="#s1">这一讲解决什么</a></li>
+          <li><a href="#s2">为什么重要</a></li>
+          <li><a href="#s3">要讲清的 5 件事</a></li>
+          <li><a href="#s4">照着做：6 步</a></li>
+          <li><a href="#sop">完整 SOP</a></li>
+          <li><a href="#s5">产出物与验收</a></li>
+          <li><a href="#s6">练习</a></li>
+          <li><a href="#s7">最容易踩的坑</a></li>
+          <li><a href="#s8">自检表</a></li>
+          <li><a href="#s9">本讲术语</a></li>
+        </ol>
+      </div>
+      <div class="blk">
+        <p class="rail-h">S9 外部服务对接</p>
+        <ol>
+          <li><a href="../M31/">M31 表单通知与邮件通道</a></li>
+          <li><a href="../M32/" class="on" aria-current="page">M32 在页面里加地图</a></li>
+        </ol>
+      </div>
+      
+    </aside>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 32 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../../">总览</a>
+          <a href="../../map/">课程地图</a>
+          <a href="../../gates/">门禁与红线</a>
+          <a href="../../glossary/">术语表</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部条：左版权、右「版本号 + GitHub」。版式对齐站群（LLC / AHB）页脚右下角那一簇：
+         等宽小字 + 灰色，hover 才提亮。版本号只读 META.version，与页脚上方不再重复。 -->
+    <div class="bar">
+      <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
+      <span class="meta-right">
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.5.0</span>
+        <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
+      </span>
+    </div>
+
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="../../assets/app.js"></script>
+</body>
+</html>
