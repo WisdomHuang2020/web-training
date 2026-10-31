@@ -1,0 +1,90 @@
+name: Deploy to GitHub Pages
+
+# 兜底通道（2026-10-31 新增）。
+#
+# 主通道：www.web-training.power-knowledge.tech —— 由 deploy/deploy.sh 用 tar over ssh 发布到
+#         腾讯云 /var/www/web-training。那条链路需要本机、需要 SSH，不在浏览器可达范围内。
+# 兜底通道：本工作流把同一份 site/ 发到 GitHub Pages，纯静态托管、零依赖，
+#         用作"主通道不可达时还能看着课"的备用入口。
+#
+# 为什么这里要重新 `node build-site.mjs` 而不是直接上传仓库里已提交的 site/：
+#   deploy.sh 的 ① 步每次发布都是"先重建 site/ 再上传"（见其注释）。
+#   本工作流照做，才能保证**兜底通道与主通道内容一致**；
+#   若直接上传已提交的 site/，一旦有人改了 data/ 却忘了提交重建结果，
+#   两条通道就会长期不同步，且很难被发现。
+#   已确认 build-site.mjs 无 Date/random/env 依赖 ⇒ 构建可复现，两条通道内容应完全一致。
+#
+# 用 artifact 方式发布（upload-pages-artifact + deploy-pages），不走 gh-pages 分支，
+# 因此不需要 .nojekyll —— Jekyll 根本不参与。
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时刻只跑一个 Pages 发布；新推送取消排队中的旧任务，但不打断正在进行的发布
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 重建 site/
+        run: node build-site.mjs
+
+      - name: 校验产物（防止子路径部署 404）
+        run: |
+          set -euo pipefail
+          test -f site/index.html || { echo "✗ site/index.html 缺失"; exit 1; }
+          echo "页面数: $(find site -name '*.html' | wc -l)"
+
+          # 兜底通道发布在 /web-training/ 子路径下，
+          # 任何以 / 开头的绝对引用都会指到域名根、必然 404。
+          # 这正是入口站当年 base: './' 那条教训的同型问题，必须当硬门禁。
+          #
+          # 唯一例外：site/404.html。它由 build-site.mjs 生成时**有意**按"自有域名根路径"
+          # 写死（nginx 用 error_page 指过来，在根路径下是正确的；该文件注释里也说明了
+          # 为什么不能回落首页）。在 Pages 子路径下它的样式与链接会 404，
+          # 但正文仍在、页面可达，属已知且可接受的降级 —— 只影响"不存在的地址"。
+          # 若日后要求兜底通道的 404 也完整，正确做法是改 build-site.mjs 让它输出**相对路径**
+          # （相对路径在根路径与子路径两种部署下都正确），而不是在这里事后打补丁。
+          bad=$(grep -rho -E '(href|src)="/[^"/][^"]*"' site --include='*.html' --exclude='404.html' | sort -u || true)
+          if [ -n "$bad" ]; then
+            echo "✗ 发现绝对根路径引用，Pages 子路径下会 404："
+            echo "$bad" | head -20
+            exit 1
+          fi
+          echo "✓ 除 404.html 外无绝对根路径引用，适配 /web-training/ 子路径"
+
+      - uses: actions/configure-pages@v5
+        with:
+          # 首次运行时尝试自动启用 Pages（Source 需为 GitHub Actions）。
+          # 若仓库策略不允许，此步会失败 —— 那就需要人工到 Settings → Pages 里启用。
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
