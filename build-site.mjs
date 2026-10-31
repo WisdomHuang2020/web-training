@@ -137,21 +137,21 @@ ${extra}<link rel="stylesheet" href="${prefix}assets/style.css">
 </head>`;
 }
 
-function topbar({ prefix, current }) {
+function topbar({ prefix, current, home }) {
   const item = (href, label, key) =>
     `<a href="${href}"${current === key ? ' aria-current="page"' : ''}>${label}</a>`;
-  // 只有首页能吃到纯 #hash；其余页面（含讲义）必须指回 index.html#map，
+  // 只有首页能吃到纯 #hash；其余页面（含讲义）必须指回首页目录 + #map，
   // 否则会产生一个指向本页、但本页并不存在的锚点（tools/check-links.mjs 会报）。
-  const mapHref = current === 'home' ? '#map' : prefix + 'index.html#map';
+  const mapHref = current === 'home' ? '#map' : home + '#map';
   return `<header class="topbar">
   <div class="shell">
-    <a class="brand" href="${prefix}index.html">
+    <a class="brand" href="${home}">
       ${BRAND_SVG}
       <b>从 0 到上线</b>
       <em>网站建设实训课</em>
     </a>
     <nav class="nav" aria-label="主导航">
-      ${item(prefix + 'index.html', '总览', 'home')}
+      ${item(home, '总览', 'home')}
       ${item(mapHref, '课程地图', 'map')}
       ${item(prefix + 'gates.html', '门禁与红线', 'gates')}
       ${item(prefix + 'glossary.html', '术语表', 'glossary')}
@@ -164,7 +164,7 @@ function topbar({ prefix, current }) {
 </header>`;
 }
 
-function footer({ prefix }) {
+function footer({ prefix, home }) {
   return `<footer class="foot">
   <div class="shell">
     <div class="row">
@@ -186,8 +186,8 @@ function footer({ prefix }) {
       </div>
       <div>
         <div class="links">
-          <a href="${prefix}index.html">总览</a>
-          <a href="${prefix}index.html#map">课程地图</a>
+          <a href="${home}">总览</a>
+          <a href="${home}#map">课程地图</a>
           <a href="${prefix}gates.html">门禁与红线</a>
           <a href="${prefix}glossary.html">术语表</a>
         </div>
@@ -293,7 +293,7 @@ function renderHome() {
     canon: '/',
   })}
 <body data-page="home" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'home' })}
+${topbar({ prefix: '', current: 'home', home: './' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -410,7 +410,7 @@ ${topbar({ prefix: '', current: 'home' })}
 </section>
 </main>
 
-${footer({ prefix: '' })}
+${footer({ prefix: '', home: './' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
 <script src="assets/app.js"></script>
 </body>
@@ -519,15 +519,15 @@ function lessonPage(mod, stage) {
     canon: `/lessons/${mod.no}.html`,
   })}
 <body data-page="lesson" data-total="${TOTAL}" data-mod="${mod.no}">
-${topbar({ prefix: '../', current: '' })}
+${topbar({ prefix: '../', current: '', home: '../' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <div class="shell lesson">
   <div class="lesson-grid">
     <main class="lesson-main" id="main">
       <div class="crumb">
-        <a href="../index.html">总览</a><span class="sep">/</span>
-        <a href="../index.html#map">课程地图</a><span class="sep">/</span>
+        <a href="../">总览</a><span class="sep">/</span>
+        <a href="../#map">课程地图</a><span class="sep">/</span>
         <span>${stage.id} ${esc(stage.name)}</span>
       </div>
 
@@ -632,7 +632,7 @@ ${terms.length ? `
   </div>
 </div>
 
-${footer({ prefix: '../' })}
+${footer({ prefix: '../', home: '../' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
 <script src="../assets/app.js"></script>
 </body>
@@ -672,7 +672,7 @@ function gatesPage() {
     canon: '/gates.html',
   })}
 <body data-page="gates" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'gates' })}
+${topbar({ prefix: '', current: 'gates', home: './' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -733,7 +733,7 @@ ${topbar({ prefix: '', current: 'gates' })}
 </section>
 </main>
 
-${footer({ prefix: '' })}
+${footer({ prefix: '', home: './' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
 <script src="assets/app.js"></script>
 </body>
@@ -763,7 +763,7 @@ function glossaryPage() {
     canon: '/glossary.html',
   })}
 <body data-page="glossary" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'glossary' })}
+${topbar({ prefix: '', current: 'glossary', home: './' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -794,7 +794,7 @@ ${topbar({ prefix: '', current: 'glossary' })}
 </section>
 </main>
 
-${footer({ prefix: '' })}
+${footer({ prefix: '', home: './' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
 <script src="assets/app.js"></script>
 </body>
@@ -823,7 +823,7 @@ function notFoundPage() {
     extra: '<meta name="robots" content="noindex">',
   })}
 <body data-page="404" data-total="${TOTAL}">
-${topbar({ prefix: '/', current: '' })}
+${topbar({ prefix: '/', current: '', home: '/' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -833,8 +833,8 @@ ${topbar({ prefix: '/', current: '' })}
     <h1>这个地址没有页面</h1>
     <p class="lead">可能是链接打错了一个字，也可能这页还没写。下面三个入口都能回到正题。</p>
     <div class="cta">
-      <a class="btn btn-primary" href="/index.html">回课程总览 <span class="ar">→</span></a>
-      <a class="btn btn-ghost" href="/index.html#map">看课程地图</a>
+      <a class="btn btn-primary" href="/">回课程总览 <span class="ar">→</span></a>
+      <a class="btn btn-ghost" href="/#map">看课程地图</a>
       <a class="btn btn-ghost" href="/glossary.html">术语表</a>
     </div>
   </div>
@@ -850,7 +850,7 @@ ${topbar({ prefix: '/', current: '' })}
 </section>
 </main>
 
-${footer({ prefix: '/' })}
+${footer({ prefix: '/', home: '/' })}
 <script src="/assets/app.js"></script>
 </body>
 </html>
@@ -926,7 +926,10 @@ checks.push(['讲义页带 data-mod', m01.includes('data-mod="M01"')]);
 checks.push(['讲义页无「待补充」', !m01.includes('待补充')]);
 const allLessons = MODULES.map(m => fs.readFileSync(path.join(OUT, 'lessons', m.no + '.html'), 'utf8'));
 checks.push([`${TOTAL} 讲都含自检表`, allLessons.every(h => h.includes('class="check"'))]);
-checks.push([`${TOTAL} 讲都含返回总览`, allLessons.every(h => h.includes('../index.html'))]);
+checks.push([`${TOTAL} 讲都含返回总览`, allLessons.every(h => h.includes('class="crumb"') && h.includes('<a href="../">总览</a>'))]);
+// 规范首页只能有一个地址：任何页面都不该再链到 index.html
+checks.push(['全站不再链到 /index.html', !fs.readdirSync(OUT).some(() => false) &&
+  [...allLessons, home].every(h => !/(href|src)="[^"]*index\.html"/.test(h))]);
 // 顶栏 Logo 与页签图标必须同源：两边都含同一段赤道路径，改一处忘一处会在这里报
 const fav = fs.readFileSync(path.join(OUT, 'assets', 'favicon.svg'), 'utf8');
 checks.push(['页签图标与顶栏 Logo 同源', fav.includes('M6.6 16h6.3M19.1 16h6.3') && home.includes('M6.6 16h6.3M19.1 16h6.3')]);

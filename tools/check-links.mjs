@@ -41,7 +41,9 @@ for (const p of pages) {
       console.error(`✗ 文件不存在  ${path.relative(SITE, p)} → ${raw}`);
       bad++; continue;
     }
-    if (hash && idsOf.has(target) && !idsOf.get(target).has(hash)) {
+    // 指向目录的链接（./ 与 ../ 指向首页）等价于该目录下的 index.html，锚点要在它上面校验
+    const resolved = fs.statSync(target).isDirectory() ? path.join(target, 'index.html') : target;
+    if (hash && idsOf.has(resolved) && !idsOf.get(resolved).has(hash)) {
       console.error(`✗ 锚点不存在  ${path.relative(SITE, p)} → ${raw}`);
       bad++;
     }
