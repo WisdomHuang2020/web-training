@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M25 访问监控与日志 · 从 0 到上线</title>
+<meta name="description" content="有人访问、有人攻击，你怎么知道。学完能做到：能看到「谁来了、看了什么、出没出异常」，并知道这些记录本身也是个人信息。产出物：一份监控清单 + 一条真能叫醒人的告警（S6 数据合规与风险）">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M25">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="M25 访问监控与日志 · 从 0 到上线">
+<meta property="og:description" content="有人访问、有人攻击，你怎么知道。学完能做到：能看到「谁来了、看了什么、出没出异常」，并知道这些记录本身也是个人信息。产出物：一份监控清单 + 一条真能叫醒人的告警（S6 数据合规与风险）">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M25">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body data-page="lesson" data-total="31" data-mod="M25">
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../../">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../../">总览</a>
+      <a href="../../map/">课程地图</a>
+      <a href="../../gates/">门禁与红线</a>
+      <a href="../../glossary/">术语表</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 31</span>
+    </span>
+  </div>
+</header>
+<a class="skip" href="#main">跳到正文</a>
+
+<div class="shell lesson">
+  <div class="lesson-grid">
+    <main class="lesson-main" id="main">
+      <div class="crumb">
+        <a href="../../">总览</a><span class="sep">/</span>
+        <a href="../../map/">课程地图</a><span class="sep">/</span>
+        <span>S6 数据合规与风险</span>
+      </div>
+
+      <h1><span class="num">M25</span>访问监控与日志</h1>
+      <div class="meta">
+        <span class="tag hi">所属路径 A / B / C</span>
+        <span class="tag">第 25 / 31 讲</span>
+        <span class="tag">S6 数据合规与风险</span>
+      </div>
+
+      <section class="lsec" id="s1">
+        <div class="lede">
+          <div class="q">有人访问、有人攻击，你怎么知道</div>
+          <div class="ability"><b>学完能</b>能看到「谁来了、看了什么、出没出异常」，并知道这些记录本身也是个人信息</div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s2">
+        <h2><span class="i">01</span>为什么重要</h2>
+        <div class="why">没有监控的站，故障永远是用户先告诉你的。而日志里的 IP 属于个人信息——所以监控本身也是要合规处理的数据。</div>
+      </section>
+
+      <section class="lsec" id="s3">
+        <h2><span class="i">02</span>要讲清的 4 件事<span class="n">核心要点</span></h2>
+        <ul class="pts">
+          <li>三类监控：访问日志（nginx access.log）、可用性探活、业务统计（PV / UV / 来源）</li>
+          <li>日志至少记：时间、来源 IP、UA、请求路径、状态码、耗时；保留期按需要定，常见 6 个月起</li>
+          <li>告警要发到人能看到的地方：证书到期、磁盘满、5xx 突增、探活失败</li>
+          <li>日志与统计都在处理个人信息（IP 属于个人信息），必须写进隐私政策</li>
+        </ul>
+      </section>
+
+      <section class="lsec" id="s4">
+        <h2><span class="i">03</span>照着做：4 步<span class="n">操作顺序</span></h2>
+        <ol class="steps">
+          <li>打开 access.log 确认字段齐全</li>
+          <li>配一条探活告警，发到人能看到的地方</li>
+          <li>制造一次 5xx，验证告警能到</li>
+          <li>把日志与统计写进隐私政策</li>
+        </ol>
+        <div class="code-wrap">
+        <button class="copy" type="button" aria-label="复制命令">复制</button>
+        <pre class="code">tail -n 20 /var/log/nginx/access.log
+curl -s -o /dev/null -w &quot;%{http_code} %{time_total}s\n&quot; https://你的域名
+<span class="cm"># 告警口径：探活失败连续 3 次、或 5xx 占比突增</span></pre>
+      </div>
+      </section>
+
+
+      <section class="lsec" id="s5">
+        <h2><span class="i">04</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <div class="kv2">
+          <div class="kv">
+            <h3>产出物</h3>
+            <p>一份监控清单 + 一条真能叫醒人的告警</p>
+          </div>
+          <div class="kv">
+            <h3>验收判据</h3>
+            <div class="acc-line"><span class="chip h">可验</span><span>故意制造一次 5xx，10 分钟内收到告警</span></div>
+            <div class="acc-line"><span class="chip h">可验</span><span>日志里能找到一条完整的请求记录（含状态码与耗时）</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lsec" id="s6">
+        <h2><span class="i">05</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <div class="drill">给站点配一条探活告警，然后故意把 nginx 停掉，掐表看多久收到通知。</div>
+      </section>
+
+      <section class="lsec" id="s7">
+        <h2><span class="i">06</span>最容易踩的坑</h2>
+        <div class="pit">只装统计不看日志；日志开着但从不轮转，某天把磁盘撑满<div class="cost">后果：日志不轮转，某天把磁盘写满，nginx 直接 500——而且你还会以为是代码问题。</div></div>
+      </section>
+
+      <section class="lsec" id="s8">
+        <h2><span class="i">07</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <div class="check-top">
+          <span class="ptxt" id="ptxt">0 / 7</span>
+          <span class="pbar"><i id="pbar"></i></span>
+        </div>
+        <ul class="check">
+          <li><input type="checkbox" id="c0" data-k="0"><label for="c0"><span class="grp">步骤</span>我已完成：打开 access.log 确认字段齐全</label></li>
+          <li><input type="checkbox" id="c1" data-k="1"><label for="c1"><span class="grp">步骤</span>我已完成：配一条探活告警，发到人能看到的地方</label></li>
+          <li><input type="checkbox" id="c2" data-k="2"><label for="c2"><span class="grp">步骤</span>我已完成：制造一次 5xx，验证告警能到</label></li>
+          <li><input type="checkbox" id="c3" data-k="3"><label for="c3"><span class="grp">步骤</span>我已完成：把日志与统计写进隐私政策</label></li>
+          <li><input type="checkbox" id="c4" data-k="4"><label for="c4"><span class="grp">验收</span>我能用命令证明：故意制造一次 5xx，10 分钟内收到告警</label></li>
+          <li><input type="checkbox" id="c5" data-k="5"><label for="c5"><span class="grp">验收</span>我能用命令证明：日志里能找到一条完整的请求记录（含状态码与耗时）</label></li>
+          <li><input type="checkbox" id="c6" data-k="6"><label for="c6"><span class="grp">避坑</span>我确认没有出现：只装统计不看日志；日志开着但从不轮转，某天把磁盘撑满</label></li>
+        </ul>
+      </section>
+
+      <div class="pager">
+        <a class="prev" href="../M24/"><span class="dir">← 上一讲</span><span class="tt">M24 打通与连接</span></a>
+        <a class="next" href="../M26/"><span class="dir">下一讲 →</span><span class="tt">M26 隐私保护与脱敏</span></a>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="blk">
+        <p class="rail-h">本讲目录</p>
+        <ol class="toc">
+          <li><a href="#s1">这一讲解决什么</a></li>
+          <li><a href="#s2">为什么重要</a></li>
+          <li><a href="#s3">要讲清的 4 件事</a></li>
+          <li><a href="#s4">照着做：4 步</a></li>
+          <li><a href="#s5">产出物与验收</a></li>
+          <li><a href="#s6">练习</a></li>
+          <li><a href="#s7">最容易踩的坑</a></li>
+          <li><a href="#s8">自检表</a></li>
+        </ol>
+      </div>
+      <div class="blk">
+        <p class="rail-h">S6 数据合规与风险</p>
+        <ol>
+          <li><a href="../M25/" class="on" aria-current="page">M25 访问监控与日志</a></li>
+          <li><a href="../M26/">M26 隐私保护与脱敏</a></li>
+        </ol>
+      </div>
+      <div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="../M26/"><span>M26</span>隐私保护与脱敏</a></div>
+    </aside>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 31 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../../">总览</a>
+          <a href="../../map/">课程地图</a>
+          <a href="../../gates/">门禁与红线</a>
+          <a href="../../glossary/">术语表</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部条：左版权、右「版本号 + GitHub」。版式对齐站群（LLC / AHB）页脚右下角那一簇：
+         等宽小字 + 灰色，hover 才提亮。版本号只读 META.version，与页脚上方不再重复。 -->
+    <div class="bar">
+      <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
+      <span class="meta-right">
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.4.0</span>
+        <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
+      </span>
+    </div>
+
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="../../assets/app.js"></script>
+</body>
+</html>

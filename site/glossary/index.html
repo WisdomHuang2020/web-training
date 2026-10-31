@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>术语表 · 从 0 到上线</title>
+<meta name="description" content="共 28 条术语，附出处讲次与反查索引。凡本站自造的词（门禁、打通、假绿、哨兵）都在这里有定义 —— 自造的词必须在使用处给定义。">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/glossary">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="术语表 · 从 0 到上线">
+<meta property="og:description" content="共 28 条术语，附出处讲次与反查索引。凡本站自造的词（门禁、打通、假绿、哨兵）都在这里有定义 —— 自造的词必须在使用处给定义。">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/glossary">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-page="glossary" data-total="31">
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../">总览</a>
+      <a href="../map/">课程地图</a>
+      <a href="../gates/">门禁与红线</a>
+      <a href="../glossary/" aria-current="page">术语表</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 31</span>
+    </span>
+  </div>
+</header>
+<a class="skip" href="#main">跳到正文</a>
+
+<main id="main">
+<section class="hero sm">
+  <div class="shell">
+    <div class="kicker">Reference · 术语</div>
+    <h1>术语表</h1>
+    <p class="lead">共 28 条。凡本站自造的词（门禁、打通、假绿、哨兵…），这里都有定义 —— 这是第 11 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。</p>
+  </div>
+</section>
+
+<section class="sec" id="list">
+  <div class="shell">
+    <div class="gloss">
+      <div id="g01"><dt>构建型 / 零构建</dt><dd>构建型指源码要经过打包才能变成可发布的文件；零构建指仓库里的文件本身就是发布产物。</dd></div>
+      <div id="g02"><dt>v1 / v2 后台</dt><dd>本项目自造的阶段叫法。v1 = 纯静态站；v2 = 加了内容管理后台（登录、数据库、上传）。不是技术名词。</dd></div>
+      <div id="g03"><dt>哨兵文件</dt><dd>服务器上一个记录当前已部署版本的小文件。查线上到底跑的是哪一版，看它最准。</dd></div>
+      <div id="g04"><dt>假绿</dt><dd>CI 显示成功，但关键步骤其实被跳过了。配置缺失时最容易出现。</dd></div>
+      <div id="g05"><dt>降级护栏</dt><dd>上传前把本次产物版本与线上比对，产物更旧就中止，防止旧版本覆盖新版本。</dd></div>
+      <div id="g06"><dt>三层核验</dt><dd>状态码 / 线上内容 / 服务器落盘哨兵。三层都过才算上线成功。</dd></div>
+      <div id="g07"><dt>白名单部署</dt><dd>只上传清单里列出的文件，不是整目录覆盖。清单通常要维护两处，容易不同步。</dd></div>
+      <div id="g08"><dt>拉取式部署</dt><dd>服务器定时自己从仓库拉取并发布，不依赖 CI 主动推。</dd></div>
+      <div id="g09"><dt>Deploy Key</dt><dd>只对单个仓库有效的部署密钥，通常设为只读。</dd></div>
+      <div id="g10"><dt>MCP</dt><dd>一种让工具连接外部系统的标准接口：把仓库、云平台、文档服务接成可调用的能力。</dd></div>
+      <div id="g11"><dt>门禁</dt><dd>本文档的概念：卡住时问题不在代码里的环节。备案、解析、证书都属于此类。</dd></div>
+      <div id="g12"><dt>打通</dt><dd>本文档的概念：让工具具备对某个外部系统的实际操作权限，并明确这份权限的边界。</dd></div>
+      <div id="g13"><dt>心智模型</dt><dd>你脑子里对「某个工具怎么运作」的简化图。模型错了，命令背得再熟也会乱试。</dd></div>
+      <div id="g14"><dt>提交快照</dt><dd>一次 commit 记录的是整个仓库当时的样子（附一句说明），不是一份「改了哪几行」的差异。</dd></div>
+      <div id="g15"><dt>服务器快照</dt><dd>云平台给整台机器磁盘存的一个还原点。改配置前先打一张，坏了一键回滚。</dd></div>
+      <div id="g16"><dt>单一来源</dt><dd>同一个信息只允许有一个权威出处（如版本号只写在 package.json），别处都从它派生。</dd></div>
+      <div id="g17"><dt>tag 与 Release</dt><dd>tag 是给某次提交起的固定名字（如 v1.2.0）；Release 是挂在 tag 上的发布页，可附说明与附件。</dd></div>
+      <div id="g18"><dt>预发布</dt><dd>上线前先在独立地址（子域或端口）跑一遍真环境，验过再切主域，不拿生产当试验场。</dd></div>
+      <div id="g19"><dt>属主</dt><dd>服务器上文件归哪个用户所有。网站文件必须归 nginx 运行用户，否则访问会 403。</dd></div>
+      <div id="g20"><dt>dry-run</dt><dd>试运行：命令完整走一遍但不真正生效，用来验证权限与路径（如 git push --dry-run）。</dd></div>
+      <div id="g21"><dt>CI 与 Actions</dt><dd>CI＝每次提交后自动跑构建与检查；GitHub Actions 是它的一种实现，配置写在 .github/workflows/。</dd></div>
+      <div id="g22"><dt>Secrets</dt><dd>仓库里加密保存的变量（如服务器地址与私钥），只在流水线运行时注入，不进代码。</dd></div>
+      <div id="g23"><dt>轮换与吊销</dt><dd>轮换＝定期换一把新密钥；吊销＝让旧的立刻失效。泄露时必须先吊销、再换新。</dd></div>
+      <div id="g24"><dt>台账</dt><dd>只记「有什么、什么时候到期、谁负责」的清单；密钥台账不记密钥本体。</dd></div>
+      <div id="g25"><dt>脱敏</dt><dd>把敏感字段处理后才能展示：手机中间四位、IP 末段、身份证中间位。日志、截图、导出三处都要做。</dd></div>
+      <div id="g26"><dt>最小必要</dt><dd>只收集与目的直接相关的最少信息，能不收的字段一律不收。这是个人信息保护的硬要求，不是建议。</dd></div>
+      <div id="g27"><dt>发信账号 / 收件人</dt><dd>发信账号＝真正把邮件发出去的那个邮箱，配置在服务器环境变量里；收件人＝谁该收到通知，在后台改、即时生效。两者刻意分开：一个管凭据，一个管日常运维。</dd></div>
+      <div id="g28"><dt>客户端专用密码</dt><dd>开启「安全登录」的邮箱账号，供 SMTP / IMAP 这类第三方客户端使用的独立密码。和网页登录密码不是一回事，混用会一直报 535。</dd></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="index">
+  <div class="shell">
+    <div class="sec-head"><span class="idx">02</span><h2>按术语找讲次</h2><span class="note">27 条有出处</span></div>
+    <p class="sec-desc">记不住术语在哪讲的，从这里反查。</p>
+    <div class="gloss-index">
+      <div class="gi-row"><a class="gi-t" href="#g01">构建型 / 零构建</a><span class="gi-m"><a href="../lessons/M30/">M30</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g02">v1 / v2 后台</a><span class="gi-m"><a href="../lessons/M20/">M20</a><a href="../lessons/M30/">M30</a><a href="../lessons/M31/">M31</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g03">哨兵文件</a><span class="gi-m"><a href="../lessons/M17/">M17</a><a href="../lessons/M27/">M27</a><a href="../lessons/M30/">M30</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g04">假绿</a><span class="gi-m"><a href="../lessons/M07/">M07</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g05">降级护栏</a><span class="gi-m"><a href="../lessons/M18/">M18</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g06">三层核验</a><span class="gi-m"><a href="../lessons/M17/">M17</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g07">白名单部署</a><span class="gi-m"><a href="../lessons/M17/">M17</a><a href="../lessons/M19/">M19</a><a href="../lessons/M22/">M22</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g08">拉取式部署</a><span class="gi-m"><a href="../lessons/M19/">M19</a><a href="../lessons/M30/">M30</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g09">Deploy Key</a><span class="gi-m"><a href="../lessons/M05/">M05</a><a href="../lessons/M19/">M19</a><a href="../lessons/M22/">M22</a><a href="../lessons/M24/">M24</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g10">MCP</a><span class="gi-m"><a href="../lessons/M02/">M02</a><a href="../lessons/M23/">M23</a><a href="../lessons/M24/">M24</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g12">打通</a><span class="gi-m"><a href="../lessons/M05/">M05</a><a href="../lessons/M24/">M24</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g13">心智模型</a><span class="gi-m"><a href="../lessons/M04/">M04</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g14">提交快照</a><span class="gi-m"><a href="../lessons/M04/">M04</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g15">服务器快照</a><span class="gi-m"><a href="../lessons/M04/">M04</a><a href="../lessons/M07/">M07</a><a href="../lessons/M08/">M08</a><a href="../lessons/M28/">M28</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g16">单一来源</a><span class="gi-m"><a href="../lessons/M06/">M06</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g17">tag 与 Release</a><span class="gi-m"><a href="../lessons/M06/">M06</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g18">预发布</a><span class="gi-m"><a href="../lessons/M18/">M18</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g19">属主</a><span class="gi-m"><a href="../lessons/M14/">M14</a><a href="../lessons/M17/">M17</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g20">dry-run</a><span class="gi-m"><a href="../lessons/M03/">M03</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g21">CI 与 Actions</a><span class="gi-m"><a href="../lessons/M07/">M07</a><a href="../lessons/M18/">M18</a><a href="../lessons/M19/">M19</a><a href="../lessons/M23/">M23</a><a href="../lessons/M30/">M30</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g22">Secrets</a><span class="gi-m"><a href="../lessons/M18/">M18</a><a href="../lessons/M23/">M23</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g23">轮换与吊销</a><span class="gi-m"><a href="../lessons/M23/">M23</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g24">台账</a><span class="gi-m"><a href="../lessons/M23/">M23</a><a href="../lessons/M27/">M27</a><a href="../lessons/M31/">M31</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g25">脱敏</a><span class="gi-m"><a href="../lessons/M26/">M26</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g26">最小必要</a><span class="gi-m"><a href="../lessons/M26/">M26</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g27">发信账号 / 收件人</a><span class="gi-m"><a href="../lessons/M31/">M31</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g28">客户端专用密码</a><span class="gi-m"><a href="../lessons/M31/">M31</a></span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 31 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../">总览</a>
+          <a href="../map/">课程地图</a>
+          <a href="../gates/">门禁与红线</a>
+          <a href="../glossary/">术语表</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部条：左版权、右「版本号 + GitHub」。版式对齐站群（LLC / AHB）页脚右下角那一簇：
+         等宽小字 + 灰色，hover 才提亮。版本号只读 META.version，与页脚上方不再重复。 -->
+    <div class="bar">
+      <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
+      <span class="meta-right">
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.4.0</span>
+        <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
+      </span>
+    </div>
+
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<button class="totop" type="button" aria-label="回到顶部">↑</button>
+<script src="../assets/app.js"></script>
+</body>
+</html>

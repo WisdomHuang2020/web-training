@@ -118,7 +118,12 @@ if (fs.existsSync(sitemapPath)) {
   const listed = new Set([...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]));
   const missing = pages
     .filter(p => !p.endsWith('404.html'))
-    .map(p => '/' + path.relative(SITE, p).replace(/\\/g, '/'))
+    .map(p => {
+      const rel = '/' + path.relative(SITE, p).replace(/\\/g, '/');
+      // 目录式产物：/map/index.html 的公开地址是 /map，/index.html 是 /
+      const clean = rel.replace(/\/index\.html$/, '');
+      return clean === '' ? '/' : clean;
+    })
     .filter(u => {
       const abs = SITE_ORIGIN + u;
       // 干净 URL 也算覆盖：/map.html 由 /map 提供，/index.html 由 / 提供

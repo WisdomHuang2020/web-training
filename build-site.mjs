@@ -137,24 +137,37 @@ ${extra}<link rel="stylesheet" href="${prefix}assets/style.css">
 </head>`;
 }
 
-function topbar({ prefix, current, home, map }) {
+/**
+ * 产物是目录式：map/index.html、lessons/M01/index.html。
+ * 这样 nginx 和 GitHub Pages（纯文件托管、不做无扩展名路由）都能用同一个干净地址。
+ * base = 当前页回到站点根的相对前缀：首页 ''、一级页 '../'、讲义 '../../'、404 用 '/'。
+ */
+function links(base) {
+  return {
+    home: base || './',
+    map: base + 'map/',
+    gates: base + 'gates/',
+    glossary: base + 'glossary/',
+    lesson: no => base + 'lessons/' + no + '/',
+  };
+}
+
+function topbar({ base, current }) {
+  const L = links(base);
   const item = (href, label, key) =>
     `<a href="${href}"${current === key ? ' aria-current="page"' : ''}>${label}</a>`;
-  // 课程地图是独立页面 /map（不再用首页的 #map 锚点）。
-  // 用相对形式（./map、../map）而非绝对 /map：万一将来挂到子路径也能用。
-  const mapHref = map;
   return `<header class="topbar">
   <div class="shell">
-    <a class="brand" href="${home}">
+    <a class="brand" href="${L.home}">
       ${BRAND_SVG}
       <b>从 0 到上线</b>
       <em>网站建设实训课</em>
     </a>
     <nav class="nav" aria-label="主导航">
-      ${item(home, '总览', 'home')}
-      ${item(mapHref, '课程地图', 'map')}
-      ${item(prefix + 'gates', '门禁与红线', 'gates')}
-      ${item(prefix + 'glossary', '术语表', 'glossary')}
+      ${item(L.home, '总览', 'home')}
+      ${item(L.map, '课程地图', 'map')}
+      ${item(L.gates, '门禁与红线', 'gates')}
+      ${item(L.glossary, '术语表', 'glossary')}
     </nav>
     <span class="pill" data-progress hidden>
       <i><span data-pbar></span></i>
@@ -164,7 +177,8 @@ function topbar({ prefix, current, home, map }) {
 </header>`;
 }
 
-function footer({ prefix, home, map }) {
+function footer({ prefix, base }) {
+  const L = links(base);
   return `<footer class="foot">
   <div class="shell">
     <div class="row">
@@ -186,10 +200,10 @@ function footer({ prefix, home, map }) {
       </div>
       <div>
         <div class="links">
-          <a href="${home}">总览</a>
-          <a href="${map}">课程地图</a>
-          <a href="${prefix}gates">门禁与红线</a>
-          <a href="${prefix}glossary">术语表</a>
+          <a href="${L.home}">总览</a>
+          <a href="${L.map}">课程地图</a>
+          <a href="${L.gates}">门禁与红线</a>
+          <a href="${L.glossary}">术语表</a>
         </div>
       </div>
     </div>
@@ -223,7 +237,7 @@ function modCard(m) {
   const idx = MODULES.findIndex(x => x.no === m.no);
   const kw = [m.t, m.q, m.can, (m.pts || []).join(' '), m.out, m.drill].join(' ');
   const tags = m.p.map(k => `<i class="${k === 'Q' ? 'q' : ''}">${k}</i>`).join('');
-  return `<a class="mod" href="lessons/${m.no}" data-mod="${m.no}" data-p="${m.p.join(' ')}" data-kw="${esc(kw)}">
+  return `<a class="mod" href="../lessons/${m.no}/" data-mod="${m.no}" data-p="${m.p.join(' ')}" data-kw="${esc(kw)}">
         <span class="no">${m.no} · ${pad2(idx + 1)}/${TOTAL}</span>
         <h4>${esc(m.t)}</h4>
         <p>${esc(m.q)}</p>
@@ -233,7 +247,7 @@ function modCard(m) {
 
 function renderHome() {
   // 首页只放 9 行阶段索引，31 张卡在 /map —— 首页原先是 7700px 长，主要就是这堆卡撑的
-  const stageIndex = STAGES.map(st => `<a class="si" href="./map#${st.id.toLowerCase()}">
+  const stageIndex = STAGES.map(st => `<a class="si" href="map/#${st.id.toLowerCase()}">
       <span class="si-id">${st.id}</span>
       <span class="si-body">
         <span class="si-name">${esc(st.name)}<b>${st.mods.length} 讲</b></span>
@@ -242,7 +256,7 @@ function renderHome() {
     </a>`).join('\n      ');
 
   const pathCards = Object.entries(PATHS).map(([k, p]) => {
-    const chips = p.mods.map(no => `<a href="lessons/${no}">${no}</a>`).join('');
+    const chips = p.mods.map(no => `<a href="lessons/${no}/">${no}</a>`).join('');
     return `<div class="path ${k === 'Q' ? 'q' : ''}">
         <div class="ph">
           <span class="key">${k}</span>
@@ -287,7 +301,7 @@ function renderHome() {
     canon: '/',
   })}
 <body data-page="home" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'home', home: './', map: './map' })}
+${topbar({ base: '', current: 'home' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -298,8 +312,8 @@ ${topbar({ prefix: '', current: 'home', home: './', map: './map' })}
     <p class="lead">一条<b>能照做跑通</b>的完整链路：本地 → 仓库 → 服务器 → 域名 → 备案 → 上线 → 维护。
       及格线只有一条 —— <b>${esc(PASS_LINE.replace(/。$/, ''))}</b>。</p>
     <div class="cta">
-      <a class="btn btn-primary" href="lessons/M01">从第 1 讲开始 <span class="ar">→</span></a>
-      <a class="btn btn-ghost" href="./map">看课程地图</a>
+      <a class="btn btn-primary" href="lessons/M01/">从第 1 讲开始 <span class="ar">→</span></a>
+      <a class="btn btn-ghost" href="map/">看课程地图</a>
     </div>
     <div class="stats">${stats}</div>
   </div>
@@ -346,7 +360,7 @@ ${topbar({ prefix: '', current: 'home', home: './', map: './map' })}
       ${stageIndex}
     </div>
     <div class="cta-row">
-      <a class="btn btn-primary" href="./map">打开完整课程地图 <span class="ar">→</span></a>
+      <a class="btn btn-primary" href="map/">打开完整课程地图 <span class="ar">→</span></a>
       <span class="cta-note">31 讲全在这里，可按路径 Q / A / B / C 筛选，也能按关键词搜</span>
     </div>
   </div>
@@ -362,7 +376,7 @@ ${topbar({ prefix: '', current: 'home', home: './', map: './map' })}
       </div>
     </div>
     <div class="cta-row">
-      <a class="btn btn-ghost" href="gates">四道门禁的归因表 + ${DRILL_CN}次破坏性演练 <span class="ar">→</span></a>
+      <a class="btn btn-ghost" href="gates/">四道门禁的归因表 + ${DRILL_CN}次破坏性演练 <span class="ar">→</span></a>
     </div>
   </div>
 </section>
@@ -395,13 +409,13 @@ ${topbar({ prefix: '', current: 'home', home: './', map: './map' })}
       ${glossPreview}
     </div>
     <div class="cta-row">
-      <a class="btn btn-ghost" href="glossary">全部 ${GLOSSARY.length} 条术语 <span class="ar">→</span></a>
+      <a class="btn btn-ghost" href="glossary/">全部 ${GLOSSARY.length} 条术语 <span class="ar">→</span></a>
     </div>
   </div>
 </section>
 </main>
 
-${footer({ prefix: '', home: './', map: './map' })}
+${footer({ prefix: '', base: '' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
 <script src="assets/app.js"></script>
 </body>
@@ -464,6 +478,7 @@ function renderSop(mod, idx) {
 /* ============================== 讲义页 ============================== */
 
 function lessonPage(mod, stage) {
+  const L = links('../../');
   const i = MODULES.findIndex(x => x.no === mod.no);
   const prev = i > 0 ? MODULES[i - 1] : null;
   const next = i < TOTAL - 1 ? MODULES[i + 1] : null;
@@ -506,19 +521,19 @@ function lessonPage(mod, stage) {
   return `${head({
     title: `${mod.no} ${mod.t} · 从 0 到上线`,
     desc: `${mod.q}。学完能做到：${mod.can}。产出物：${mod.out}（${stage.id} ${stage.name}）`,
-    prefix: '../',
+    prefix: '../../',
     canon: `/lessons/${mod.no}`,
   })}
 <body data-page="lesson" data-total="${TOTAL}" data-mod="${mod.no}">
-${topbar({ prefix: '../', current: '', home: '../', map: '../map' })}
+${topbar({ base: '../../', current: '' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <div class="shell lesson">
   <div class="lesson-grid">
     <main class="lesson-main" id="main">
       <div class="crumb">
-        <a href="../">总览</a><span class="sep">/</span>
-        <a href="../map">课程地图</a><span class="sep">/</span>
+        <a href="${L.home}">总览</a><span class="sep">/</span>
+        <a href="${L.map}">课程地图</a><span class="sep">/</span>
         <span>${stage.id} ${esc(stage.name)}</span>
       </div>
 
@@ -593,15 +608,15 @@ ${renderSop(mod, SOP[mod.no] ? num() : '')}
       </section>
 ${terms.length ? `
       <section class="lsec" id="s9">
-        <h2><span class="i">${num()}</span>本讲术语<span class="n"><a href="../glossary">全部 ${GLOSSARY.length} 条</a></span></h2>
+        <h2><span class="i">${num()}</span>本讲术语<span class="n"><a href="${L.glossary}">全部 ${GLOSSARY.length} 条</a></span></h2>
         <ul class="pts">
-          ${terms.map(t => `<li><b><a href="../glossary#${t.id}">${esc(t.name)}</a></b>：${esc(t.desc)}</li>`).join('\n          ')}
+          ${terms.map(t => `<li><b><a href="${L.glossary}#${t.id}">${esc(t.name)}</a></b>：${esc(t.desc)}</li>`).join('\n          ')}
         </ul>
       </section>
 ` : ''}
       <div class="pager">
-        ${prev ? `<a class="prev" href="${prev.no}"><span class="dir">← 上一讲</span><span class="tt">${prev.no} ${esc(prev.t)}</span></a>` : '<span class="sp"></span>'}
-        ${next ? `<a class="next" href="${next.no}"><span class="dir">下一讲 →</span><span class="tt">${next.no} ${esc(next.t)}</span></a>` : '<span class="sp"></span>'}
+        ${prev ? `<a class="prev" href="../${prev.no}/"><span class="dir">← 上一讲</span><span class="tt">${prev.no} ${esc(prev.t)}</span></a>` : '<span class="sp"></span>'}
+        ${next ? `<a class="next" href="../${next.no}/"><span class="dir">下一讲 →</span><span class="tt">${next.no} ${esc(next.t)}</span></a>` : '<span class="sp"></span>'}
       </div>
     </main>
 
@@ -615,17 +630,17 @@ ${terms.length ? `
       <div class="blk">
         <p class="rail-h">${stage.id} ${esc(stage.name)}</p>
         <ol>
-          ${stage.mods.map(x => `<li><a href="${x.no}"${x.no === mod.no ? ' class="on" aria-current="page"' : ''}>${x.no} ${esc(x.t)}</a></li>`).join('\n          ')}
+          ${stage.mods.map(x => `<li><a href="../${x.no}/"${x.no === mod.no ? ' class="on" aria-current="page"' : ''}>${x.no} ${esc(x.t)}</a></li>`).join('\n          ')}
         </ol>
       </div>
-      ${next ? `<div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="${next.no}"><span>${next.no}</span>${esc(next.t)}</a></div>` : ''}
+      ${next ? `<div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="../${next.no}/"><span>${next.no}</span>${esc(next.t)}</a></div>` : ''}
     </aside>
   </div>
 </div>
 
-${footer({ prefix: '../', home: '../', map: '../map' })}
+${footer({ prefix: '../../', base: '../../' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
-<script src="../assets/app.js"></script>
+<script src="../../assets/app.js"></script>
 </body>
 </html>
 `;
@@ -659,11 +674,11 @@ function renderMapPage() {
   return `${head({
     title: `课程地图 · 从 0 到上线`,
     desc: `${STAGES.length} 个阶段 ${TOTAL} 讲的完整索引，可按学习路径 Q / A / B / C 筛选，也能按关键词搜索。每讲含能力目标、操作步骤、产出物与验收判据。`,
-    prefix: './',
+    prefix: '../',
     canon: '/map',
   })}
 <body data-page="map" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'map', home: './', map: './map' })}
+${topbar({ base: '../', current: 'map' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -693,9 +708,9 @@ ${topbar({ prefix: '', current: 'map', home: './', map: './map' })}
 </section>
 </main>
 
-${footer({ prefix: '', home: './', map: './map' })}
+${footer({ prefix: '../', base: '../' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
-<script src="assets/app.js"></script>
+<script src="../assets/app.js"></script>
 </body>
 </html>
 `;
@@ -729,11 +744,11 @@ function gatesPage() {
   return `${head({
     title: '门禁与红线 · 从 0 到上线',
     desc: `关键路径上的四道门禁、${DRILL_COUNT} 次破坏性演练与${cn(REDLINES.length)}条通用红线。卡住时问题不在代码里的那些环节。`,
-    prefix: '',
+    prefix: '../',
     canon: '/gates',
   })}
 <body data-page="gates" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'gates', home: './', map: './map' })}
+${topbar({ base: '../', current: 'gates' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -794,9 +809,9 @@ ${topbar({ prefix: '', current: 'gates', home: './', map: './map' })}
 </section>
 </main>
 
-${footer({ prefix: '', home: './', map: './map' })}
+${footer({ prefix: '../', base: '../' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
-<script src="assets/app.js"></script>
+<script src="../assets/app.js"></script>
 </body>
 </html>
 `;
@@ -814,17 +829,17 @@ function glossaryPage() {
   });
 
   const index = usedIn.filter(x => x.mods.length).map(x =>
-    `<div class="gi-row"><a class="gi-t" href="#${x.id}">${esc(x.name)}</a><span class="gi-m">${x.mods.map(m => `<a href="lessons/${m.no}">${m.no}</a>`).join('')}</span></div>`
+    `<div class="gi-row"><a class="gi-t" href="#${x.id}">${esc(x.name)}</a><span class="gi-m">${x.mods.map(m => `<a href="../lessons/${m.no}/">${m.no}</a>`).join('')}</span></div>`
   ).join('\n      ');
 
   return `${head({
     title: '术语表 · 从 0 到上线',
     desc: `共 ${GLOSSARY.length} 条术语，附出处讲次与反查索引。凡本站自造的词（门禁、打通、假绿、哨兵）都在这里有定义 —— 自造的词必须在使用处给定义。`,
-    prefix: '',
+    prefix: '../',
     canon: '/glossary',
   })}
 <body data-page="glossary" data-total="${TOTAL}">
-${topbar({ prefix: '', current: 'glossary', home: './', map: './map' })}
+${topbar({ base: '../', current: 'glossary' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -855,9 +870,9 @@ ${topbar({ prefix: '', current: 'glossary', home: './', map: './map' })}
 </section>
 </main>
 
-${footer({ prefix: '', home: './', map: './map' })}
+${footer({ prefix: '../', base: '../' })}
 <button class="totop" type="button" aria-label="回到顶部">↑</button>
-<script src="assets/app.js"></script>
+<script src="../assets/app.js"></script>
 </body>
 </html>
 `;
@@ -873,7 +888,7 @@ function notFoundPage() {
   const hot = ['M01', 'M11', 'M17', 'M31'];
   const hotCards = hot.map(no => {
     const m = MODULES.find(x => x.no === no);
-    return `<a class="mod" href="/lessons/${m.no}"><span class="no">${m.no}</span><h3>${esc(m.t)}</h3><p>${esc(m.q)}</p></a>`;
+    return `<a class="mod" href="/lessons/${m.no}/"><span class="no">${m.no}</span><h3>${esc(m.t)}</h3><p>${esc(m.q)}</p></a>`;
   }).join('\n      ');
 
   return `${head({
@@ -884,7 +899,7 @@ function notFoundPage() {
     extra: '<meta name="robots" content="noindex">',
   })}
 <body data-page="404" data-total="${TOTAL}">
-${topbar({ prefix: '/', current: '', home: '/', map: '/map' })}
+${topbar({ base: '/', current: '' })}
 <a class="skip" href="#main">跳到正文</a>
 
 <main id="main">
@@ -895,8 +910,8 @@ ${topbar({ prefix: '/', current: '', home: '/', map: '/map' })}
     <p class="lead">可能是链接打错了一个字，也可能这页还没写。下面三个入口都能回到正题。</p>
     <div class="cta">
       <a class="btn btn-primary" href="/">回课程总览 <span class="ar">→</span></a>
-      <a class="btn btn-ghost" href="/map">看课程地图</a>
-      <a class="btn btn-ghost" href="/glossary">术语表</a>
+      <a class="btn btn-ghost" href="/map/">看课程地图</a>
+      <a class="btn btn-ghost" href="/glossary/">术语表</a>
     </div>
   </div>
 </section>
@@ -911,7 +926,7 @@ ${topbar({ prefix: '/', current: '', home: '/', map: '/map' })}
 </section>
 </main>
 
-${footer({ prefix: '/', home: '/', map: '/map' })}
+${footer({ prefix: '/', base: '/' })}
 <script src="/assets/app.js"></script>
 </body>
 </html>
@@ -934,13 +949,13 @@ const files = [];
 
 bytes += write('index.html', renderHome()); files.push('index.html');
 STAGES.forEach(st => st.mods.forEach(m => {
-  const f = path.join('lessons', m.no + '.html');
+  const f = path.join('lessons', m.no, 'index.html');
   bytes += write(f, lessonPage(m, st));
   files.push(f);
 }));
-bytes += write('gates.html', gatesPage()); files.push('gates.html');
-bytes += write('glossary.html', glossaryPage()); files.push('glossary.html');
-bytes += write('map.html', renderMapPage()); files.push('map.html');
+bytes += write(path.join('gates', 'index.html'), gatesPage()); files.push('gates/index.html');
+bytes += write(path.join('glossary', 'index.html'), glossaryPage()); files.push('glossary/index.html');
+bytes += write(path.join('map', 'index.html'), renderMapPage()); files.push('map/index.html');
 bytes += write('404.html', notFoundPage()); files.push('404.html');
 
 /* ---- sitemap.xml / robots.txt：M13 与 M29 都在讲它们，本站自己没有就说不过去 ---- */
@@ -976,27 +991,27 @@ fs.writeFileSync(path.join(OUT, 'assets', 'favicon.svg'), FAVICON_SVG, 'utf8');
 /* ============================== 自检 ============================== */
 
 const checks = [];
-const need = ['index.html', 'map.html', 'gates.html', 'glossary.html', '404.html',
+const need = ['index.html', 'map/index.html', 'gates/index.html', 'glossary/index.html', '404.html',
   'sitemap.xml', 'robots.txt',
-  ...MODULES.map(m => `lessons/${m.no}.html`)];
+  ...MODULES.map(m => `lessons/${m.no}/index.html`)];
 checks.push([`页面数 = ${TOTAL + 5}`, files.length === TOTAL + 5]);
 checks.push(['文件全部落盘', need.every(f => fs.existsSync(path.join(OUT, f)))]);
 const home = fs.readFileSync(path.join(OUT, 'index.html'), 'utf8');
-const mapHtml = fs.readFileSync(path.join(OUT, 'map.html'), 'utf8');
+const mapHtml = fs.readFileSync(path.join(OUT, 'map', 'index.html'), 'utf8');
 // 31 张卡在 /map 上（首页只剩 9 行阶段索引），这两项自检跟着搬过去
 checks.push([`地图页含全部 ${TOTAL} 张卡`, (mapHtml.match(/class="mod" href=/g) || []).length === TOTAL]);
 checks.push(['地图页路径计数与数据一致', Object.entries(PATH_COUNT).every(([k]) => mapHtml.includes(`data-path="${k}"`))]);
 checks.push(['首页只放阶段索引，不再重复卡片', !/class="mod" href=/.test(home)]);
-const m01 = fs.readFileSync(path.join(OUT, 'lessons', 'M01.html'), 'utf8');
+const m01 = fs.readFileSync(path.join(OUT, 'lessons', 'M01', 'index.html'), 'utf8');
 checks.push(['讲义页带 data-mod', m01.includes('data-mod="M01"')]);
 checks.push(['讲义页无「待补充」', !m01.includes('待补充')]);
-const allLessons = MODULES.map(m => fs.readFileSync(path.join(OUT, 'lessons', m.no + '.html'), 'utf8'));
+const allLessons = MODULES.map(m => fs.readFileSync(path.join(OUT, 'lessons', m.no, 'index.html'), 'utf8'));
 checks.push([`${TOTAL} 讲都含自检表`, allLessons.every(h => h.includes('class="check"'))]);
-checks.push([`${TOTAL} 讲都含返回总览`, allLessons.every(h => h.includes('class="crumb"') && h.includes('<a href="../">总览</a>'))]);
+checks.push([`${TOTAL} 讲都含返回总览`, allLessons.every(h => h.includes('class="crumb"') && h.includes('href="../../">总览</a>'))]);
 // 全站统一干净 URL：页面里不该再出现 .html 的站内链接（文件本身仍是 .html）
 const allHtml = [...allLessons, home, mapHtml,
-  fs.readFileSync(path.join(OUT, 'gates.html'), 'utf8'),
-  fs.readFileSync(path.join(OUT, 'glossary.html'), 'utf8')];
+  fs.readFileSync(path.join(OUT, 'gates', 'index.html'), 'utf8'),
+  fs.readFileSync(path.join(OUT, 'glossary', 'index.html'), 'utf8')];
 checks.push(['全站链接不再带 .html', allHtml.every(h =>
   !/(href|src)="(?![a-z]+:)[^"]*\.html(#[^"]*)?"/i.test(h))]);
 // 顶栏 Logo 与页签图标必须同源：两边都含同一段赤道路径，改一处忘一处会在这里报
