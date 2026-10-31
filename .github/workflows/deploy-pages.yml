@@ -69,6 +69,30 @@ jobs:
           fi
           echo "✓ 除 404.html 外无绝对根路径引用，适配 /web-training/ 子路径"
 
+      # 前置检查：Pages 站点不存在时直接说清楚该怎么修。
+      #
+      # 起因（2026-10-31 实测）：仓库转 public 后工作流仍失败，报
+      #   Create Pages site failed. Error: Resource not accessible by integration
+      #   Get Pages site failed. Error: Not Found
+      # 原因是 Pages 站点尚未创建（GET /repos/{owner}/{repo}/pages 返回 404）。
+      # 下面的 configure-pages 带 enablement: true 会尝试 POST 创建，但那需要
+      # **仓库管理员**权限，GITHUB_TOKEN 只是安装令牌，只有 pages: write，创建不了。
+      # 结论：这一步必须由人在仓库设置里点一次，动作脚本代替不了。
+      - name: 检查 GitHub Pages 是否已启用
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          code=$(curl -s -o /dev/null -w '%{http_code}' \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/pages")
+          echo "GET pages API -> HTTP $code"
+          if [ "$code" = "404" ]; then
+            echo "::error title=Pages 未启用::本仓库还没有 GitHub Pages 站点。请打开 Settings → Pages → Build and deployment → Source 选择「GitHub Actions」并保存，然后在 Actions 里点 Re-run jobs。这一步需要仓库管理员，工作流令牌做不了。"
+            exit 1
+          fi
+
       - uses: actions/configure-pages@v5
         with:
           # 首次运行时尝试自动启用 Pages（Source 需为 GitHub Actions）。
