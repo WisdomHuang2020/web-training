@@ -6,12 +6,12 @@
 <title>M14 服务器环境与目录规划 · 从 0 到上线</title>
 <meta name="description" content="多站共存的目录与属主。学完能做到：在一台已有多个站的服务器上安全地新增一个站。产出物：目录结构 + 一份当前站点清单（S3 上线）">
 <meta name="theme-color" content="#0a0a0a">
-<link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M14.html">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M14">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
 <meta property="og:title" content="M14 服务器环境与目录规划 · 从 0 到上线">
 <meta property="og:description" content="多站共存的目录与属主。学完能做到：在一台已有多个站的服务器上安全地新增一个站。产出物：目录结构 + 一份当前站点清单（S3 上线）">
-<meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M14.html">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M14">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/style.css">
@@ -33,8 +33,8 @@
     <nav class="nav" aria-label="主导航">
       <a href="../">总览</a>
       <a href="../map">课程地图</a>
-      <a href="../gates.html">门禁与红线</a>
-      <a href="../glossary.html">术语表</a>
+      <a href="../gates">门禁与红线</a>
+      <a href="../glossary">术语表</a>
     </nav>
     <span class="pill" data-progress hidden>
       <i><span data-pbar></span></i>
@@ -141,15 +141,15 @@ namei -l /var/www/site/index.html   # 逐级看权限</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../glossary.html">全部 28 条</a></span></h2>
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../glossary">全部 28 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../glossary.html#g19">属主</a></b>：服务器上文件归哪个用户所有。网站文件必须归 nginx 运行用户，否则访问会 403。</li>
+          <li><b><a href="../glossary#g19">属主</a></b>：服务器上文件归哪个用户所有。网站文件必须归 nginx 运行用户，否则访问会 403。</li>
         </ul>
       </section>
 
       <div class="pager">
-        <a class="prev" href="M13.html"><span class="dir">← 上一讲</span><span class="tt">M13 站点合规四件套</span></a>
-        <a class="next" href="M15.html"><span class="dir">下一讲 →</span><span class="tt">M15 nginx 配置实战</span></a>
+        <a class="prev" href="M13"><span class="dir">← 上一讲</span><span class="tt">M13 站点合规四件套</span></a>
+        <a class="next" href="M15"><span class="dir">下一讲 →</span><span class="tt">M15 nginx 配置实战</span></a>
       </div>
     </main>
 
@@ -171,13 +171,13 @@ namei -l /var/www/site/index.html   # 逐级看权限</pre>
       <div class="blk">
         <p class="rail-h">S3 上线</p>
         <ol>
-          <li><a href="M14.html" class="on" aria-current="page">M14 服务器环境与目录规划</a></li>
-          <li><a href="M15.html">M15 nginx 配置实战</a></li>
-          <li><a href="M16.html">M16 HTTPS 与证书</a></li>
-          <li><a href="M17.html">M17 首次手工上线</a></li>
+          <li><a href="M14" class="on" aria-current="page">M14 服务器环境与目录规划</a></li>
+          <li><a href="M15">M15 nginx 配置实战</a></li>
+          <li><a href="M16">M16 HTTPS 与证书</a></li>
+          <li><a href="M17">M17 首次手工上线</a></li>
         </ol>
       </div>
-      <div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="M15.html"><span>M15</span>nginx 配置实战</a></div>
+      <div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="M15"><span>M15</span>nginx 配置实战</a></div>
     </aside>
   </div>
 </div>
@@ -211,8 +211,8 @@ namei -l /var/www/site/index.html   # 逐级看权限</pre>
         <div class="links">
           <a href="../">总览</a>
           <a href="../map">课程地图</a>
-          <a href="../gates.html">门禁与红线</a>
-          <a href="../glossary.html">术语表</a>
+          <a href="../gates">门禁与红线</a>
+          <a href="../glossary">术语表</a>
         </div>
       </div>
     </div>
@@ -222,7 +222,7 @@ namei -l /var/www/site/index.html   # 逐级看权限</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.2.0</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.3.0</span>
         <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
       </span>
     </div>
