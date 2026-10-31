@@ -1577,7 +1577,7 @@ export const TODO = [
   { s: "ok", t: "用途：发给同事当课件", w: "每个模块需补练习答案与讲者备注；红线与门禁表要做成可投屏的单页" },
   { s: "ok", t: "云厂商：只讲腾讯云轻量", w: "M08 已收窄，不再横向对比阿里云 / 华为云" },
   { s: "ok", t: "网络场景：GitHub 访问不稳", w: "M03 改为通道判定（SSH:22 → ssh.github.com:443 → HTTPS:443），不写公司内网代理" },
-  { s: "ok", t: "交付位置：与 LLC 仓库解耦", w: "已独立到 web-training/site/，不进 llc-design-tool 的 dist；需要时再单独建库" }
+  { s: "ok", t: "交付位置：独立仓库 + 独立域名", w: "仓库 github.com/WisdomHuang2020/web-training；站点 www.web-training.power-knowledge.tech（裸域 301 归一 www）；产物落 /var/www/web-training，nginx 配置存档在 deploy/nginx.conf" }
 ];
 
 /** 扁平模块表（按讲课顺序），页面里几乎都从这里取。 */
