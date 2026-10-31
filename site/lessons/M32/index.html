@@ -75,7 +75,7 @@
       <section class="lsec" id="s3">
         <h2><span class="i">02</span>要讲清的 5 件事<span class="n">核心要点</span></h2>
         <ul class="pts">
-          <li>服务商只能用合规白名单：腾讯位置服务 / 高德 / 百度 / 天地图。境外底图（Google、Apple、Bing 境外版、Mapbox、OSM 境外瓦片）一律不用，这是合规红线，不是偏好问题</li>
+          <li>服务商只能用合规白名单：腾讯位置服务 / 高德 / 百度 / 天地图。境外地图（Google Maps、Apple Maps、Bing 境外版、Mapbox、OSM 境外瓦片）一律不用，这是合规红线，不是偏好问题</li>
           <li>key 绝不进 git（仓库历史会永久留痕），只写在服务器上的 js/map-keys.*.js，该文件不入库；页面读不到 key 就整块隐藏 —— 降级不能变成报错</li>
           <li>外链一律带坐标，不用关键词搜索：关键词会按访客 IP 所在城市检索，海外客户直接搜不到，页面看起来像没定位</li>
           <li>内嵌容器必须有固定高度，否则不渲染；腾讯 GL 依赖 WebGL，老显卡 / 远程桌面 / 关了硬件加速会白屏且控制台不报错，必须探测后自动切高德</li>
@@ -114,7 +114,7 @@ chrome --headless=new --disable-gpu --virtual-time-budget=15000 \
         <h2><span class="i">04</span>完整 SOP<span class="n">照着能做</span></h2>
         <p class="sop-p sop-intro">目标：联系页上放一张能用的地图，并且在地图服务挂掉时页面仍然完整可用。</p>
         <p class="sop-p">这份 SOP 来自一次真实接入：客户要在联系页放地图。全程踩过 WebGL 白屏、浏览器缓存旧 key、百度外链按访客城市检索这几个坑，下面按能照做的顺序写。</p>
-<div class="callout danger">三条铁律，违反就是合规风险或线上事故：① 地图服务商只能用合规白名单（腾讯位置服务 / 高德 / 百度 / 天地图），境外底图一律不用；② 真实 key 绝不进 git，仓库历史会永久留痕；③ 外链一律用坐标，不用关键词。</div>
+<div class="callout danger">三条铁律，违反就是合规风险或线上事故：① 地图服务商只能用合规白名单（腾讯位置服务 / 高德 / 百度 / 天地图），境外地图一律不用；② 真实 key 绝不进 git，仓库历史会永久留痕；③ 外链一律用坐标，不用关键词。</div>
 <h3>0. 先判断：你要加的是哪一种地图</h3>
 <div class="tbl-wrap"><table class="tbl">
           <thead><tr><th>形态</th><th>说明</th><th>是否需要 key</th></tr></thead>
@@ -320,7 +320,7 @@ grep -c &quot;&lt;canvas&quot; dom.html      # ≥1 说明底图渲染了</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.5.1</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.5.2</span>
         <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
       </span>
     </div>
