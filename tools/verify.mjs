@@ -33,6 +33,7 @@ const PAGES = [
   ['讲义 M31', '/lessons/M31.html'],
   ['门禁', '/gates.html'],
   ['术语表', '/glossary.html'],
+  ['404', '/404.html'],
 ];
 
 const browser = await chromium.launch({ channel: 'chrome' });
