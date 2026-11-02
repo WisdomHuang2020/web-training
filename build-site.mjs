@@ -1085,6 +1085,10 @@ ${topbar({ base, current: '' })}
             <label for="fb-pass">密码</label>
             <input id="fb-pass" type="password" autocomplete="current-password" required>
           </div>
+          <!-- 登录失败提示放这里，不复用页面顶部的 #fb-alert：
+               登录失败要「先提示、再切回登录页」，而切页会清掉页面级提示。 -->
+          <div class="fb-alert err" id="fb-login-err" hidden></div>
+
           <div class="fb-actions">
             <a href="#" id="fb-to-setup" style="font-size:12px;color:var(--text-3)">首次使用，或忘记密码？</a>
             <button type="submit" class="btn btn-primary" id="fb-login-btn">登录</button>

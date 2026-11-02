@@ -101,8 +101,8 @@
    * 按钮必须 type="button"：放在 form 里时，默认 type=submit 会让
    * 点眼睛等于提交表单。
    * ============================================================ */
-  var EYE_SVG = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
-  var EYE_OFF_SVG = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>';
+  var EYE_SVG = '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var EYE_OFF_SVG = '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>';
 
   function enhancePasswordFields(root) {
     var inputs = (root || document).querySelectorAll('input[type="password"]');
@@ -329,6 +329,22 @@
     }
     function clearAlert() { if (alertBox) alertBox.hidden = true; }
 
+    /* 登录错误用**独立**容器，不能复用页面顶部的 #fb-alert。
+       原因：登录失败的 catch 里要先提示、再 view('login') 切回登录页，
+       而 view() 内部会调 clearAlert() —— 刚显示的错误会被立刻抹掉，
+       用户看到的现象就是"输错密码毫无反应"（2026-11-02 实测确认：
+       alertText 有内容但 alertHidden=true）。 */
+    var loginErrBox = $('#fb-login-err');
+    function showLoginErr(text) {
+      if (!loginErrBox) return;
+      loginErrBox.className = 'fb-alert err';
+      loginErrBox.textContent = text;
+      loginErrBox.hidden = false;
+    }
+    function clearLoginErr() {
+      if (loginErrBox) loginErrBox.hidden = true;
+    }
+
     function view(mode) {
       state.mode = mode;
       if (loginCard) loginCard.hidden = mode !== 'login';
@@ -343,6 +359,7 @@
       loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
         clearAlert();
+        clearLoginErr();
         var btn = $('#fb-login-btn');
         btn.disabled = true;
         btn.textContent = '登录中…';
@@ -357,7 +374,7 @@
           $('#fb-pass').value = '';
           enterPanel();
         }).catch(function (err) {
-          show('err', err.message || '登录失败。');
+          showLoginErr(err.message || '登录失败。');
           view('login');
         }).then(function () {
           btn.disabled = false;
@@ -521,6 +538,7 @@
     if (loginLink) {
       loginLink.addEventListener('click', function (e) {
         e.preventDefault();
+        clearLoginErr();
         view('setup');
       });
     }
@@ -538,6 +556,7 @@
         api('/api/admin/logout', { method: 'POST' }).catch(function () {}).then(function () {
           state.user = '';
           if (typeof closeSettings === 'function') closeSettings();
+          clearLoginErr();
           view('login');
         });
       });
