@@ -73,13 +73,14 @@
       </section>
 
       <section class="lsec" id="s3">
-        <h2><span class="i">02</span>要讲清的 5 件事<span class="n">核心要点</span></h2>
+        <h2><span class="i">02</span>要讲清的 6 件事<span class="n">核心要点</span></h2>
         <ul class="pts">
           <li>服务商只能用合规白名单：腾讯位置服务 / 高德 / 百度 / 天地图。境外地图（Google Maps、Apple Maps、Bing 境外版、Mapbox、OSM 境外瓦片）一律不用，这是合规红线，不是偏好问题</li>
           <li>key 绝不进 git（仓库历史会永久留痕），只写在服务器上的 js/map-keys.*.js，该文件不入库；页面读不到 key 就整块隐藏 —— 降级不能变成报错</li>
           <li>外链一律带坐标，不用关键词搜索：关键词会按访客 IP 所在城市检索，海外客户直接搜不到，页面看起来像没定位</li>
           <li>内嵌容器必须有固定高度，否则不渲染；腾讯 GL 依赖 WebGL，老显卡 / 远程桌面 / 关了硬件加速会白屏且控制台不报错，必须探测后自动切高德</li>
           <li>坐标要双源核实（腾讯 WebService + 高德 REST 返回值一致才采信），不手工编造；三家经纬度顺序不同，高德是「经度,纬度」</li>
+          <li>key 写在前端，F12 就能抄走 —— 域名白名单是唯一防线，但它不决定地图能否显示，配错反而让自家挂：先只加线上域名、立刻验，出问题清空白名单即恢复</li>
         </ul>
       </section>
 
@@ -113,7 +114,7 @@ chrome --headless=new --disable-gpu --virtual-time-budget=15000 \
       <section class="lsec sop" id="sop">
         <h2><span class="i">04</span>完整 SOP<span class="n">照着能做</span></h2>
         <p class="sop-p sop-intro">目标：联系页上放一张能用的地图，并且在地图服务挂掉时页面仍然完整可用。</p>
-        <p class="sop-p">这份 SOP 来自一次真实接入：客户要在联系页放地图。全程踩过 WebGL 白屏、浏览器缓存旧 key、百度外链按访客城市检索这几个坑，下面按能照做的顺序写。</p>
+        <p class="sop-p">这份 SOP 来自一次真实接入：客户要在联系页放地图。全程踩过 WebGL 白屏、浏览器缓存旧 key、百度外链按访客城市检索、以及「缓存把 SDK 加载短路」这几个坑。下面按能照做的顺序写。</p>
 <div class="callout danger">三条铁律，违反就是合规风险或线上事故：① 地图服务商只能用合规白名单（腾讯位置服务 / 高德 / 百度 / 天地图），境外地图一律不用；② 真实 key 绝不进 git，仓库历史会永久留痕；③ 外链一律用坐标，不用关键词。</div>
 <h3>0. 先判断：你要加的是哪一种地图</h3>
 <div class="tbl-wrap"><table class="tbl">
@@ -122,11 +123,11 @@ chrome --headless=new --disable-gpu --virtual-time-budget=15000 \
         </table></div>
 <div class="callout tip">两个都要做：外链是保底（零依赖、永不失败），内嵌是体验（需要 key，可能失败，由自动切换兜底）。</div>
 <h3>1. 申请 key</h3>
-<p class="sop-p">腾讯位置服务：控制台 lbs.qq.com → 创建应用 → 添加 Key，类型选支持「JavaScript GL / Web端」的那一项；拿到 Key 后在设置里填域名白名单，把所有对外域名逐个列全。</p>
+<p class="sop-p">腾讯位置服务：控制台 lbs.qq.com → 创建应用 → 添加 Key，类型选支持「JavaScript GL / Web端」的那一项。</p>
 <p class="sop-p">高德开放平台：控制台 console.amap.com → 应用 → 添加 Key → 服务平台选「Web端 (JS API)」。这个 key 会同时生成安全密钥 jscode —— JS API 2.0 必须有它，缺了页面上的高德标签会自动隐藏。</p>
-<div class="callout warn">key 类型不能串用：「Web服务」类型的 key 只能调 REST，不能用于页面内嵌；反之「Web端」key 调 REST 会被拒。判断方法见第 7 节速查表。</div>
+<div class="callout warn">key 类型不能串用：「Web服务」类型的 key 只能调 REST，不能用于页面内嵌；反之「Web端」key 调 REST 会被拒。判断方法见第 8 节速查表。</div>
 <h3>2. 把 key 放到服务器（不进 git）</h3>
-<p class="sop-p">在每台服务器上写 /var/www/&lt;站点&gt;/js/map-keys.v2.js：</p>
+<p class="sop-p">在每台服务器上各写一份 /var/www/&lt;站点&gt;/js/map-keys.v2.js：</p>
 <div class="code-wrap">
           <button class="copy" type="button" aria-label="复制命令">复制</button>
           <pre class="code">window.SITE_MAP_KEYS = {
@@ -136,15 +137,33 @@ chrome --headless=new --disable-gpu --virtual-time-budget=15000 \
 };</pre>
         </div>
 <p class="sop-p">页面用 &lt;script src=&quot;js/map-keys.v2.js&quot;&gt;&lt;/script&gt; 读取。任何一项为空或缺失 → 对应标签自动隐藏、页面外观不变，属于零风险降级。</p>
-<p class="sop-p">这个文件不进 git，也打不上 ?v= 版本戳，所以要让浏览器立刻拿到新 key，必须两步都做：① nginx 对该路径禁缓存；② 换 key 时把文件名升一级（v2 → v3），同步改 HTML 里的 src。</p>
+<p class="sop-p">这个文件不进 git，也打不上 ?v= 版本戳，所以要让浏览器立刻拿到新 key，必须三步都做：</p>
+<ol class="steps"><li>nginx 对该路径禁缓存（每台都加），改完 nginx -t 再 reload</li><li>换 key 时把文件名升一级（v2 → v3），并同步改 HTML 里的 src</li><li>改名后把旧文件从公开目录清掉：先 cp -a 归档到 /root/，再删。旧文件若还在，既是一份多余的 key 暴露面，也会让人日后改错文件、怎么也不生效</li></ol>
 <div class="code-wrap">
           <button class="copy" type="button" aria-label="复制命令">复制</button>
           <pre class="code">location = /js/map-keys.v2.js {
     add_header Cache-Control &quot;no-cache, must-revalidate&quot; always;
 }</pre>
         </div>
-<div class="callout warn">实测教训：只加 no-cache 头不够 —— 浏览器里已经缓存过的旧文件仍会在启发式有效期内被直接复用，表现为「同一个页面在 A 域名正常、B 域名失败」。改文件名是唯一可靠办法。</div>
-<h3>3. 内嵌地图组件</h3>
+<div class="callout warn">实测教训：只加 no-cache 头不够 —— 浏览器里已经缓存过的旧文件仍会在启发式有效期内被直接复用，表现为「同一个页面在 A 域名正常、B 域名失败」。改文件名才是可靠办法。</div>
+<h3>3. 域名白名单（防盗用）</h3>
+<p class="sop-p">key 写在前端，任何人按 F12 都能抄走。白名单的唯一作用是「让抄走的人在别的网站上用不了」。它不是地图能不能显示的前提 —— 配错反而会让自家地图挂掉，所以按下面的顺序做。</p>
+<p class="sop-p">先看现状，不看控制台也能判断：把下面命令里的 pid 换成别人的域名，若仍返回一大段完整配置，说明白名单当前是关的，谁抄走都能用。</p>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code"><span class="cm"># 腾讯：pid 就是它做校验用的域名参数</span>
+curl -s &quot;https://apikey.map.qq.com/mkey/index.php/mkey/check?key=你的key&amp;pid=example.com&amp;channel=0&amp;output=json&amp;pf=jsapi&amp;ref=jsapi&quot; | head -c 200
+<span class="cm"># 返回 detail{...} 一大段 → 白名单没开；返回鉴权失败 / 被拒 → 已开且拦住了</span></pre>
+        </div>
+<p class="sop-p">① 腾讯位置服务：控制台 → Key 管理 → 找到本项目那把 key（怎么认出是哪一把：对照服务器 map-keys.v2.js 里的 tencent 值；不要把它的任何字符抄进文档、提交信息或聊天记录）→ 点「设置」。</p>
+<ol class="steps"><li>确认「启用产品」里勾了 WebGL JavaScript API（地图组件用它），也勾了 WebServiceAPI（POI 检索走这个）</li><li>找到「域名白名单」输入框 —— 在 Web 端产品下面，不是「授权 IP」那一栏（那是给 WebService 用的）</li><li>一行填一个域名，只填域名：不带 https://、不带末尾斜杠、不带路径</li><li>不要填 * —— 那等于没开</li><li>保存后等 3–5 分钟再验</li></ol>
+<p class="sop-p">② 高德开放平台：控制台 → 应用管理 → 我的应用 → 找到 Web端(JS API) 那把 key（对照 map-keys.v2.js 里的 amap 值）→ 「设置」→ 同样按行填域名白名单。</p>
+<div class="callout warn">高德的 jscode 与 key 是绑定关系：key 换了 jscode 也会换。两者对不上，站点就整块不显示高德标签 —— 换 key 时这两项要一起改。</div>
+<p class="sop-p">③ 改完必须验（三条都要过）：</p>
+<ol class="steps"><li>无痕窗口开联系页，滚到地图区：应看到腾讯地图与角标 ©Tencent，点「高德」标签也能切换出来</li><li>F12 → Console 无红色报错；localStorage 里记录的 last-error 应为 null</li><li>用手机流量（不同网络、不同设备）再开一次 —— 排除本机缓存造成的假通过</li></ol>
+<div class="callout tip">配错了怎么退：把白名单清空并保存即可立刻恢复（两家都是「留空 = 不限制」）。所以正确做法是「先只加线上域名、立刻验，验过再谈别的」，不要一次性把历史域名全删掉再填新的。</div>
+<div class="callout warn">白名单只管「谁能用」，不解决配额。地图画不出来时先别怀疑白名单 —— 判据见第 8 节最后两行。</div>
+<h3>4. 内嵌地图组件</h3>
 <div class="code-wrap">
           <button class="copy" type="button" aria-label="复制命令">复制</button>
           <pre class="code">&lt;div id=&quot;mapEmbed&quot; style=&quot;display:none&quot;&gt;
@@ -158,10 +177,12 @@ chrome --headless=new --disable-gpu --virtual-time-budget=15000 \
 <div class="callout warn">容器必须有固定高度（这里 360px），否则地图不渲染 —— 尤其在 flex 布局里，高度塌陷时你会以为是 SDK 没加载。</div>
 <div class="tbl-wrap"><table class="tbl">
           <thead><tr><th>机制</th><th>作用</th></tr></thead>
-          <tbody><tr><td>懒加载</td><td>IntersectionObserver（rootMargin 300px）滚到附近才加载 SDK，省流量与配额</td></tr><tr><td>POI 检索</td><td>腾讯 searchRegion、高德 PlaceSearch 按关键词检索；坐标由地图库返回，不手工编造</td></tr><tr><td>本地缓存</td><td>检索结果存 localStorage，减少配额消耗</td></tr><tr><td>兜底坐标</td><td>检索失败但 SDK 可用时，用双源核实过的坐标渲染，位置仍然正确</td></tr><tr><td>SDK 加固</td><td>脚本 8 秒超时 + 自动重试一次；onload 后轮询全局变量再检索</td></tr><tr><td>自动换一家</td><td>某家不可用（SDK 没出来 / 渲染抛错 / 需要 WebGL 而浏览器不支持）自动切另一家并翻转标签选中态</td></tr><tr><td>最后兜底</td><td>两家都失败才显示「地图服务加载失败，请用下方按钮导航」</td></tr></tbody>
+          <tbody><tr><td>懒加载</td><td>IntersectionObserver（rootMargin 300px）滚到附近才加载 SDK，省流量与配额</td></tr><tr><td>POI 检索</td><td>腾讯 searchRegion、高德 PlaceSearch 按关键词检索；坐标由地图库返回，不手工编造</td></tr><tr><td>兜底坐标</td><td>检索失败但 SDK 可用时，用双源核实过的坐标渲染，位置仍然正确</td></tr><tr><td>SDK 加固</td><td>脚本 8 秒超时 + 自动重试一次；onload 后轮询全局变量再检索</td></tr><tr><td>自动换一家</td><td>某家不可用（SDK 没出来 / 渲染抛错 / 需要 WebGL 而浏览器不支持）自动切另一家并翻转标签选中态</td></tr><tr><td>最后兜底</td><td>两家都失败才显示「地图服务加载失败，请用下方按钮导航」</td></tr></tbody>
         </table></div>
+<div class="callout danger">反面案例（实锤，别再犯）：不要缓存 POI 检索结果。当初写成「先读缓存，没有才去检索」，而 SDK 的加载恰恰写在检索函数里 —— 一旦命中缓存就跳过检索，SDK 永不加载，初始化直接抛 TMap is not defined。表现极具迷惑性：第 1 次访问正常（那次把缓存写了进去）→ 第 2 次起永久白屏或静默换到高德 → 第 3 次两家全挂；清站点数据就恢复，再访问几次又坏。</div>
+<div class="callout tip">缓存省下的只是一次检索请求，2.3MB 的 SDK 无论如何都要下载，收益远小于风险。正确写法：SDK 加载与 POI 检索分开，加载函数里先判 window.TMap 是否存在、只插一次脚本；渲染入口把失败标记重置。</div>
 <div class="callout danger">腾讯 GL JS 依赖 WebGL。访客禁用硬件加速、老显卡、远程桌面环境下，new TMap.Map() 会白屏且不报错。必须在渲染前探测 WebGL，不支持就判腾讯不可用、自动切高德（2D 不需要 WebGL）。</div>
-<h3>4. 外链按钮（三家都要带坐标）</h3>
+<h3>5. 外链按钮（三家都要带坐标）</h3>
 <div class="code-wrap">
           <button class="copy" type="button" aria-label="复制命令">复制</button>
           <pre class="code"><span class="cm"># 腾讯：marker URI，GCJ-02</span>
@@ -176,22 +197,23 @@ https://api.map.baidu.com/marker?location=31.230416,121.473701&amp;title=公司�
 <p class="sop-p">（示例坐标取上海人民广场，仅示范格式与顺序。）HTML 属性里的 &amp; 必须写成 &amp;amp;，中文参数统一百分号编码。</p>
 <div class="callout tip">实测跳转结果（都应 302 到落地页）：腾讯 → tools/poimarker；高德 → ditu.amap.com/regeo?lng=..&amp;lat=..；百度 → map.baidu.com/?latlng=..&amp;autoOpen=true。发布前逐个点一遍。</div>
 <div class="callout danger">不要用关键词搜索型链接（如 map.baidu.com/search/公司名）。实测百度会按访客 IP 所在城市检索，访客不在当地（尤其海外客户）就搜不到，页面看起来像「没有定位」。</div>
-<h3>5. 坐标怎么来：必须双源核实</h3>
+<h3>6. 坐标怎么来：必须双源核实</h3>
 <ol class="steps"><li>腾讯 WebService：/ws/place/v1/search?keyword=关键词&amp;boundary=region(城市,0)&amp;page_size=1&amp;key=…</li><li>高德 REST（需要「Web服务」类型的 key）：/v3/place/text?key=…&amp;keywords=关键词&amp;city=城市</li><li>两家返回的 POI 名称与经纬度一致才采信，写进兜底坐标，并在代码注释里记下来源与日期</li></ol>
 <div class="callout tip">坐标属于「编错一个字就指到别人家」的数据：单源结果一律不采信，也不能凭地图上目测的位置手填。</div>
-<h3>6. 验收清单</h3>
+<h3>7. 验收清单</h3>
 <ol class="steps"><li>页面能 grep 到三个外链（腾讯 / 高德 / 百度 marker）</li><li>/js/map-keys.v2.js 返回 200，响应头带 Cache-Control: no-cache</li><li>真实浏览器滚到地图处：canvas ≥ 1、信息窗显示名称与地址、控制台 0 报错</li><li>两个标签都可见（说明 key 与安全密钥都配齐）</li><li>模拟故障：拦截地图 SDK 域名（返回 404）→ 应自动切另一家并渲染；把 getContext('webgl') 覆写成 null → 同样应自动切</li></ol>
 <div class="code-wrap">
           <button class="copy" type="button" aria-label="复制命令">复制</button>
           <pre class="code"><span class="cm"># 无头浏览器快速体检：数 canvas，比肉眼看可靠</span>
-chrome --headless=new --disable-gpu --window-size=1400,9000 \
+chrome --headless=new --window-size=1400,9000 \
   --virtual-time-budget=15000 --dump-dom &quot;https://你的域名/contact&quot; &gt; dom.html
 grep -c &quot;&lt;canvas&quot; dom.html      # ≥1 说明底图渲染了</pre>
         </div>
-<h3>7. 故障排查速查表</h3>
+<div class="callout danger">但上面这条命令如果带上 --disable-gpu，就等于把 WebGL 关掉了：腾讯必然白屏、必然自动切高德 —— 而「canvas ≥ 1」照样通过，让你误以为腾讯正常，其实它一次都没被真正测到。要验腾讯分支，用 Playwright 默认配置或去掉 --disable-gpu，并额外看角标是 ©Tencent 还是 © AutoNavi —— 看角标才知道实际渲染的是哪一家。</div>
+<h3>8. 故障排查速查表</h3>
 <div class="tbl-wrap"><table class="tbl">
           <thead><tr><th>现象</th><th>原因</th><th>判定 / 处理</th></tr></thead>
-          <tbody><tr><td>高德标签不显示</td><td>key 缺失，或安全密钥 jscode 没填</td><td>页面逻辑：key 存在且 jscode 非空才显示</td></tr><tr><td>高德报 INVALID_USER_KEY（10001）</td><td>key 不存在 / 已删 / 未生效</td><td>REST 探测返回 10001 就是废 key，重建</td></tr><tr><td>高德 REST 返回 USERKEY_PLAT_NOMATCH（10009）</td><td>key 是「Web端」类型（这其实是好消息）</td><td>Web端 key 本来就不能调 REST，用它做内嵌即可</td></tr><tr><td>腾讯地图白屏、不报错</td><td>浏览器不支持 WebGL</td><td>代码已自动切高德；访客可开启「使用硬件加速」</td></tr><tr><td>同一份代码 A 域名正常、B 域名失败</td><td>B 域名下浏览器缓存了旧 key 文件</td><td>改文件名（v2/v3）穿透缓存，再让用户强刷</td></tr><tr><td>点百度外链后「没有定位」</td><td>链接是关键词搜索，按访客 IP 城市检索</td><td>换成带坐标的 marker 链接</td></tr><tr><td>改了 key 但页面没变</td><td>浏览器或代理缓存</td><td>先确认响应头，再考虑改名；服务器侧用 curl 复核实际内容</td></tr></tbody>
+          <tbody><tr><td>高德标签不显示</td><td>key 缺失，或安全密钥 jscode 没填</td><td>页面逻辑：key 存在且 jscode 非空才显示</td></tr><tr><td>高德报 INVALID_USER_KEY（10001）</td><td>key 不存在 / 已删 / 未生效</td><td>REST 探测返回 10001 就是废 key，重建</td></tr><tr><td>高德 REST 返回 USERKEY_PLAT_NOMATCH（10009）</td><td>key 是「Web端」类型（这其实是好消息）</td><td>Web端 key 本来就不能调 REST，用它做内嵌即可</td></tr><tr><td>腾讯地图白屏、不报错</td><td>浏览器不支持 WebGL</td><td>代码已自动切高德；访客可开启「使用硬件加速」</td></tr><tr><td>同一份代码 A 域名正常、B 域名失败</td><td>B 域名下浏览器缓存了旧 key 文件</td><td>改文件名（v2/v3）穿透缓存，再让用户强刷</td></tr><tr><td>第 2 次访问起地图必挂、清站点数据就好、过会又坏</td><td>缓存短路了 SDK 加载（见第 4 节反面案例）</td><td>看 Local Storage 里是否存了 POI；last-error 若是 TMap / AMap is not defined 即此症</td></tr><tr><td>怀疑白名单或配额，但地图其实画出来了</td><td>绝大多数时候不是这两个原因</td><td>判据：GL JS 入口 map.qq.com/api/gljs 对假 key 也返回 200 同一份 bundle，它不做校验，拿它测白名单是错的；真正鉴权在瓦片与检索请求 —— 只要地图画出来、角标有 ©Tencent，就说明 key 有效、白名单通过、配额未耗尽</td></tr><tr><td>确定是配额超限</td><td>免费额度用完了</td><td>控制台会明确报：腾讯 status 121「此 key 每日调用量已达到上限」、高德 DAILY_QUERY_OVER_LIMIT —— 与「白屏不报错」完全不同</td></tr><tr><td>点百度外链后「没有定位」</td><td>链接是关键词搜索，按访客 IP 城市检索</td><td>换成带坐标的 marker 链接</td></tr><tr><td>改了 key 但页面没变</td><td>浏览器或代理缓存</td><td>先确认响应头，再考虑改名；服务器侧用 curl 复核实际内容</td></tr></tbody>
         </table></div>
       </section>
 
@@ -258,7 +280,7 @@ grep -c &quot;&lt;canvas&quot; dom.html      # ≥1 说明底图渲染了</pre>
         <ol class="toc">
           <li><a href="#s1">这一讲解决什么</a></li>
           <li><a href="#s2">为什么重要</a></li>
-          <li><a href="#s3">要讲清的 5 件事</a></li>
+          <li><a href="#s3">要讲清的 6 件事</a></li>
           <li><a href="#s4">照着做：6 步</a></li>
           <li><a href="#sop">完整 SOP</a></li>
           <li><a href="#s5">产出物与验收</a></li>
@@ -320,7 +342,7 @@ grep -c &quot;&lt;canvas&quot; dom.html      # ≥1 说明底图渲染了</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.5.3</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.6.0</span>
         <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
       </span>
     </div>

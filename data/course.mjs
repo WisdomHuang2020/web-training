@@ -16,7 +16,7 @@
  */
 
 export const META = {
-  "version": "v1.5.3",
+  "version": "v1.6.0",
   "date": "2026-10-31",
   "title": "从 0 到上线：网站建设实训课",
   "basis": "素材基准：llc-design-tool（构建型单页应用，CI 推送）与 wx-seastar（零构建多页站 + 内容后台）",
@@ -913,7 +913,8 @@ export const STAGES = [
           "key 绝不进 git（仓库历史会永久留痕），只写在服务器上的 js/map-keys.*.js，该文件不入库；页面读不到 key 就整块隐藏 —— 降级不能变成报错",
           "外链一律带坐标，不用关键词搜索：关键词会按访客 IP 所在城市检索，海外客户直接搜不到，页面看起来像没定位",
           "内嵌容器必须有固定高度，否则不渲染；腾讯 GL 依赖 WebGL，老显卡 / 远程桌面 / 关了硬件加速会白屏且控制台不报错，必须探测后自动切高德",
-          "坐标要双源核实（腾讯 WebService + 高德 REST 返回值一致才采信），不手工编造；三家经纬度顺序不同，高德是「经度,纬度」"
+          "坐标要双源核实（腾讯 WebService + 高德 REST 返回值一致才采信），不手工编造；三家经纬度顺序不同，高德是「经度,纬度」",
+    "key 写在前端，F12 就能抄走 —— 域名白名单是唯一防线，但它不决定地图能否显示，配错反而让自家挂：先只加线上域名、立刻验，出问题清空白名单即恢复"
         ],
         "out": "内嵌地图 + 三家外链按钮 + 一份「key 放哪、谁维护、怎么换」的说明",
         "acc": [
@@ -1773,7 +1774,7 @@ export const SOP = {
     "blocks": [
       {
         "type": "p",
-        "text": "这份 SOP 来自一次真实接入：客户要在联系页放地图。全程踩过 WebGL 白屏、浏览器缓存旧 key、百度外链按访客城市检索这几个坑，下面按能照做的顺序写。"
+        "text": "这份 SOP 来自一次真实接入：客户要在联系页放地图。全程踩过 WebGL 白屏、浏览器缓存旧 key、百度外链按访客城市检索、以及「缓存把 SDK 加载短路」这几个坑。下面按能照做的顺序写。"
       },
       {
         "type": "note",
@@ -1815,7 +1816,7 @@ export const SOP = {
       },
       {
         "type": "p",
-        "text": "腾讯位置服务：控制台 lbs.qq.com → 创建应用 → 添加 Key，类型选支持「JavaScript GL / Web端」的那一项；拿到 Key 后在设置里填域名白名单，把所有对外域名逐个列全。"
+        "text": "腾讯位置服务：控制台 lbs.qq.com → 创建应用 → 添加 Key，类型选支持「JavaScript GL / Web端」的那一项。"
       },
       {
         "type": "p",
@@ -1824,7 +1825,7 @@ export const SOP = {
       {
         "type": "note",
         "kind": "warn",
-        "text": "key 类型不能串用：「Web服务」类型的 key 只能调 REST，不能用于页面内嵌；反之「Web端」key 调 REST 会被拒。判断方法见第 7 节速查表。"
+        "text": "key 类型不能串用：「Web服务」类型的 key 只能调 REST，不能用于页面内嵌；反之「Web端」key 调 REST 会被拒。判断方法见第 8 节速查表。"
       },
       {
         "type": "h",
@@ -1832,7 +1833,7 @@ export const SOP = {
       },
       {
         "type": "p",
-        "text": "在每台服务器上写 /var/www/<站点>/js/map-keys.v2.js："
+        "text": "在每台服务器上各写一份 /var/www/<站点>/js/map-keys.v2.js："
       },
       {
         "type": "code",
@@ -1844,7 +1845,15 @@ export const SOP = {
       },
       {
         "type": "p",
-        "text": "这个文件不进 git，也打不上 ?v= 版本戳，所以要让浏览器立刻拿到新 key，必须两步都做：① nginx 对该路径禁缓存；② 换 key 时把文件名升一级（v2 → v3），同步改 HTML 里的 src。"
+        "text": "这个文件不进 git，也打不上 ?v= 版本戳，所以要让浏览器立刻拿到新 key，必须三步都做："
+      },
+      {
+        "type": "steps",
+        "items": [
+          "nginx 对该路径禁缓存（每台都加），改完 nginx -t 再 reload",
+          "换 key 时把文件名升一级（v2 → v3），并同步改 HTML 里的 src",
+          "改名后把旧文件从公开目录清掉：先 cp -a 归档到 /root/，再删。旧文件若还在，既是一份多余的 key 暴露面，也会让人日后改错文件、怎么也不生效"
+        ]
       },
       {
         "type": "code",
@@ -1853,11 +1862,72 @@ export const SOP = {
       {
         "type": "note",
         "kind": "warn",
-        "text": "实测教训：只加 no-cache 头不够 —— 浏览器里已经缓存过的旧文件仍会在启发式有效期内被直接复用，表现为「同一个页面在 A 域名正常、B 域名失败」。改文件名是唯一可靠办法。"
+        "text": "实测教训：只加 no-cache 头不够 —— 浏览器里已经缓存过的旧文件仍会在启发式有效期内被直接复用，表现为「同一个页面在 A 域名正常、B 域名失败」。改文件名才是可靠办法。"
       },
       {
         "type": "h",
-        "text": "3. 内嵌地图组件"
+        "text": "3. 域名白名单（防盗用）"
+      },
+      {
+        "type": "p",
+        "text": "key 写在前端，任何人按 F12 都能抄走。白名单的唯一作用是「让抄走的人在别的网站上用不了」。它不是地图能不能显示的前提 —— 配错反而会让自家地图挂掉，所以按下面的顺序做。"
+      },
+      {
+        "type": "p",
+        "text": "先看现状，不看控制台也能判断：把下面命令里的 pid 换成别人的域名，若仍返回一大段完整配置，说明白名单当前是关的，谁抄走都能用。"
+      },
+      {
+        "type": "code",
+        "text": "# 腾讯：pid 就是它做校验用的域名参数\ncurl -s \"https://apikey.map.qq.com/mkey/index.php/mkey/check?key=你的key&pid=example.com&channel=0&output=json&pf=jsapi&ref=jsapi\" | head -c 200\n# 返回 detail{...} 一大段 → 白名单没开；返回鉴权失败 / 被拒 → 已开且拦住了"
+      },
+      {
+        "type": "p",
+        "text": "① 腾讯位置服务：控制台 → Key 管理 → 找到本项目那把 key（怎么认出是哪一把：对照服务器 map-keys.v2.js 里的 tencent 值；不要把它的任何字符抄进文档、提交信息或聊天记录）→ 点「设置」。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "确认「启用产品」里勾了 WebGL JavaScript API（地图组件用它），也勾了 WebServiceAPI（POI 检索走这个）",
+          "找到「域名白名单」输入框 —— 在 Web 端产品下面，不是「授权 IP」那一栏（那是给 WebService 用的）",
+          "一行填一个域名，只填域名：不带 https://、不带末尾斜杠、不带路径",
+          "不要填 * —— 那等于没开",
+          "保存后等 3–5 分钟再验"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "② 高德开放平台：控制台 → 应用管理 → 我的应用 → 找到 Web端(JS API) 那把 key（对照 map-keys.v2.js 里的 amap 值）→ 「设置」→ 同样按行填域名白名单。"
+      },
+      {
+        "type": "note",
+        "kind": "warn",
+        "text": "高德的 jscode 与 key 是绑定关系：key 换了 jscode 也会换。两者对不上，站点就整块不显示高德标签 —— 换 key 时这两项要一起改。"
+      },
+      {
+        "type": "p",
+        "text": "③ 改完必须验（三条都要过）："
+      },
+      {
+        "type": "steps",
+        "items": [
+          "无痕窗口开联系页，滚到地图区：应看到腾讯地图与角标 ©Tencent，点「高德」标签也能切换出来",
+          "F12 → Console 无红色报错；localStorage 里记录的 last-error 应为 null",
+          "用手机流量（不同网络、不同设备）再开一次 —— 排除本机缓存造成的假通过"
+        ]
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "配错了怎么退：把白名单清空并保存即可立刻恢复（两家都是「留空 = 不限制」）。所以正确做法是「先只加线上域名、立刻验，验过再谈别的」，不要一次性把历史域名全删掉再填新的。"
+      },
+      {
+        "type": "note",
+        "kind": "warn",
+        "text": "白名单只管「谁能用」，不解决配额。地图画不出来时先别怀疑白名单 —— 判据见第 8 节最后两行。"
+      },
+      {
+        "type": "h",
+        "text": "4. 内嵌地图组件"
       },
       {
         "type": "code",
@@ -1884,10 +1954,6 @@ export const SOP = {
             "腾讯 searchRegion、高德 PlaceSearch 按关键词检索；坐标由地图库返回，不手工编造"
           ],
           [
-            "本地缓存",
-            "检索结果存 localStorage，减少配额消耗"
-          ],
-          [
             "兜底坐标",
             "检索失败但 SDK 可用时，用双源核实过的坐标渲染，位置仍然正确"
           ],
@@ -1908,11 +1974,21 @@ export const SOP = {
       {
         "type": "note",
         "kind": "danger",
+        "text": "反面案例（实锤，别再犯）：不要缓存 POI 检索结果。当初写成「先读缓存，没有才去检索」，而 SDK 的加载恰恰写在检索函数里 —— 一旦命中缓存就跳过检索，SDK 永不加载，初始化直接抛 TMap is not defined。表现极具迷惑性：第 1 次访问正常（那次把缓存写了进去）→ 第 2 次起永久白屏或静默换到高德 → 第 3 次两家全挂；清站点数据就恢复，再访问几次又坏。"
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "缓存省下的只是一次检索请求，2.3MB 的 SDK 无论如何都要下载，收益远小于风险。正确写法：SDK 加载与 POI 检索分开，加载函数里先判 window.TMap 是否存在、只插一次脚本；渲染入口把失败标记重置。"
+      },
+      {
+        "type": "note",
+        "kind": "danger",
         "text": "腾讯 GL JS 依赖 WebGL。访客禁用硬件加速、老显卡、远程桌面环境下，new TMap.Map() 会白屏且不报错。必须在渲染前探测 WebGL，不支持就判腾讯不可用、自动切高德（2D 不需要 WebGL）。"
       },
       {
         "type": "h",
-        "text": "4. 外链按钮（三家都要带坐标）"
+        "text": "5. 外链按钮（三家都要带坐标）"
       },
       {
         "type": "code",
@@ -1934,7 +2010,7 @@ export const SOP = {
       },
       {
         "type": "h",
-        "text": "5. 坐标怎么来：必须双源核实"
+        "text": "6. 坐标怎么来：必须双源核实"
       },
       {
         "type": "steps",
@@ -1951,7 +2027,7 @@ export const SOP = {
       },
       {
         "type": "h",
-        "text": "6. 验收清单"
+        "text": "7. 验收清单"
       },
       {
         "type": "steps",
@@ -1965,11 +2041,16 @@ export const SOP = {
       },
       {
         "type": "code",
-        "text": "# 无头浏览器快速体检：数 canvas，比肉眼看可靠\nchrome --headless=new --disable-gpu --window-size=1400,9000 \\\n  --virtual-time-budget=15000 --dump-dom \"https://你的域名/contact\" > dom.html\ngrep -c \"<canvas\" dom.html      # ≥1 说明底图渲染了"
+        "text": "# 无头浏览器快速体检：数 canvas，比肉眼看可靠\nchrome --headless=new --window-size=1400,9000 \\\n  --virtual-time-budget=15000 --dump-dom \"https://你的域名/contact\" > dom.html\ngrep -c \"<canvas\" dom.html      # ≥1 说明底图渲染了"
+      },
+      {
+        "type": "note",
+        "kind": "danger",
+        "text": "但上面这条命令如果带上 --disable-gpu，就等于把 WebGL 关掉了：腾讯必然白屏、必然自动切高德 —— 而「canvas ≥ 1」照样通过，让你误以为腾讯正常，其实它一次都没被真正测到。要验腾讯分支，用 Playwright 默认配置或去掉 --disable-gpu，并额外看角标是 ©Tencent 还是 © AutoNavi —— 看角标才知道实际渲染的是哪一家。"
       },
       {
         "type": "h",
-        "text": "7. 故障排查速查表"
+        "text": "8. 故障排查速查表"
       },
       {
         "type": "table",
@@ -2005,6 +2086,21 @@ export const SOP = {
             "改文件名（v2/v3）穿透缓存，再让用户强刷"
           ],
           [
+            "第 2 次访问起地图必挂、清站点数据就好、过会又坏",
+            "缓存短路了 SDK 加载（见第 4 节反面案例）",
+            "看 Local Storage 里是否存了 POI；last-error 若是 TMap / AMap is not defined 即此症"
+          ],
+          [
+            "怀疑白名单或配额，但地图其实画出来了",
+            "绝大多数时候不是这两个原因",
+            "判据：GL JS 入口 map.qq.com/api/gljs 对假 key 也返回 200 同一份 bundle，它不做校验，拿它测白名单是错的；真正鉴权在瓦片与检索请求 —— 只要地图画出来、角标有 ©Tencent，就说明 key 有效、白名单通过、配额未耗尽"
+          ],
+          [
+            "确定是配额超限",
+            "免费额度用完了",
+            "控制台会明确报：腾讯 status 121「此 key 每日调用量已达到上限」、高德 DAILY_QUERY_OVER_LIMIT —— 与「白屏不报错」完全不同"
+          ],
+          [
             "点百度外链后「没有定位」",
             "链接是关键词搜索，按访客 IP 城市检索",
             "换成带坐标的 marker 链接"
@@ -2015,7 +2111,6 @@ export const SOP = {
             "先确认响应头，再考虑改名；服务器侧用 curl 复核实际内容"
           ]
         ]
-      },
+      }
     ]
-  },
-};
+  }};
