@@ -1014,6 +1014,15 @@ ${topbar({ base, current: 'feedback' })}
             <input id="fb-contact" type="text" maxlength="200" placeholder="邮箱 / 微信号，留空也可以" autocomplete="off">
           </div>
 
+          <div class="fb-field">
+            <label for="fb-files">附图 / 附件 <span class="opt">（可选，最多 3 个，单个 ≤ 2 MB）</span></label>
+            <input id="fb-files" type="file" multiple class="fb-file-input"
+                   accept="image/png,image/jpeg,image/webp,image/gif,application/pdf,text/plain,text/csv">
+            <p class="fb-hint">支持 PNG / JPEG / WebP / GIF / PDF / TXT / CSV。报错截图、终端输出、配置文件片段都可以直接附上——比转述准确得多。</p>
+            <ul class="fb-pick-list" id="fb-file-list" hidden></ul>
+            <p class="fb-hint fb-hint-err" id="fb-file-err"></p>
+          </div>
+
           <!-- 蜜罐：对真人不可见，机器人会填。填了则服务端静默丢弃。 -->
           <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
             <label for="fb-website">Website</label>
