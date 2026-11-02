@@ -46,6 +46,33 @@ for (const p of pages) {
       console.error(`✗ 文件不存在  ${path.relative(SITE, p)} → ${raw}`);
       bad++; continue;
     }
+
+    // 目录式产物会被两个地址服务：/lessons/M02/ 与 /lessons/M02（无尾斜杠）。
+    // 两者在浏览器里的「基准目录」不同——无斜杠时少一层，../M01/ 就会解析成 /M01/。
+    // 所以相对链接必须在两种基准下都落得住。这里按 URL 段模拟解析（到根为止，不再往上）。
+    const isDirIndex = path.basename(p) === 'index.html' && path.dirname(p) !== SITE;
+    if (isDirIndex && !href.startsWith('/')) {
+      const dirSegs = path.relative(SITE, path.dirname(p)).split(path.sep).filter(Boolean);
+      const resolveSegs = (base, link) => {
+        const out = base.slice();
+        for (const seg of link.split('/')) {
+          if (seg === '' || seg === '.') continue;
+          if (seg === '..') { if (out.length) out.pop(); continue; }
+          out.push(seg);
+        }
+        return out;
+      };
+      const altSegs = resolveSegs(dirSegs.slice(0, -1), href); // 无尾斜杠 = 少一层基准
+      const altPath = path.join(SITE, ...altSegs);
+      const altOk = fs.existsSync(altPath) ||
+        (!path.extname(altPath) && fs.existsSync(altPath + '.html')) ||
+        fs.existsSync(path.join(altPath, 'index.html'));
+      if (!altOk) {
+        console.error(`✗ 尾斜杠差异  ${path.relative(SITE, p)} → ${raw}` +
+          `（该页在无尾斜杠地址下会解析到 /${altSegs.join('/')}）`);
+        bad++; continue;
+      }
+    }
     // 指向目录的链接（./ 与 ../ 指向首页）等价于该目录下的 index.html，锚点要在它上面校验
     const resolved = fs.statSync(resolvedTarget).isDirectory() ? path.join(resolvedTarget, 'index.html') : resolvedTarget;
     if (hash && idsOf.has(resolved) && !idsOf.get(resolved).has(hash)) {

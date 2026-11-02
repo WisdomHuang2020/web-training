@@ -615,8 +615,8 @@ ${terms.length ? `
       </section>
 ` : ''}
       <div class="pager">
-        ${prev ? `<a class="prev" href="../${prev.no}/"><span class="dir">← 上一讲</span><span class="tt">${prev.no} ${esc(prev.t)}</span></a>` : '<span class="sp"></span>'}
-        ${next ? `<a class="next" href="../${next.no}/"><span class="dir">下一讲 →</span><span class="tt">${next.no} ${esc(next.t)}</span></a>` : '<span class="sp"></span>'}
+        ${prev ? `<a class="prev" href="${L.lesson(prev.no)}"><span class="dir">← 上一讲</span><span class="tt">${prev.no} ${esc(prev.t)}</span></a>` : '<span class="sp"></span>'}
+        ${next ? `<a class="next" href="${L.lesson(next.no)}"><span class="dir">下一讲 →</span><span class="tt">${next.no} ${esc(next.t)}</span></a>` : '<span class="sp"></span>'}
       </div>
     </main>
 
@@ -630,10 +630,10 @@ ${terms.length ? `
       <div class="blk">
         <p class="rail-h">${stage.id} ${esc(stage.name)}</p>
         <ol>
-          ${stage.mods.map(x => `<li><a href="../${x.no}/"${x.no === mod.no ? ' class="on" aria-current="page"' : ''}>${x.no} ${esc(x.t)}</a></li>`).join('\n          ')}
+          ${stage.mods.map(x => `<li><a href="${L.lesson(x.no)}"${x.no === mod.no ? ' class="on" aria-current="page"' : ''}>${x.no} ${esc(x.t)}</a></li>`).join('\n          ')}
         </ol>
       </div>
-      ${next ? `<div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="../${next.no}/"><span>${next.no}</span>${esc(next.t)}</a></div>` : ''}
+      ${next ? `<div class="blk"><p class="rail-h">下一讲</p><a class="nex" href="${L.lesson(next.no)}"><span>${next.no}</span>${esc(next.t)}</a></div>` : ''}
     </aside>
   </div>
 </div>
