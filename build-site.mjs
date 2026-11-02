@@ -148,6 +148,7 @@ function links(base) {
     map: base + 'map/',
     gates: base + 'gates/',
     glossary: base + 'glossary/',
+    feedback: base + 'feedback/',
     lesson: no => base + 'lessons/' + no + '/',
   };
 }
@@ -168,6 +169,7 @@ function topbar({ base, current }) {
       ${item(L.map, '课程地图', 'map')}
       ${item(L.gates, '门禁与红线', 'gates')}
       ${item(L.glossary, '术语表', 'glossary')}
+      ${item(L.feedback, '留言', 'feedback')}
     </nav>
     <span class="pill" data-progress hidden>
       <i><span data-pbar></span></i>
@@ -204,6 +206,7 @@ function footer({ prefix, base }) {
           <a href="${L.map}">课程地图</a>
           <a href="${L.gates}">门禁与红线</a>
           <a href="${L.glossary}">术语表</a>
+          <a href="${L.feedback}">留言</a>
         </div>
       </div>
     </div>
@@ -933,6 +936,233 @@ ${footer({ prefix: '/', base: '/' })}
 `;
 }
 
+/* ============================== 留言 / 后台 ============================== */
+
+/**
+ * 读者留言。为什么要有它：
+ *   课程里每一步都实测过，但平台会改版、套餐会变、地域与账号类型也会造成差异。
+ *   没有回馈渠道，读者只能在别处憋着；有渠道但没有"具体到哪一讲"的结构，
+ *   收到的都是"打不开"。故表单第一项就是"涉及讲次"，而不是让读者自己措辞。
+ */
+function feedbackPage() {
+  const base = '../';
+  return `${head({
+    title: '读者留言 · 从 0 到上线',
+    desc: '课程内容的纠错与补充渠道：发现哪一讲、哪一步与你的实际操作不符，可在此提交，仅作者可见。',
+    prefix: base,
+    canon: '/feedback',
+  })}
+<body>
+${topbar({ base, current: 'feedback' })}
+<main>
+
+<section class="hero sm">
+  <div class="shell">
+    <span class="kicker">FEEDBACK</span>
+    <h1>读者留言</h1>
+    <p class="lead">
+      课程里每一步都实测过，但平台会改版、套餐会变，地域与账号类型也会造成差异。
+      发现哪一讲、哪一步与你的实际操作不符，请在这里指出——
+      <b>写清"哪一讲 + 哪一步 + 报了什么错"，比"打不开"有用得多。</b>
+    </p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="shell">
+    <div class="fb-box">
+      <div class="fb-lead-note">
+        留言<b>不会公开展示</b>，也不会出现在任何页面上，只有作者能在后台查看。
+        若留了联系方式，仅用于回复你的问题。
+      </div>
+
+      <div class="fb-card">
+        <h2>填写反馈</h2>
+        <form id="fb-form" novalidate>
+          <div class="fb-field">
+            <label for="fb-page">涉及讲次 / 页面</label>
+            <select id="fb-page">
+              <option>总览（首页）</option>
+              <option>课程地图</option>
+              <option>门禁与红线</option>
+              <option>术语表</option>
+              <option>具体某一讲（请在描述里写明讲号，如 M13）</option>
+              <option>其它 / 未指明</option>
+            </select>
+          </div>
+
+          <div class="fb-field">
+            <div class="fb-meta">
+              <label for="fb-content">问题描述 <span class="req">*</span></label>
+              <span class="count" id="fb-count">0 / 4000</span>
+            </div>
+            <textarea id="fb-content" rows="10" placeholder="建议写清四点：&#10;1. 走到哪一讲、哪一步（讲号 + 步骤标题）&#10;2. 你执行的命令或点的按钮&#10;3. 实际看到的结果 / 完整报错&#10;4. 你的云厂商、系统版本、域名是否备案等前置条件"></textarea>
+          </div>
+
+          <div class="fb-field">
+            <label for="fb-contact">联系方式 <span class="opt">（可选，便于回复你）</span></label>
+            <input id="fb-contact" type="text" maxlength="200" placeholder="邮箱 / 微信号，留空也可以" autocomplete="off">
+          </div>
+
+          <!-- 蜜罐：对真人不可见，机器人会填。填了则服务端静默丢弃。 -->
+          <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+            <label for="fb-website">Website</label>
+            <input id="fb-website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="fb-alert" id="fb-alert" hidden></div>
+
+          <div class="fb-actions">
+            <p class="hint">提交即为同意作者在改进课程时参考该反馈。</p>
+            <button type="submit" class="btn btn-primary" id="fb-submit" disabled>提交</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+${footer({ prefix: base, base })}
+<script src="../assets/feedback.js" defer></script>
+</body>
+</html>
+`;
+}
+
+/** 后台：登录 / 一次性令牌设定密码 / 留言列表。不进 sitemap，且 noindex。 */
+function adminPage() {
+  const base = '../';
+  return `${head({
+    title: '后台 · 读者留言',
+    desc: '课程站后台，仅作者本人可访问。',
+    prefix: base,
+    canon: '/admin',
+    extra: '<meta name="robots" content="noindex,nofollow">\n',
+  })}
+<body>
+${topbar({ base, current: '' })}
+<main>
+
+<section class="sec">
+  <div class="shell">
+    <div class="fb-box" id="fb-admin">
+      <div class="fb-alert" id="fb-alert" hidden></div>
+
+      <div class="fb-card" id="fb-login-card" hidden>
+        <h2>登录</h2>
+        <p class="hint" style="font-size:12.5px;color:var(--text-3);margin-bottom:16px;line-height:1.75">
+          只有作者能查看读者留言。首次使用或忘记密码，请到服务器上运行
+          <code style="font-family:var(--font-mono)">init-site.mjs --site web-training</code>
+          取得一次性令牌。
+        </p>
+        <form id="fb-login-form">
+          <div class="fb-field">
+            <label for="fb-user">用户名</label>
+            <input id="fb-user" type="text" value="power-admin" autocomplete="username" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-pass">密码</label>
+            <input id="fb-pass" type="password" autocomplete="current-password" required>
+          </div>
+          <div class="fb-actions">
+            <a href="#" id="fb-to-setup" style="font-size:12px;color:var(--text-3)">首次使用，或忘记密码？</a>
+            <button type="submit" class="btn btn-primary" id="fb-login-btn">登录</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="fb-card" id="fb-setup-card" hidden>
+        <h2>设定后台密码</h2>
+        <p class="hint" style="font-size:12.5px;color:var(--text-3);margin-bottom:16px;line-height:1.75">
+          凭服务器上生成的一次性令牌设定密码。令牌 60 分钟内有效，用一次即失效；
+          密码不经任何中间环节，直接在这里设定。
+        </p>
+        <form id="fb-setup-form">
+          <div class="fb-field">
+            <label for="fb-setup-token">一次性令牌 <span class="req">*</span></label>
+            <input id="fb-setup-token" type="text" autocomplete="off" spellcheck="false"
+                   style="font-family:var(--font-mono);font-size:12px" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-setup-user">用户名</label>
+            <input id="fb-setup-user" type="text" value="power-admin" autocomplete="username" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-setup-pass">新密码 <span class="opt">（至少 10 位）</span></label>
+            <input id="fb-setup-pass" type="password" autocomplete="new-password" minlength="10" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-setup-pass2">确认新密码</label>
+            <input id="fb-setup-pass2" type="password" autocomplete="new-password" minlength="10" required>
+          </div>
+          <div class="fb-actions">
+            <a href="#" id="fb-to-login" style="font-size:12px;color:var(--text-3)">← 返回登录</a>
+            <button type="submit" class="btn btn-primary" id="fb-setup-btn">设定密码</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="fb-panel" hidden>
+        <div class="fb-toolbar">
+          <div>
+            <h2 style="font-size:19px;font-weight:600">读者留言</h2>
+            <p style="font-size:12px;color:var(--text-3);margin-top:4px" id="fb-who"></p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="btn btn-ghost" id="fb-refresh">刷新</button>
+            <button type="button" class="btn btn-ghost" id="fb-logout">退出</button>
+          </div>
+        </div>
+
+        <div class="fb-filters" id="fb-filters">
+          <button type="button" class="fb-filter active" data-status="all">全部<span class="n">0</span></button>
+          <button type="button" class="fb-filter" data-status="new">未读<span class="n">0</span></button>
+          <button type="button" class="fb-filter" data-status="read">已读<span class="n">0</span></button>
+          <button type="button" class="fb-filter" data-status="archived">已归档<span class="n">0</span></button>
+        </div>
+
+        <div id="fb-list"></div>
+
+        <div class="fb-card" style="margin-top:22px">
+          <h2>修改密码</h2>
+          <p class="hint" style="font-size:12.5px;color:var(--text-3);margin-bottom:16px">
+            修改后其它设备上的登录立即失效，仅当前浏览器保持登录。
+          </p>
+          <form id="fb-pw-form">
+            <div class="fb-field">
+              <label for="fb-pw-cur">当前密码</label>
+              <input id="fb-pw-cur" type="password" autocomplete="current-password" required>
+            </div>
+            <div class="fb-field">
+              <label for="fb-pw-new">新密码 <span class="opt">（至少 10 位）</span></label>
+              <input id="fb-pw-new" type="password" autocomplete="new-password" minlength="10" required>
+            </div>
+            <div class="fb-field">
+              <label for="fb-pw-new2">确认新密码</label>
+              <input id="fb-pw-new2" type="password" autocomplete="new-password" minlength="10" required>
+            </div>
+            <div class="fb-actions">
+              <span></span>
+              <button type="submit" class="btn btn-primary" id="fb-pw-btn">更新密码</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+${footer({ prefix: base, base })}
+<script src="../assets/feedback.js" defer></script>
+</body>
+</html>
+`;
+}
+
 /* ============================== 输出 ============================== */
 
 function write(rel, html) {
@@ -956,6 +1186,8 @@ STAGES.forEach(st => st.mods.forEach(m => {
 bytes += write(path.join('gates', 'index.html'), gatesPage()); files.push('gates/index.html');
 bytes += write(path.join('glossary', 'index.html'), glossaryPage()); files.push('glossary/index.html');
 bytes += write(path.join('map', 'index.html'), renderMapPage()); files.push('map/index.html');
+bytes += write(path.join('feedback', 'index.html'), feedbackPage()); files.push('feedback/index.html');
+bytes += write(path.join('admin', 'index.html'), adminPage()); files.push('admin/index.html');
 bytes += write('404.html', notFoundPage()); files.push('404.html');
 
 /* ---- sitemap.xml / robots.txt：M13 与 M29 都在讲它们，本站自己没有就说不过去 ---- */
@@ -964,6 +1196,8 @@ const smEntries = [
   { loc: '/map', pri: '0.9' },
   { loc: '/gates', pri: '0.8' },
   { loc: '/glossary', pri: '0.7' },
+  // /admin 刻意不进 sitemap：它是后台，不该被收录（robots.txt 里另行 Disallow）。
+  { loc: '/feedback', pri: '0.5' },
   ...MODULES.map(m => ({ loc: `/lessons/${m.no}`, pri: '0.6' })),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -981,6 +1215,7 @@ fs.writeFileSync(path.join(OUT, 'robots.txt'),
   `# 从 0 到上线 · 网站建设实训课
 User-agent: *
 Allow: /
+Disallow: /admin/
 
 Sitemap: ${SITE_ORIGIN}/sitemap.xml
 `, 'utf8');
@@ -991,10 +1226,11 @@ fs.writeFileSync(path.join(OUT, 'assets', 'favicon.svg'), FAVICON_SVG, 'utf8');
 /* ============================== 自检 ============================== */
 
 const checks = [];
-const need = ['index.html', 'map/index.html', 'gates/index.html', 'glossary/index.html', '404.html',
+const need = ['index.html', 'map/index.html', 'gates/index.html', 'glossary/index.html',
+  'feedback/index.html', 'admin/index.html', '404.html',
   'sitemap.xml', 'robots.txt',
   ...MODULES.map(m => `lessons/${m.no}/index.html`)];
-checks.push([`页面数 = ${TOTAL + 5}`, files.length === TOTAL + 5]);
+checks.push([`页面数 = ${TOTAL + 7}`, files.length === TOTAL + 7]);
 checks.push(['文件全部落盘', need.every(f => fs.existsSync(path.join(OUT, f)))]);
 const home = fs.readFileSync(path.join(OUT, 'index.html'), 'utf8');
 const mapHtml = fs.readFileSync(path.join(OUT, 'map', 'index.html'), 'utf8');

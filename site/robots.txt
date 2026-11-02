@@ -1,5 +1,6 @@
 # 从 0 到上线 · 网站建设实训课
 User-agent: *
 Allow: /
+Disallow: /admin/
 
 Sitemap: https://www.web-training.power-knowledge.tech/sitemap.xml

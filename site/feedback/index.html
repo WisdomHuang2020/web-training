@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>读者留言 · 从 0 到上线</title>
+<meta name="description" content="课程内容的纠错与补充渠道：发现哪一讲、哪一步与你的实际操作不符，可在此提交，仅作者可见。">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/feedback">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="读者留言 · 从 0 到上线">
+<meta property="og:description" content="课程内容的纠错与补充渠道：发现哪一讲、哪一步与你的实际操作不符，可在此提交，仅作者可见。">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/feedback">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../">总览</a>
+      <a href="../map/">课程地图</a>
+      <a href="../gates/">门禁与红线</a>
+      <a href="../glossary/">术语表</a>
+      <a href="../feedback/" aria-current="page">留言</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 32</span>
+    </span>
+  </div>
+</header>
+<main>
+
+<section class="hero sm">
+  <div class="shell">
+    <span class="kicker">FEEDBACK</span>
+    <h1>读者留言</h1>
+    <p class="lead">
+      课程里每一步都实测过，但平台会改版、套餐会变，地域与账号类型也会造成差异。
+      发现哪一讲、哪一步与你的实际操作不符，请在这里指出——
+      <b>写清"哪一讲 + 哪一步 + 报了什么错"，比"打不开"有用得多。</b>
+    </p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="shell">
+    <div class="fb-box">
+      <div class="fb-lead-note">
+        留言<b>不会公开展示</b>，也不会出现在任何页面上，只有作者能在后台查看。
+        若留了联系方式，仅用于回复你的问题。
+      </div>
+
+      <div class="fb-card">
+        <h2>填写反馈</h2>
+        <form id="fb-form" novalidate>
+          <div class="fb-field">
+            <label for="fb-page">涉及讲次 / 页面</label>
+            <select id="fb-page">
+              <option>总览（首页）</option>
+              <option>课程地图</option>
+              <option>门禁与红线</option>
+              <option>术语表</option>
+              <option>具体某一讲（请在描述里写明讲号，如 M13）</option>
+              <option>其它 / 未指明</option>
+            </select>
+          </div>
+
+          <div class="fb-field">
+            <div class="fb-meta">
+              <label for="fb-content">问题描述 <span class="req">*</span></label>
+              <span class="count" id="fb-count">0 / 4000</span>
+            </div>
+            <textarea id="fb-content" rows="10" placeholder="建议写清四点：&#10;1. 走到哪一讲、哪一步（讲号 + 步骤标题）&#10;2. 你执行的命令或点的按钮&#10;3. 实际看到的结果 / 完整报错&#10;4. 你的云厂商、系统版本、域名是否备案等前置条件"></textarea>
+          </div>
+
+          <div class="fb-field">
+            <label for="fb-contact">联系方式 <span class="opt">（可选，便于回复你）</span></label>
+            <input id="fb-contact" type="text" maxlength="200" placeholder="邮箱 / 微信号，留空也可以" autocomplete="off">
+          </div>
+
+          <!-- 蜜罐：对真人不可见，机器人会填。填了则服务端静默丢弃。 -->
+          <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+            <label for="fb-website">Website</label>
+            <input id="fb-website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="fb-alert" id="fb-alert" hidden></div>
+
+          <div class="fb-actions">
+            <p class="hint">提交即为同意作者在改进课程时参考该反馈。</p>
+            <button type="submit" class="btn btn-primary" id="fb-submit" disabled>提交</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 32 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../">总览</a>
+          <a href="../map/">课程地图</a>
+          <a href="../gates/">门禁与红线</a>
+          <a href="../glossary/">术语表</a>
+          <a href="../feedback/">留言</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部条：左版权、右「版本号 + GitHub」。版式对齐站群（LLC / AHB）页脚右下角那一簇：
+         等宽小字 + 灰色，hover 才提亮。版本号只读 META.version，与页脚上方不再重复。 -->
+    <div class="bar">
+      <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
+      <span class="meta-right">
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.7.0</span>
+        <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
+      </span>
+    </div>
+
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<script src="../assets/feedback.js" defer></script>
+</body>
+</html>

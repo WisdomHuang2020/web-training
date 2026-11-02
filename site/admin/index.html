@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>后台 · 读者留言</title>
+<meta name="description" content="课程站后台，仅作者本人可访问。">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://www.web-training.power-knowledge.tech/admin">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
+<meta property="og:title" content="后台 · 读者留言">
+<meta property="og:description" content="课程站后台，仅作者本人可访问。">
+<meta property="og:url" content="https://www.web-training.power-knowledge.tech/admin">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="../">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+      <b>从 0 到上线</b>
+      <em>网站建设实训课</em>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../">总览</a>
+      <a href="../map/">课程地图</a>
+      <a href="../gates/">门禁与红线</a>
+      <a href="../glossary/">术语表</a>
+      <a href="../feedback/">留言</a>
+    </nav>
+    <span class="pill" data-progress hidden>
+      <i><span data-pbar></span></i>
+      <span data-ptxt>已学 0 / 32</span>
+    </span>
+  </div>
+</header>
+<main>
+
+<section class="sec">
+  <div class="shell">
+    <div class="fb-box" id="fb-admin">
+      <div class="fb-alert" id="fb-alert" hidden></div>
+
+      <div class="fb-card" id="fb-login-card" hidden>
+        <h2>登录</h2>
+        <p class="hint" style="font-size:12.5px;color:var(--text-3);margin-bottom:16px;line-height:1.75">
+          只有作者能查看读者留言。首次使用或忘记密码，请到服务器上运行
+          <code style="font-family:var(--font-mono)">init-site.mjs --site web-training</code>
+          取得一次性令牌。
+        </p>
+        <form id="fb-login-form">
+          <div class="fb-field">
+            <label for="fb-user">用户名</label>
+            <input id="fb-user" type="text" value="power-admin" autocomplete="username" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-pass">密码</label>
+            <input id="fb-pass" type="password" autocomplete="current-password" required>
+          </div>
+          <div class="fb-actions">
+            <a href="#" id="fb-to-setup" style="font-size:12px;color:var(--text-3)">首次使用，或忘记密码？</a>
+            <button type="submit" class="btn btn-primary" id="fb-login-btn">登录</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="fb-card" id="fb-setup-card" hidden>
+        <h2>设定后台密码</h2>
+        <p class="hint" style="font-size:12.5px;color:var(--text-3);margin-bottom:16px;line-height:1.75">
+          凭服务器上生成的一次性令牌设定密码。令牌 60 分钟内有效，用一次即失效；
+          密码不经任何中间环节，直接在这里设定。
+        </p>
+        <form id="fb-setup-form">
+          <div class="fb-field">
+            <label for="fb-setup-token">一次性令牌 <span class="req">*</span></label>
+            <input id="fb-setup-token" type="text" autocomplete="off" spellcheck="false"
+                   style="font-family:var(--font-mono);font-size:12px" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-setup-user">用户名</label>
+            <input id="fb-setup-user" type="text" value="power-admin" autocomplete="username" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-setup-pass">新密码 <span class="opt">（至少 10 位）</span></label>
+            <input id="fb-setup-pass" type="password" autocomplete="new-password" minlength="10" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-setup-pass2">确认新密码</label>
+            <input id="fb-setup-pass2" type="password" autocomplete="new-password" minlength="10" required>
+          </div>
+          <div class="fb-actions">
+            <a href="#" id="fb-to-login" style="font-size:12px;color:var(--text-3)">← 返回登录</a>
+            <button type="submit" class="btn btn-primary" id="fb-setup-btn">设定密码</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="fb-panel" hidden>
+        <div class="fb-toolbar">
+          <div>
+            <h2 style="font-size:19px;font-weight:600">读者留言</h2>
+            <p style="font-size:12px;color:var(--text-3);margin-top:4px" id="fb-who"></p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="btn btn-ghost" id="fb-refresh">刷新</button>
+            <button type="button" class="btn btn-ghost" id="fb-logout">退出</button>
+          </div>
+        </div>
+
+        <div class="fb-filters" id="fb-filters">
+          <button type="button" class="fb-filter active" data-status="all">全部<span class="n">0</span></button>
+          <button type="button" class="fb-filter" data-status="new">未读<span class="n">0</span></button>
+          <button type="button" class="fb-filter" data-status="read">已读<span class="n">0</span></button>
+          <button type="button" class="fb-filter" data-status="archived">已归档<span class="n">0</span></button>
+        </div>
+
+        <div id="fb-list"></div>
+
+        <div class="fb-card" style="margin-top:22px">
+          <h2>修改密码</h2>
+          <p class="hint" style="font-size:12.5px;color:var(--text-3);margin-bottom:16px">
+            修改后其它设备上的登录立即失效，仅当前浏览器保持登录。
+          </p>
+          <form id="fb-pw-form">
+            <div class="fb-field">
+              <label for="fb-pw-cur">当前密码</label>
+              <input id="fb-pw-cur" type="password" autocomplete="current-password" required>
+            </div>
+            <div class="fb-field">
+              <label for="fb-pw-new">新密码 <span class="opt">（至少 10 位）</span></label>
+              <input id="fb-pw-new" type="password" autocomplete="new-password" minlength="10" required>
+            </div>
+            <div class="fb-field">
+              <label for="fb-pw-new2">确认新密码</label>
+              <input id="fb-pw-new2" type="password" autocomplete="new-password" minlength="10" required>
+            </div>
+            <div class="fb-actions">
+              <span></span>
+              <button type="submit" class="btn btn-primary" id="fb-pw-btn">更新密码</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="row">
+      <div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <circle cx="16" cy="16" r="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <ellipse cx="16" cy="16" rx="4.4" ry="9.4" fill="none" stroke="#14b8a6" stroke-width="2.2"/>
+  <path d="M6.6 16h6.3M19.1 16h6.3" stroke="#14b8a6" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="16" cy="16" r="1.7" fill="#f59e0b"/>
+</svg>
+          <b>从 0 到上线</b>
+        </div>
+        <div class="meta">
+          网站建设实训课 · 2026-10-31<br>
+          10 个阶段 / 32 讲 / 4 条学习路径 / 11 条红线
+        </div>
+        <div class="beian">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">苏ICP备2026073104号-1</a>
+          <a class="gp" href="https://beian.mps.gov.cn/#/query/webSearch?code=32021402005238" target="_blank" rel="noopener noreferrer">
+            <img src="../assets/beian-gongan.png" alt="" width="36" height="40">苏公网安备32021402005238号
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="links">
+          <a href="../">总览</a>
+          <a href="../map/">课程地图</a>
+          <a href="../gates/">门禁与红线</a>
+          <a href="../glossary/">术语表</a>
+          <a href="../feedback/">留言</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部条：左版权、右「版本号 + GitHub」。版式对齐站群（LLC / AHB）页脚右下角那一簇：
+         等宽小字 + 灰色，hover 才提亮。版本号只读 META.version，与页脚上方不再重复。 -->
+    <div class="bar">
+      <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
+      <span class="meta-right">
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v1.7.0</span>
+        <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
+      </span>
+    </div>
+
+    <div class="disc">
+      <p><b>免责声明：</b>本站为个人非商业性技术分享，内容基于公开资料与两个真实站点的实际操作整理，
+      仅供学习与工程参考。文中涉及的云服务商、软件与产品，只作操作路径说明，
+      <b>不构成对任何厂商的推荐、评价或背书</b>；价格、套餐与政策随时变动，一律以官网为准。
+      涉及备案、个人信息处理等法定义务的，以主管部门最新要求为准。任何主体引用本站内容所作的决定及后果，
+      由该主体自行承担。</p>
+      <p>站内文字与图表为作者原创或基于公开资料整理，著作权归作者所有；文中提及的软件、标准、商标与厂商名称，
+      权利均归各自权利人所有，仅作技术说明引用，不代表任何隶属、赞助或背书关系。</p>
+    </div>
+  </div>
+</footer>
+<script src="../assets/feedback.js" defer></script>
+</body>
+</html>
