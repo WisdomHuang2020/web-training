@@ -1,11 +1,15 @@
 /* ============================================================
  * feedback.js —— 读者留言 与 后台留言管理
  * ------------------------------------------------------------
- * 一份脚本服务两个页面（与 optical 站同一份实现，两站变量名不同但 DOM 契约一致）：
- *   · /feedback/ —— 读者提交（含附件）
- *   · /admin/    —— 作者查看 / 下载附件 / 状态流转 / 改密码
- * 按容器是否存在分支，不靠 URL 判断：本站是生成器产出的多页静态站，
- * 用 URL 判断会在 /feedback/ 与 /admin/ 之间产生脆弱的字符串匹配。
+ * 一份脚本服务两个页面：
+ *   · index.html 的「留言」标签页（#view-fb）—— 读者提交
+ *   · admin.html（#fb-admin）—— 作者查看 / 状态流转 / 改密码
+ * 按容器是否存在分支，不靠 URL 判断（本站是多视图单页 + 一个独立后台页，
+ * 用 URL 判断会在深链 /mats 之类的地址上误判）。
+ *
+ * 为什么是原生 JS 而不是复用 React 组件：
+ *   本站没有构建链，站点直接由 nginx 托管源文件。引入 React 要新增
+ *   一条构建流水线，与「讲义可直接查看、禁用 JS 也不白页」的取向冲突。
  *
  * 两条硬约束（都是安全项，不是风格问题）：
  *   1. 后台只能凭服务端会话访问，前端不做任何"密码比对"；
@@ -83,6 +87,56 @@
       e3.status = 0;
       throw e3;
     });
+  }
+
+  /* ============================================================
+   * 密码框的「显示」开关（2026-11-02）
+   * ------------------------------------------------------------
+   * 为什么用 JS 动态包裹而不是在 HTML 里逐个写按钮：
+   *   本站后台页有 6 个密码框（登录 1、首次设定 2、设置弹层 3），
+   *   web-training 用同一份脚本、HTML 却是生成器产出的。逐个手写容易漏、
+   *   且两站要各改一遍；这里一次性处理所有 input[type=password]，
+   *   以后新增密码框自动获得同样的行为。
+   *
+   * 按钮必须 type="button"：放在 form 里时，默认 type=submit 会让
+   * 点眼睛等于提交表单。
+   * ============================================================ */
+  var EYE_SVG = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var EYE_OFF_SVG = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>';
+
+  function enhancePasswordFields(root) {
+    var inputs = (root || document).querySelectorAll('input[type="password"]');
+    for (var i = 0; i < inputs.length; i++) enhanceOne(inputs[i]);
+  }
+
+  function enhanceOne(inp) {
+    if (!inp || inp.getAttribute('data-pw-ready')) return;
+    inp.setAttribute('data-pw-ready', '1');
+
+    var wrap = document.createElement('div');
+    wrap.className = 'pw-wrap';
+    inp.parentNode.insertBefore(wrap, inp);
+    wrap.appendChild(inp);
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pw-eye';
+    btn.setAttribute('aria-label', '显示密码');
+    btn.setAttribute('title', '显示密码');
+    btn.innerHTML = EYE_SVG;
+
+    btn.addEventListener('click', function () {
+      var toText = inp.type === 'password';
+      inp.type = toText ? 'text' : 'password';
+      btn.innerHTML = toText ? EYE_OFF_SVG : EYE_SVG;
+      btn.setAttribute('aria-label', toText ? '隐藏密码' : '显示密码');
+      btn.setAttribute('title', toText ? '隐藏密码' : '显示密码');
+      if (toText) btn.classList.add('on'); else btn.classList.remove('on');
+      /* 切回明文后把光标放回原处，否则焦点留在按钮上，用户接着打字会打空 */
+      try { inp.focus({ preventScroll: true }); } catch (e) { inp.focus(); }
+    });
+
+    wrap.appendChild(btn);
   }
 
   /* ============================================================
@@ -483,6 +537,7 @@
       logoutBtn.addEventListener('click', function () {
         api('/api/admin/logout', { method: 'POST' }).catch(function () {}).then(function () {
           state.user = '';
+          if (typeof closeSettings === 'function') closeSettings();
           view('login');
         });
       });
@@ -491,14 +546,63 @@
     var refreshBtn = $('#fb-refresh');
     if (refreshBtn) refreshBtn.addEventListener('click', load);
 
+    /* ---- 设置弹层（改密码收进来，与其余五站的 Admin 页一致）---- */
+    var settings = $('#fb-settings');
+    var pwAlert = $('#fb-pw-alert');
+
+    function openSettings() {
+      if (!settings) return;
+      settings.hidden = false;
+      document.body.style.overflow = 'hidden';
+      if (pwAlert) pwAlert.hidden = true;
+      var nameEl = document.querySelectorAll('.fb-who-name');
+      for (var i = 0; i < nameEl.length; i++) nameEl[i].textContent = state.user || '';
+    }
+
+    function closeSettings() {
+      if (!settings) return;
+      settings.hidden = true;
+      document.body.style.overflow = '';
+      /* 关掉就清空：密码框不该在下次打开时还留着上一次的输入，
+         尤其是在共用电脑上。 */
+      ['#fb-pw-cur', '#fb-pw-new', '#fb-pw-new2'].forEach(function (sel) {
+        var el = $(sel);
+        if (el) el.value = '';
+      });
+      if (pwAlert) pwAlert.hidden = true;
+    }
+
+    var settingsOpenBtn = $('#fb-settings-open');
+    if (settingsOpenBtn) settingsOpenBtn.addEventListener('click', openSettings);
+
+    var settingsCloseBtn = $('#fb-settings-close');
+    if (settingsCloseBtn) settingsCloseBtn.addEventListener('click', closeSettings);
+
+    if (settings) {
+      settings.addEventListener('click', function (e) {
+        if (e.target.getAttribute && e.target.getAttribute('data-close')) closeSettings();
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && settings && !settings.hidden) closeSettings();
+    });
+
+    function showPw(kind, text) {
+      if (!pwAlert) return;
+      pwAlert.className = 'fb-alert ' + kind;
+      pwAlert.textContent = text;
+      pwAlert.hidden = false;
+    }
+
     var pwForm = $('#fb-pw-form');
     if (pwForm) {
       pwForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        clearAlert();
+        if (pwAlert) pwAlert.hidden = true;
         var np = $('#fb-pw-new').value;
         var np2 = $('#fb-pw-new2').value;
-        if (np !== np2) { show('err', '两次输入的新密码不一致。'); return; }
+        if (np !== np2) { showPw('err', '两次输入的新密码不一致。'); return; }
         var btn = $('#fb-pw-btn');
         btn.disabled = true;
         btn.textContent = '提交中…';
@@ -507,9 +611,9 @@
           body: { currentPassword: $('#fb-pw-cur').value, newPassword: np }
         }).then(function () {
           pwForm.reset();
-          show('ok', '密码已更新。其它设备的登录已全部失效。');
+          showPw('ok', '密码已更新。其它设备的登录已全部失效。');
         }).catch(function (err) {
-          show('err', err.message || '修改失败。');
+          showPw('err', err.message || '修改失败。');
         }).then(function () {
           btn.disabled = false;
           btn.textContent = '更新密码';
@@ -527,13 +631,17 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-      initFeedbackForm();
-      initAdmin();
-    });
-  } else {
+  function boot() {
     initFeedbackForm();
     initAdmin();
+    /* 给所有密码框加「显示」开关。放在两个 init 之后：它们可能刚把某个卡片
+       从 hidden 切到可见，节点此时一定已在 DOM 里。 */
+    enhancePasswordFields(document);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 })();

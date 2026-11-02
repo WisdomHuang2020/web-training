@@ -882,3 +882,16 @@ ul.check input:checked + label { color: var(--text-3); text-decoration: line-thr
 .fb-att-name { word-break: break-all; }
 .fb-att-size { flex: none; color: var(--text-3); font-family: var(--font-mono); }
 
+/* ── 密码框的「显示」开关（2026-11-02）────────────────────────────
+   与 optical 站同一份 js/feedback.js 生成，样式变量换成本站的 --brand 系。 */
+.pw-wrap { position: relative; }
+.fb-field .pw-wrap input { padding-right: 38px; }
+.pw-eye {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border-radius: 5px; border: 1px solid transparent;
+  background: transparent; color: var(--text-3); transition: all .15s;
+}
+.pw-eye:hover { color: var(--text); border-color: var(--border); }
+.pw-eye.on { color: var(--brand-light); }
