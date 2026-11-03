@@ -1118,7 +1118,7 @@ ${topbar({ base, current: '' })}
           </div>
           <div class="fb-field">
             <label for="fb-setup-pass2">确认新密码</label>
-            <input id="fb-setup-pass2" type="password" autocomplete="new-password" minlength="10" required>
+            <input id="fb-setup-pass2" type="password" autocomplete="off" minlength="10" required>
           </div>
           <div class="fb-actions">
             <a href="#" id="fb-to-login" style="font-size:12px;color:var(--text-3)">← 返回登录</a>
@@ -1164,7 +1164,7 @@ ${topbar({ base, current: '' })}
             </div>
             <div class="fb-field">
               <label for="fb-pw-new2">确认新密码</label>
-              <input id="fb-pw-new2" type="password" autocomplete="new-password" minlength="10" required>
+              <input id="fb-pw-new2" type="password" autocomplete="off" minlength="10" required>
             </div>
             <div class="fb-actions">
               <span></span>
