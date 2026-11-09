@@ -254,3 +254,71 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();
+
+/* ── 页面风格切换（8 套配色）─────────────────────────────────────────
+   与 style.css 末尾的 html[data-theme="x"] 块配套。
+   持久化 localStorage['pk-theme']；?theme= 优先，方便截图与分享。
+   head 里还有一段内联防闪脚本，二者校验规则必须一致。 */
+;(function () {
+  var THEMES = [
+    { id: 'dark-teal', name: '深墨 teal', dot: '#14b8a6' },
+    { id: 'blue', name: '蓝调浅色', dot: '#0070c0' },
+    { id: 'navy-tech', name: '深蓝科技', dot: '#3aa0e8' },
+    { id: 'graphite', name: '石墨灰', dot: '#3f4855' },
+    { id: 'warm-paper', name: '米白手册', dot: '#9a5b13' },
+    { id: 'forest', name: '森林墨绿', dot: '#3fbf7f' },
+    { id: 'indigo', name: '靛紫柔光', dot: '#5b4bd6' },
+    { id: 'sea-salt', name: '海盐青', dot: '#0e7490' }
+  ]
+  var KEY = 'pk-theme'
+  var btn = document.querySelector('[data-theme-btn]')
+  var menu = document.querySelector('[data-theme-menu]')
+  var dot = document.querySelector('[data-theme-dot]')
+  if (!btn || !menu) return
+
+  function valid(v) { return !!v && THEMES.some(function (t) { return t.id === v }) }
+  function current() {
+    var q = null, s = null
+    try { q = new URLSearchParams(location.search).get('theme') } catch (e) {}
+    if (valid(q)) return q
+    try { s = localStorage.getItem(KEY) } catch (e) {}
+    return valid(s) ? s : 'dark-teal'
+  }
+  function close() { menu.hidden = true; btn.setAttribute('aria-expanded', 'false') }
+  function apply(id, save) {
+    document.documentElement.dataset.theme = id
+    var t = THEMES.filter(function (x) { return x.id === id })[0] || THEMES[0]
+    if (dot) dot.style.background = t.dot
+    Array.prototype.forEach.call(menu.querySelectorAll('button'), function (b) {
+      var on = b.getAttribute('data-id') === id
+      b.setAttribute('aria-checked', on ? 'true' : 'false')
+      var tick = b.querySelector('.tick')
+      if (tick) tick.textContent = on ? '✓' : ''
+    })
+    if (save) { try { localStorage.setItem(KEY, id) } catch (e) {} }
+  }
+
+  menu.innerHTML = '<p class="theme-menu-hint">页面风格 · ' + THEMES.length + ' 种（本机记住）</p>'
+  THEMES.forEach(function (t) {
+    var b = document.createElement('button')
+    b.type = 'button'
+    b.setAttribute('data-id', t.id)
+    b.setAttribute('role', 'menuitemradio')
+    b.innerHTML = '<span class="swatch" style="background:' + t.dot + '"></span><span>' + t.name + '</span><span class="tick"></span>'
+    b.addEventListener('click', function () { apply(t.id, true); close() })
+    menu.appendChild(b)
+  })
+
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation()
+    var willOpen = menu.hidden
+    menu.hidden = !willOpen
+    btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false')
+  })
+  document.addEventListener('click', function (e) {
+    if (!menu.hidden && !menu.contains(e.target)) close()
+  })
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close() })
+
+  apply(current(), false)
+})()

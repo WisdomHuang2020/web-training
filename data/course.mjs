@@ -16,8 +16,8 @@
  */
 
 export const META = {
-  "version": "v2.2.3",
-  "date": "2026-10-31",
+  "version": "v2.3.0",
+  "date": "2026-11-09",
   "title": "从 0 到上线：网站建设实训课",
   "basis": "素材基准：llc-design-tool（构建型单页应用，CI 推送）与 wx-seastar（零构建多页站 + 内容后台）",
   "delivery": "交付形态：网页（可交互总览）+ 培训课件（PPT，SEA☆STAR 品牌版式），用于发给同事当课件"

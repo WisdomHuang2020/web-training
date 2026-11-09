@@ -139,6 +139,18 @@ function head({ title, desc, prefix, canon, extra = '' }) {
 <meta property="og:url" content="${url}">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="${prefix}assets/favicon.svg" type="image/svg+xml">
+<script>
+/* 首屏防闪：body 渲染前把上次选的主题盖到 <html> 上。
+   校验规则必须与 assets/app.js 里的 current() 一致：?theme= → localStorage → 默认。 */
+(function () {
+  var IDS = ['dark-teal', 'blue', 'navy-tech', 'graphite', 'warm-paper', 'forest', 'indigo', 'sea-salt']
+  try {
+    var q = new URLSearchParams(location.search).get('theme')
+    var v = IDS.indexOf(q) >= 0 ? q : localStorage.getItem('pk-theme')
+    if (IDS.indexOf(v) >= 0) document.documentElement.dataset.theme = v
+  } catch (e) {}
+})()
+</script>
 ${extra}<link rel="stylesheet" href="${prefix}assets/style.css">
 </head>`;
 }
@@ -177,6 +189,14 @@ function topbar({ base, current }) {
       ${item(L.glossary, '术语表', 'glossary')}
       ${item(L.feedback, '留言', 'feedback')}
     </nav>
+    <div class="theme-picker">
+      <button type="button" class="theme-btn" data-theme-btn aria-haspopup="menu" aria-expanded="false" aria-label="页面风格">
+        <span class="theme-dot" data-theme-dot></span>
+        <span class="label">风格</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="theme-menu" data-theme-menu role="menu" hidden></div>
+    </div>
     <span class="pill" data-progress hidden>
       <i><span data-pbar></span></i>
       <span data-ptxt>已学 0 / ${TOTAL}</span>
@@ -989,6 +1009,12 @@ ${topbar({ base, current: 'feedback' })}
       <div class="fb-card">
         <h2>填写反馈</h2>
         <form id="fb-form" novalidate>
+          <!-- 草稿恢复提示：assets/feedback.js 检测到本地草稿时才显示。
+               用本站已有的 .hint 类，不新造样式。 -->
+          <p class="hint" id="fb-draft-hint" hidden>
+            已恢复上次未提交的内容（保存在你自己的浏览器里，7 天后自动清除）。不需要的话直接删掉即可。
+          </p>
+
           <div class="fb-field">
             <label for="fb-page">涉及讲次 / 页面</label>
             <select id="fb-page">
