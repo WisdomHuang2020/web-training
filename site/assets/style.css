@@ -419,12 +419,7 @@ code {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: .02em;
   color: var(--text-3); cursor: default;
 }
-.foot .bar .gh {
-  display: inline-flex; align-items: center; gap: 7px;
-  color: var(--text-3); transition: color .18s;
-}
-.foot .bar .gh:hover { color: var(--text-2); }
-.foot .bar .gh-i { width: 16px; height: 16px; display: block; flex: 0 0 auto; }
+/* 2026-11-10：底部条 GitHub 图标 + 外链已按站群统一口径移除，原 .gh / .gh-i 规则一并删除。 */
 /* 「返回站群入口」按钮（2026-11-02 新增）。
    站群内其余 5 站用的是同形态的「边框 + 深底 + 灰字」小按钮，这里沿用同一口径；
    颜色全部取本站已有变量，不新造色值。 */

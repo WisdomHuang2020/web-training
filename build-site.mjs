@@ -91,12 +91,8 @@ const BRAND_SVG = `<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"
 
 const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${MARK_BG}${GLOBE}</svg>`;
 
-/**
- * GitHub 图标：官方 Mark 的 24×24 路径，fill=currentColor 让颜色跟着文字走。
- * 站群（LLC / AHB）用的是 lucide 的 Github 图标 + 「GitHub」文字，这里保持同样的
- * 「图标 + 文字」组合与 16px 尺寸，不单独上色 —— 灰底上再上品牌色会跳出整体。
- */
-const GITHUB_ICON = `<svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>`
+/* 2026-11-10 站群统一口径：底部条的 GitHub 图标 + 外链已移除（原先此处定义 GITHUB_ICON）。
+   生成器不再输出 GitHub 链接与图标；Pages 兜底通道仍保留，只是页面不做外链。 */
 
 /* 返回站群入口用的房子图标（2026-11-02 新增）。
    取 lucide 的 `House` 路径而非 `Home` —— lucide 新版已把 Home 改名为 House，
@@ -109,7 +105,7 @@ const HOUSE_ICON = `<svg class="back-i" viewBox="0 0 24 24" aria-hidden="true" f
 /** 规范域：裸域与 www 都在服务器上配了，但对外只认 www（301 归一）。
  *  canonical / sitemap / og:url 全部用这一个，别处不要再写死域名。 */
 const SITE_ORIGIN = 'https://www.web-training.power-knowledge.tech';
-const REPO_URL = 'https://github.com/WisdomHuang2020/web-training';
+/* 2026-11-10：原 REPO_URL（GitHub 源码仓库外链）已按站群统一口径移除。 */
 
 /** 备案信息：与站群（power-knowledge.tech）同一主体、同一网站，子域共用这组号。
  *  ICP 号必须能点开工信部；公安备案要求「图标 + 编号 + 链接」三者齐备，缺一不可。 */
@@ -244,13 +240,12 @@ function footer({ prefix, base }) {
       </div>
     </div>
 
-    <!-- 底部条：左版权、右「版本号 + GitHub」。版式对齐站群（LLC / AHB）页脚右下角那一簇：
-         等宽小字 + 灰色，hover 才提亮。版本号只读 META.version，与页脚上方不再重复。 -->
+    <!-- 底部条：左版权、右版本号。2026-11-10 按站群统一口径移除右侧 GitHub 图标 + 外链。
+         版本号只读 META.version，与页脚上方不再重复。 -->
     <div class="bar">
       <span class="cr">© ${esc(META.date.slice(0, 4))} 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
         <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">${esc(META.version)}</span>
-        <a class="gh" href="${REPO_URL}" target="_blank" rel="noopener noreferrer">${GITHUB_ICON}GitHub</a>
       </span>
     </div>
 
