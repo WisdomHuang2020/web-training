@@ -231,15 +231,16 @@ sudo bash /opt/&lt;站点&gt;/repo/deploy/setup-mail.sh \
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">09</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
+        <h2><span class="i">09</span>本讲术语<span class="n"><a href="../../glossary/">全部 106 条</a></span></h2>
         <ul class="pts">
           <li><b><a href="../../glossary/#g04">客户端与服务端</a></b>：客户端是你手里的浏览器，服务端是那台一直开着的机器。请求由客户端发出、服务端回应——排障时第一步永远是分清问题在哪一头。</li>
-          <li><b><a href="../../glossary/#g45">v1 / v2 后台</a></b>：本项目自造的阶段叫法。v1 = 纯静态站；v2 = 加了内容管理后台（登录、数据库、上传）。不是技术名词。</li>
-          <li><b><a href="../../glossary/#g51">台账</a></b>：只记「有什么、什么时候到期、谁负责」的清单；密钥台账不记密钥本体。</li>
-          <li><b><a href="../../glossary/#g54">凭据</a></b>：证明身份的东西的统称：密码、私钥、令牌都算。管凭据就是管「谁能以谁的身份做事」。</li>
-          <li><b><a href="../../glossary/#g64">发信账号 / 收件人</a></b>：发信账号＝真正把邮件发出去的那个邮箱，配置在服务器环境变量里；收件人＝谁该收到通知，在后台改、即时生效。两者刻意分开：一个管凭据，一个管日常运维。</li>
-          <li><b><a href="../../glossary/#g65">客户端专用密码</a></b>：开启「安全登录」的邮箱账号，供 SMTP / IMAP 这类第三方客户端使用的独立密码。和网页登录密码不是一回事，混用会一直报 535。</li>
-          <li><b><a href="../../glossary/#g66">SMTP</a></b>：发邮件的协议。465 是 SSL 直连，587 是 STARTTLS 升级，25 端口多被机房封。</li>
+          <li><b><a href="../../glossary/#g73">v1 / v2 后台</a></b>：本项目自造的阶段叫法。v1 = 纯静态站；v2 = 加了内容管理后台（登录、数据库、上传）。不是技术名词。</li>
+          <li><b><a href="../../glossary/#g79">台账</a></b>：只记「有什么、什么时候到期、谁负责」的清单；密钥台账不记密钥本体。</li>
+          <li><b><a href="../../glossary/#g82">凭据</a></b>：证明身份的东西的统称：密码、私钥、令牌都算。管凭据就是管「谁能以谁的身份做事」。</li>
+          <li><b><a href="../../glossary/#g84">环境变量与 .env</a></b>：不写死在代码里的配置，运行时从外部注入。.env 存本地值，必须写进 .gitignore。</li>
+          <li><b><a href="../../glossary/#g102">发信账号 / 收件人</a></b>：发信账号＝真正把邮件发出去的那个邮箱，配置在服务器环境变量里；收件人＝谁该收到通知，在后台改、即时生效。两者刻意分开：一个管凭据，一个管日常运维。</li>
+          <li><b><a href="../../glossary/#g103">客户端专用密码</a></b>：开启「安全登录」的邮箱账号，供 SMTP / IMAP 这类第三方客户端使用的独立密码。和网页登录密码不是一回事，混用会一直报 535。</li>
+          <li><b><a href="../../glossary/#g104">SMTP</a></b>：发邮件的协议。465 是 SSL 直连，587 是 STARTTLS 升级，25 端口多被机房封。</li>
         </ul>
       </section>
 
@@ -322,7 +323,7 @@ sudo bash /opt/&lt;站点&gt;/repo/deploy/setup-mail.sh \
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.6.0</span>
       </span>
     </div>
 

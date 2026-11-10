@@ -160,14 +160,16 @@ curl -I http://example.com   # 看是否 301</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 106 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g13">域名（Domain）</a></b>：服务器的人类可读名字，本身不含位置信息，只是指向某个 IP 的标签。</li>
-          <li><b><a href="../../glossary/#g14">裸域与子域</a></b>：裸域＝不带任何前缀的注册域名（example.com）；子域＝在它前面加标签（www.example.com、llc.example.com）。</li>
-          <li><b><a href="../../glossary/#g15">DNS</a></b>：互联网的电话簿：把人能读的域名翻译成机器能连的 IP。</li>
-          <li><b><a href="../../glossary/#g16">A 记录 / CNAME</a></b>：A 记录把域名指到一个 IP；CNAME 把域名指到另一个域名，由后者再解析。</li>
-          <li><b><a href="../../glossary/#g17">TTL</a></b>：DNS 记录的缓存时长。改解析之前先调小，切换才快；切完再调回去。</li>
-          <li><b><a href="../../glossary/#g34">301 重定向</a></b>：永久搬家：告诉浏览器和搜索引擎「这个地址以后看新地址」，权重会跟过去。临时搬家用 302。</li>
+          <li><b><a href="../../glossary/#g22">域名（Domain）</a></b>：服务器的人类可读名字，本身不含位置信息，只是指向某个 IP 的标签。</li>
+          <li><b><a href="../../glossary/#g23">裸域与子域</a></b>：裸域＝不带任何前缀的注册域名（example.com）；子域＝在它前面加标签（www.example.com、llc.example.com）。</li>
+          <li><b><a href="../../glossary/#g24">DNS</a></b>：互联网的电话簿：把人能读的域名翻译成机器能连的 IP。</li>
+          <li><b><a href="../../glossary/#g25">A 记录 / CNAME</a></b>：A 记录把域名指到一个 IP；CNAME 把域名指到另一个域名，由后者再解析。</li>
+          <li><b><a href="../../glossary/#g26">TTL</a></b>：DNS 记录的缓存时长。改解析之前先调小，切换才快；切完再调回去。</li>
+          <li><b><a href="../../glossary/#g33">DNS 记录类型</a></b>：加解析时真正要选的是「记录类型」，选错就等于没配。最常用的六种见下。</li>
+          <li><b><a href="../../glossary/#g34">权威 NS 与递归解析器</a></b>：权威 NS 是保管你这个域名记录的服务器；递归解析器是替你去问的那一方（运营商、8.8.8.8）。</li>
+          <li><b><a href="../../glossary/#g48">301 重定向</a></b>：永久搬家：告诉浏览器和搜索引擎「这个地址以后看新地址」，权重会跟过去。临时搬家用 302。</li>
         </ul>
       </section>
 
@@ -253,7 +255,7 @@ curl -I http://example.com   # 看是否 301</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.6.0</span>
       </span>
     </div>
 

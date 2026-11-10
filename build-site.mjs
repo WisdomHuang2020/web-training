@@ -853,7 +853,15 @@ ${footer({ prefix: '../', base: '../' })}
 function glossaryPage() {
   /* 术语按「所属阶段」分组：字典按阅读顺序排，比一长串平铺好查得多。
      每条术语第三位是阶段号（S0…S9），没有的落到「通用」。 */
-  const rowOf = i => `<div id="${termId(i)}"><dt>${esc(GLOSSARY[i][0])}</dt><dd>${esc(GLOSSARY[i][1])}</dd></div>`;
+  // 第四位是可选的「明细」：像 HTTP 状态码、DNS 记录类型这种天然是表格的，
+  // 压成一句话就废了。用两列小表渲染，仍挂在同一条术语下。
+  const rowOf = i => {
+    const g = GLOSSARY[i];
+    const rows = Array.isArray(g[3]) && g[3].length
+      ? `<dl class="gl-sub">${g[3].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`
+      : '';
+    return `<div id="${termId(i)}"><dt>${esc(g[0])}</dt><dd>${esc(g[1])}</dd>${rows}</div>`;
+  };
   const idxOf = sid => GLOSSARY.map((g, i) => (g[2] === sid ? i : -1)).filter(i => i >= 0);
   const groups = STAGES.map(st => {
     const idx = idxOf(st.id);

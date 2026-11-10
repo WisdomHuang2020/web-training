@@ -161,13 +161,14 @@ ssh root@服务器IP &quot;cat /var/www/site/.deployed-version&quot;</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 106 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g09">属主</a></b>：服务器上文件归哪个用户所有。网站文件必须归 nginx 运行用户，否则访问会 403。</li>
-          <li><b><a href="../../glossary/#g31">HTTP 与状态码</a></b>：浏览器与服务端说话的协议。200 成功、301 永久搬家、404 没有这个页面、502 上游没响应——状态码是排障的第一手证据。</li>
-          <li><b><a href="../../glossary/#g35">哨兵文件</a></b>：服务器上一个记录当前已部署版本的小文件。查线上到底跑的是哪一版，看它最准。</li>
-          <li><b><a href="../../glossary/#g38">三层核验</a></b>：状态码 / 线上内容 / 服务器落盘哨兵。三层都过才算上线成功。</li>
-          <li><b><a href="../../glossary/#g39">白名单部署</a></b>：只上传清单里列出的文件，不是整目录覆盖。清单通常要维护两处，容易不同步。</li>
+          <li><b><a href="../../glossary/#g16">属主</a></b>：服务器上文件归哪个用户所有。网站文件必须归 nginx 运行用户，否则访问会 403。</li>
+          <li><b><a href="../../glossary/#g45">HTTP 与状态码</a></b>：三位数字，第一位定性质：2xx 成功、3xx 搬家、4xx 你这边的问题、5xx 服务端的问题。排障第一步就是看它。</li>
+          <li><b><a href="../../glossary/#g57">哨兵文件</a></b>：服务器上一个记录当前已部署版本的小文件。查线上到底跑的是哪一版，看它最准。</li>
+          <li><b><a href="../../glossary/#g60">三层核验</a></b>：状态码 / 线上内容 / 服务器落盘哨兵。三层都过才算上线成功。</li>
+          <li><b><a href="../../glossary/#g61">白名单部署</a></b>：只上传清单里列出的文件，不是整目录覆盖。清单通常要维护两处，容易不同步。</li>
+          <li><b><a href="../../glossary/#g70">tar over ssh</a></b>：把目录打成 tar 流，直接通过 ssh 管道解到服务器。不需要 rsync，一条命令就传完。</li>
         </ul>
       </section>
 
@@ -251,7 +252,7 @@ ssh root@服务器IP &quot;cat /var/www/site/.deployed-version&quot;</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.6.0</span>
       </span>
     </div>
 

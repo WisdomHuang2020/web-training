@@ -159,13 +159,18 @@ curl -I https://你的域名 | head -1</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 106 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g13">域名（Domain）</a></b>：服务器的人类可读名字，本身不含位置信息，只是指向某个 IP 的标签。</li>
-          <li><b><a href="../../glossary/#g15">DNS</a></b>：互联网的电话簿：把人能读的域名翻译成机器能连的 IP。</li>
-          <li><b><a href="../../glossary/#g31">HTTP 与状态码</a></b>：浏览器与服务端说话的协议。200 成功、301 永久搬家、404 没有这个页面、502 上游没响应——状态码是排障的第一手证据。</li>
-          <li><b><a href="../../glossary/#g32">HTTPS / TLS</a></b>：HTTP 外面加一层加密。TLS 是那层协议（SSL 是前身，叫法沿用至今），证书用来证明「这台服务器确实是它声称的那个域名」。</li>
-          <li><b><a href="../../glossary/#g34">301 重定向</a></b>：永久搬家：告诉浏览器和搜索引擎「这个地址以后看新地址」，权重会跟过去。临时搬家用 302。</li>
+          <li><b><a href="../../glossary/#g22">域名（Domain）</a></b>：服务器的人类可读名字，本身不含位置信息，只是指向某个 IP 的标签。</li>
+          <li><b><a href="../../glossary/#g24">DNS</a></b>：互联网的电话簿：把人能读的域名翻译成机器能连的 IP。</li>
+          <li><b><a href="../../glossary/#g33">DNS 记录类型</a></b>：加解析时真正要选的是「记录类型」，选错就等于没配。最常用的六种见下。</li>
+          <li><b><a href="../../glossary/#g34">权威 NS 与递归解析器</a></b>：权威 NS 是保管你这个域名记录的服务器；递归解析器是替你去问的那一方（运营商、8.8.8.8）。</li>
+          <li><b><a href="../../glossary/#g45">HTTP 与状态码</a></b>：三位数字，第一位定性质：2xx 成功、3xx 搬家、4xx 你这边的问题、5xx 服务端的问题。排障第一步就是看它。</li>
+          <li><b><a href="../../glossary/#g46">HTTPS / TLS</a></b>：HTTP 外面加一层加密。TLS 是那层协议（SSL 是前身，叫法沿用至今），证书用来证明「这台服务器确实是它声称的那个域名」。</li>
+          <li><b><a href="../../glossary/#g48">301 重定向</a></b>：永久搬家：告诉浏览器和搜索引擎「这个地址以后看新地址」，权重会跟过去。临时搬家用 302。</li>
+          <li><b><a href="../../glossary/#g52">证书与 CA（含 SAN）</a></b>：证书由 CA 签发，用来证明「这个域名归这台服务器」；SAN 是它覆盖的域名清单，一张证书可以列多个。</li>
+          <li><b><a href="../../glossary/#g54">HSTS</a></b>：告诉浏览器「以后只用 HTTPS 访问我」。由浏览器强制执行，比 301 更难绕过——配错也很难回退。</li>
+          <li><b><a href="../../glossary/#g55">HTTP-01 与 DNS-01</a></b>：ACME 的两种域名验证方式：前者在网站上放一个文件，后者加一条 DNS 记录。只有 DNS-01 能签通配符证书。</li>
         </ul>
       </section>
 
@@ -249,7 +254,7 @@ curl -I https://你的域名 | head -1</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.6.0</span>
       </span>
     </div>
 
