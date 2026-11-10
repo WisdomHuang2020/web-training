@@ -188,6 +188,12 @@ function topbar({ base, current }) {
       ${item(L.glossary, '术语表', 'glossary')}
       ${item(L.feedback, '留言', 'feedback')}
     </nav>
+    <!-- 站群入口（2026-11-10）：参照 control-mode / motor-lighting / english 三站，
+         房子图标 + 「站群入口」位于页眉右侧主题切换器之前，链接总入口且不开新标签页。
+         页脚「返回站群入口」保留不动。 -->
+    <a class="group-entry" href="https://power-knowledge.tech/" title="返回 power-knowledge.tech 站群入口">
+      ${HOUSE_ICON}<span>站群入口</span>
+    </a>
     <div class="theme-picker">
       <button type="button" class="theme-btn" data-theme-btn aria-haspopup="menu" aria-expanded="false" aria-label="页面风格">
         <span class="theme-dot" data-theme-dot></span>

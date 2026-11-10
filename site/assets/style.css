@@ -1103,6 +1103,22 @@ html[data-theme="sea-salt"] {
 
 
 /* ── 切换器（纯静态实现，逻辑在 assets/app.js 末尾）── */
+/* ── 页眉「站群入口」按钮（2026-11-10）──
+   与 control-mode / motor-lighting / english 三站同构：房子图标 + 文案，
+   位于主题切换器之前、不开新标签页。视觉沿用 .theme-btn 的药丸样式。
+   注意：build-site.mjs 只覆盖 .html，不碰 assets/，本样式是源文件需单独维护。 */
+.group-entry {
+  display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto;
+  margin-left: 6px; padding: 6px 11px; border-radius: 99px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-2); font-size: 12.5px; font-weight: 500;
+  text-decoration: none; white-space: nowrap;
+  transition: border-color .16s, color .16s, background .16s;
+}
+.group-entry:hover { color: var(--text); border-color: var(--border-2); background: var(--surface-2); }
+.group-entry .back-i { width: 14px; height: 14px; display: block; flex: 0 0 auto; }
+@media (max-width: 900px) { .group-entry span { display: none; } }
+
 .theme-picker { position: relative; flex: 0 0 auto; margin-left: 6px; }
 .theme-btn {
   display: inline-flex; align-items: center; gap: 6px;
