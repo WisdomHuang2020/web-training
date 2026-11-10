@@ -159,6 +159,17 @@
         </ul>
       </section>
 
+      <section class="lsec" id="s9">
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
+        <ul class="pts">
+          <li><b><a href="../../glossary/#g14">裸域与子域</a></b>：裸域＝不带任何前缀的注册域名（example.com）；子域＝在它前面加标签（www.example.com、llc.example.com）。</li>
+          <li><b><a href="../../glossary/#g27">nginx</a></b>：Web 服务器 / 反向代理。核心职责：监听端口 → 收到请求 → 找到对应文件或转给后端 → 把结果发回去。</li>
+          <li><b><a href="../../glossary/#g34">301 重定向</a></b>：永久搬家：告诉浏览器和搜索引擎「这个地址以后看新地址」，权重会跟过去。临时搬家用 302。</li>
+          <li><b><a href="../../glossary/#g59">缓存与 Cache-Control</a></b>：浏览器把资源存本地，下次直接用。Cache-Control 决定存多久：HTML 要 no-cache 才更新得及时，带内容哈希的资源才敢长缓存。</li>
+          <li><b><a href="../../glossary/#g60">gzip</a></b>：传输前把文本资源压一遍，浏览器收到自动解压。JSON / CSS / JS 通常能省一半以上流量。</li>
+        </ul>
+      </section>
+
       <div class="pager">
         <a class="prev" href="../../lessons/M14/"><span class="dir">← 上一讲</span><span class="tt">M14 服务器环境与目录规划</span></a>
         <a class="next" href="../../lessons/M16/"><span class="dir">下一讲 →</span><span class="tt">M16 HTTPS 与证书</span></a>
@@ -177,6 +188,7 @@
           <li><a href="#s6">练习</a></li>
           <li><a href="#s7">最容易踩的坑</a></li>
           <li><a href="#s8">自检表</a></li>
+          <li><a href="#s9">本讲术语</a></li>
         </ol>
       </div>
       <div class="blk">
@@ -238,7 +250,7 @@
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.4.2</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
       </span>
     </div>
 

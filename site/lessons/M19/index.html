@@ -162,12 +162,14 @@ journalctl -u deploy -n 50 --no-pager</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 28 条</a></span></h2>
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g07">白名单部署</a></b>：只上传清单里列出的文件，不是整目录覆盖。清单通常要维护两处，容易不同步。</li>
-          <li><b><a href="../../glossary/#g08">拉取式部署</a></b>：服务器定时自己从仓库拉取并发布，不依赖 CI 主动推。</li>
-          <li><b><a href="../../glossary/#g09">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
-          <li><b><a href="../../glossary/#g21">CI 与 Actions</a></b>：CI＝每次提交后自动跑构建与检查；GitHub Actions 是它的一种实现，配置写在 .github/workflows/。</li>
+          <li><b><a href="../../glossary/#g16">A 记录 / CNAME</a></b>：A 记录把域名指到一个 IP；CNAME 把域名指到另一个域名，由后者再解析。</li>
+          <li><b><a href="../../glossary/#g39">白名单部署</a></b>：只上传清单里列出的文件，不是整目录覆盖。清单通常要维护两处，容易不同步。</li>
+          <li><b><a href="../../glossary/#g40">拉取式部署</a></b>：服务器定时自己从仓库拉取并发布，不依赖 CI 主动推。</li>
+          <li><b><a href="../../glossary/#g42">CI 与 Actions</a></b>：CI＝每次提交后自动跑构建与检查；GitHub Actions 是它的一种实现，配置写在 .github/workflows/。</li>
+          <li><b><a href="../../glossary/#g46">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
+          <li><b><a href="../../glossary/#g68">API Key</a></b>：调用第三方服务时出示的凭据。写在前端就等于公开，所以要么放服务端，要么配域名白名单。</li>
         </ul>
       </section>
 
@@ -249,7 +251,7 @@ journalctl -u deploy -n 50 --no-pager</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.4.2</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
       </span>
     </div>
 

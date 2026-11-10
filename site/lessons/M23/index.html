@@ -284,13 +284,19 @@ git pull --ff-only &amp;&amp; echo deployed
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">09</span>本讲术语<span class="n"><a href="../../glossary/">全部 28 条</a></span></h2>
+        <h2><span class="i">09</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g09">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
-          <li><b><a href="../../glossary/#g21">CI 与 Actions</a></b>：CI＝每次提交后自动跑构建与检查；GitHub Actions 是它的一种实现，配置写在 .github/workflows/。</li>
-          <li><b><a href="../../glossary/#g22">Secrets</a></b>：仓库里加密保存的变量（如服务器地址与私钥），只在流水线运行时注入，不进代码。</li>
-          <li><b><a href="../../glossary/#g23">轮换与吊销</a></b>：轮换＝定期换一把新密钥；吊销＝让旧的立刻失效。泄露时必须先吊销、再换新。</li>
-          <li><b><a href="../../glossary/#g24">台账</a></b>：只记「有什么、什么时候到期、谁负责」的清单；密钥台账不记密钥本体。</li>
+          <li><b><a href="../../glossary/#g10">Git 与远程仓库</a></b>：Git 在本机记录每一次改动；远程仓库（GitHub）是放在网上的那份副本，用来备份、协作与触发自动化。</li>
+          <li><b><a href="../../glossary/#g24">SSH</a></b>：加密的远程登录协议：你在本机敲命令，实际在远程服务器上执行。</li>
+          <li><b><a href="../../glossary/#g25">公钥与私钥</a></b>：一对钥匙：公钥是锁，可以交给任何需要验证你的地方；私钥是钥匙，只留在自己机器上，600 权限、绝不外传。</li>
+          <li><b><a href="../../glossary/#g42">CI 与 Actions</a></b>：CI＝每次提交后自动跑构建与检查；GitHub Actions 是它的一种实现，配置写在 .github/workflows/。</li>
+          <li><b><a href="../../glossary/#g43">推式部署</a></b>：由 CI 主动把产物推到服务器（ssh / rsync）。实时，但代价是要把「能登服务器的私钥」交给 CI。</li>
+          <li><b><a href="../../glossary/#g46">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
+          <li><b><a href="../../glossary/#g49">Secrets</a></b>：仓库里加密保存的变量（如服务器地址与私钥），只在流水线运行时注入，不进代码。</li>
+          <li><b><a href="../../glossary/#g50">轮换与吊销</a></b>：轮换＝定期换一把新密钥；吊销＝让旧的立刻失效。泄露时必须先吊销、再换新。</li>
+          <li><b><a href="../../glossary/#g51">台账</a></b>：只记「有什么、什么时候到期、谁负责」的清单；密钥台账不记密钥本体。</li>
+          <li><b><a href="../../glossary/#g54">凭据</a></b>：证明身份的东西的统称：密码、私钥、令牌都算。管凭据就是管「谁能以谁的身份做事」。</li>
+          <li><b><a href="../../glossary/#g55">Fine-grained token</a></b>：GitHub 的细粒度令牌：选仓库、选权限项、必须设过期。默认优先用它，而不是账号级令牌。</li>
         </ul>
       </section>
 
@@ -376,7 +382,7 @@ git pull --ff-only &amp;&amp; echo deployed
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.4.2</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
       </span>
     </div>
 

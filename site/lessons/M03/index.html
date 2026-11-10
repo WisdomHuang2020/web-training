@@ -163,9 +163,15 @@ ssh -T -p 443 git@ssh.github.com</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 28 条</a></span></h2>
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g20">dry-run</a></b>：试运行：命令完整走一遍但不真正生效，用来验证权限与路径（如 git push --dry-run）。</li>
+          <li><b><a href="../../glossary/#g10">Git 与远程仓库</a></b>：Git 在本机记录每一次改动；远程仓库（GitHub）是放在网上的那份副本，用来备份、协作与触发自动化。</li>
+          <li><b><a href="../../glossary/#g16">A 记录 / CNAME</a></b>：A 记录把域名指到一个 IP；CNAME 把域名指到另一个域名，由后者再解析。</li>
+          <li><b><a href="../../glossary/#g24">SSH</a></b>：加密的远程登录协议：你在本机敲命令，实际在远程服务器上执行。</li>
+          <li><b><a href="../../glossary/#g31">HTTP 与状态码</a></b>：浏览器与服务端说话的协议。200 成功、301 永久搬家、404 没有这个页面、502 上游没响应——状态码是排障的第一手证据。</li>
+          <li><b><a href="../../glossary/#g32">HTTPS / TLS</a></b>：HTTP 外面加一层加密。TLS 是那层协议（SSL 是前身，叫法沿用至今），证书用来证明「这台服务器确实是它声称的那个域名」。</li>
+          <li><b><a href="../../glossary/#g41">dry-run</a></b>：试运行：命令完整走一遍但不真正生效，用来验证权限与路径（如 git push --dry-run）。</li>
+          <li><b><a href="../../glossary/#g54">凭据</a></b>：证明身份的东西的统称：密码、私钥、令牌都算。管凭据就是管「谁能以谁的身份做事」。</li>
         </ul>
       </section>
 
@@ -248,7 +254,7 @@ ssh -T -p 443 git@ssh.github.com</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.4.2</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
       </span>
     </div>
 

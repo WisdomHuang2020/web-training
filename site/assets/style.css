@@ -390,6 +390,27 @@ code {
 .redlines li:hover { color: var(--text); }
 
 /* ============================ 术语表 ============================ */
+/* 术语表：按阶段分组。跳转条 + 每组一个 h2，组内仍是两栏 */
+.gl-jump {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  margin: 4px 0 8px; padding-bottom: 18px; border-bottom: 1px solid var(--surface-2);
+}
+.gl-jump-t { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; color: var(--text-3); text-transform: uppercase; }
+.gl-jump a {
+  display: inline-flex; align-items: baseline; gap: 5px;
+  font-size: 12.5px; color: var(--text-2); padding: 4px 10px;
+  border: 1px solid var(--border); border-radius: 999px; transition: color .16s, border-color .16s;
+}
+.gl-jump a:hover { color: var(--brand-light); border-color: var(--brand-light); }
+.gl-jump a b { font-family: var(--font-mono); font-size: 10px; font-weight: 400; color: var(--text-3); }
+.gl-head {
+  display: flex; align-items: baseline; gap: 10px;
+  font-size: 15px; font-weight: 600; color: var(--text);
+  margin: 38px 0 6px; padding-left: 12px; border-left: 2px solid var(--brand-light);
+}
+.gl-head .n { font-family: var(--font-mono); font-size: 10.5px; font-weight: 400; color: var(--text-3); }
+.gl-head:first-of-type { margin-top: 26px; }
+
 .gloss { columns: 2; column-gap: 28px; }
 .gloss > div { break-inside: avoid; padding: 13px 0; border-bottom: 1px solid var(--surface-2); }
 .gloss dt { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }

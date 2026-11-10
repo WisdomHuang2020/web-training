@@ -161,11 +161,17 @@ git push --dry-run             # 预期：permission denied</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 28 条</a></span></h2>
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g09">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
-          <li><b><a href="../../glossary/#g10">MCP</a></b>：一种让工具连接外部系统的标准接口：把仓库、云平台、文档服务接成可调用的能力。</li>
-          <li><b><a href="../../glossary/#g12">打通</a></b>：本文档的概念：让工具具备对某个外部系统的实际操作权限，并明确这份权限的边界。</li>
+          <li><b><a href="../../glossary/#g24">SSH</a></b>：加密的远程登录协议：你在本机敲命令，实际在远程服务器上执行。</li>
+          <li><b><a href="../../glossary/#g27">nginx</a></b>：Web 服务器 / 反向代理。核心职责：监听端口 → 收到请求 → 找到对应文件或转给后端 → 把结果发回去。</li>
+          <li><b><a href="../../glossary/#g29">root 与 location</a></b>：root 是这个站点文件的根目录；location 是按路径分流的规则，路径更具体的规则优先。</li>
+          <li><b><a href="../../glossary/#g46">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
+          <li><b><a href="../../glossary/#g47">MCP</a></b>：一种让工具连接外部系统的标准接口：把仓库、云平台、文档服务接成可调用的能力。</li>
+          <li><b><a href="../../glossary/#g48">打通</a></b>：本文档的概念：让工具具备对某个外部系统的实际操作权限，并明确这份权限的边界。</li>
+          <li><b><a href="../../glossary/#g54">凭据</a></b>：证明身份的东西的统称：密码、私钥、令牌都算。管凭据就是管「谁能以谁的身份做事」。</li>
+          <li><b><a href="../../glossary/#g55">Fine-grained token</a></b>：GitHub 的细粒度令牌：选仓库、选权限项、必须设过期。默认优先用它，而不是账号级令牌。</li>
+          <li><b><a href="../../glossary/#g68">API Key</a></b>：调用第三方服务时出示的凭据。写在前端就等于公开，所以要么放服务端，要么配域名白名单。</li>
         </ul>
       </section>
 
@@ -250,7 +256,7 @@ git push --dry-run             # 预期：permission denied</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.4.2</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
       </span>
     </div>
 

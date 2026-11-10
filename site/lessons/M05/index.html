@@ -160,10 +160,17 @@ ssh -T git@github.com</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 28 条</a></span></h2>
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g09">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
-          <li><b><a href="../../glossary/#g12">打通</a></b>：本文档的概念：让工具具备对某个外部系统的实际操作权限，并明确这份权限的边界。</li>
+          <li><b><a href="../../glossary/#g10">Git 与远程仓库</a></b>：Git 在本机记录每一次改动；远程仓库（GitHub）是放在网上的那份副本，用来备份、协作与触发自动化。</li>
+          <li><b><a href="../../glossary/#g12">.gitignore</a></b>：告诉 Git「这些不要跟踪」的清单。密钥、依赖目录、构建产物都该在里面；漏了就是永久留痕。</li>
+          <li><b><a href="../../glossary/#g24">SSH</a></b>：加密的远程登录协议：你在本机敲命令，实际在远程服务器上执行。</li>
+          <li><b><a href="../../glossary/#g25">公钥与私钥</a></b>：一对钥匙：公钥是锁，可以交给任何需要验证你的地方；私钥是钥匙，只留在自己机器上，600 权限、绝不外传。</li>
+          <li><b><a href="../../glossary/#g31">HTTP 与状态码</a></b>：浏览器与服务端说话的协议。200 成功、301 永久搬家、404 没有这个页面、502 上游没响应——状态码是排障的第一手证据。</li>
+          <li><b><a href="../../glossary/#g32">HTTPS / TLS</a></b>：HTTP 外面加一层加密。TLS 是那层协议（SSL 是前身，叫法沿用至今），证书用来证明「这台服务器确实是它声称的那个域名」。</li>
+          <li><b><a href="../../glossary/#g46">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
+          <li><b><a href="../../glossary/#g48">打通</a></b>：本文档的概念：让工具具备对某个外部系统的实际操作权限，并明确这份权限的边界。</li>
+          <li><b><a href="../../glossary/#g68">API Key</a></b>：调用第三方服务时出示的凭据。写在前端就等于公开，所以要么放服务端，要么配域名白名单。</li>
         </ul>
       </section>
 
@@ -247,7 +254,7 @@ ssh -T git@github.com</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.4.2</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
       </span>
     </div>
 

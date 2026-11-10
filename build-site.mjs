@@ -851,7 +851,23 @@ ${footer({ prefix: '../', base: '../' })}
 /* ============================== 术语页 ============================== */
 
 function glossaryPage() {
-  const items = GLOSSARY.map((g, i) => `<div id="${termId(i)}"><dt>${esc(g[0])}</dt><dd>${esc(g[1])}</dd></div>`).join('\n      ');
+  /* 术语按「所属阶段」分组：字典按阅读顺序排，比一长串平铺好查得多。
+     每条术语第三位是阶段号（S0…S9），没有的落到「通用」。 */
+  const rowOf = i => `<div id="${termId(i)}"><dt>${esc(GLOSSARY[i][0])}</dt><dd>${esc(GLOSSARY[i][1])}</dd></div>`;
+  const idxOf = sid => GLOSSARY.map((g, i) => (g[2] === sid ? i : -1)).filter(i => i >= 0);
+  const groups = STAGES.map(st => {
+    const idx = idxOf(st.id);
+    if (!idx.length) return '';
+    return `<h2 class="gl-head" id="${st.id.toLowerCase()}">${st.id} ${esc(st.name)}<span class="n">${idx.length} 条</span></h2>
+    <div class="gloss">
+      ${idx.map(rowOf).join('\n      ')}
+    </div>`;
+  }).filter(Boolean).join('\n    ');
+
+  const jump = STAGES.map(st => {
+    const n = idxOf(st.id).length;
+    return n ? `<a href="#${st.id.toLowerCase()}">${st.id}<b>${n}</b></a>` : '';
+  }).filter(Boolean).join('');
 
   /* 每条术语反查：哪几讲讲到了它 —— 让术语表不只是词典，还能当索引用 */
   const usedIn = GLOSSARY.map((g, i) => {
@@ -878,15 +894,16 @@ ${topbar({ base: '../', current: 'glossary' })}
   <div class="shell">
     <div class="kicker">Reference · 术语</div>
     <h1>术语表</h1>
-    <p class="lead">共 ${GLOSSARY.length} 条。凡本站自造的词（门禁、打通、假绿、哨兵…），这里都有定义 —— 这是第 ${REDLINES.length} 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。</p>
+    <p class="lead">共 ${GLOSSARY.length} 条，${STAGES.filter(s => idxOf(s.id).length).length} 组，按课程阶段排。通用术语取自建站全流程，本站自造的词（门禁、打通、假绿、哨兵…）也在里面 —— 这是第 ${REDLINES.length} 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。</p>
   </div>
 </section>
 
 <section class="sec" id="list">
   <div class="shell">
-    <div class="gloss">
-      ${items}
-    </div>
+    <nav class="gl-jump" aria-label="按阶段跳转">
+      <span class="gl-jump-t">按阶段</span>${jump}
+    </nav>
+    ${groups}
   </div>
 </section>
 

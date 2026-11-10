@@ -158,6 +158,17 @@ curl -I https://你的域名 | head -1</pre>
         </ul>
       </section>
 
+      <section class="lsec" id="s9">
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
+        <ul class="pts">
+          <li><b><a href="../../glossary/#g13">域名（Domain）</a></b>：服务器的人类可读名字，本身不含位置信息，只是指向某个 IP 的标签。</li>
+          <li><b><a href="../../glossary/#g15">DNS</a></b>：互联网的电话簿：把人能读的域名翻译成机器能连的 IP。</li>
+          <li><b><a href="../../glossary/#g31">HTTP 与状态码</a></b>：浏览器与服务端说话的协议。200 成功、301 永久搬家、404 没有这个页面、502 上游没响应——状态码是排障的第一手证据。</li>
+          <li><b><a href="../../glossary/#g32">HTTPS / TLS</a></b>：HTTP 外面加一层加密。TLS 是那层协议（SSL 是前身，叫法沿用至今），证书用来证明「这台服务器确实是它声称的那个域名」。</li>
+          <li><b><a href="../../glossary/#g34">301 重定向</a></b>：永久搬家：告诉浏览器和搜索引擎「这个地址以后看新地址」，权重会跟过去。临时搬家用 302。</li>
+        </ul>
+      </section>
+
       <div class="pager">
         <a class="prev" href="../../lessons/M15/"><span class="dir">← 上一讲</span><span class="tt">M15 nginx 配置实战</span></a>
         <a class="next" href="../../lessons/M17/"><span class="dir">下一讲 →</span><span class="tt">M17 首次手工上线</span></a>
@@ -176,6 +187,7 @@ curl -I https://你的域名 | head -1</pre>
           <li><a href="#s6">练习</a></li>
           <li><a href="#s7">最容易踩的坑</a></li>
           <li><a href="#s8">自检表</a></li>
+          <li><a href="#s9">本讲术语</a></li>
         </ol>
       </div>
       <div class="blk">
@@ -237,7 +249,7 @@ curl -I https://你的域名 | head -1</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.4.2</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
       </span>
     </div>
 

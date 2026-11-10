@@ -161,10 +161,15 @@ namei -l /var/www/site/index.html   # 逐级检查路径权限</pre>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 28 条</a></span></h2>
+        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 68 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g07">白名单部署</a></b>：只上传清单里列出的文件，不是整目录覆盖。清单通常要维护两处，容易不同步。</li>
-          <li><b><a href="../../glossary/#g09">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
+          <li><b><a href="../../glossary/#g10">Git 与远程仓库</a></b>：Git 在本机记录每一次改动；远程仓库（GitHub）是放在网上的那份副本，用来备份、协作与触发自动化。</li>
+          <li><b><a href="../../glossary/#g11">分支</a></b>：从主线（main）分出来的独立改动线，做完再合回去。一个人做小站可以不用，但它决定了你敢不敢大改。</li>
+          <li><b><a href="../../glossary/#g27">nginx</a></b>：Web 服务器 / 反向代理。核心职责：监听端口 → 收到请求 → 找到对应文件或转给后端 → 把结果发回去。</li>
+          <li><b><a href="../../glossary/#g39">白名单部署</a></b>：只上传清单里列出的文件，不是整目录覆盖。清单通常要维护两处，容易不同步。</li>
+          <li><b><a href="../../glossary/#g46">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
+          <li><b><a href="../../glossary/#g53">权限矩阵</a></b>：一张「谁能对什么做什么」的表。先写表、再写代码，权限才不会漏。</li>
+          <li><b><a href="../../glossary/#g68">API Key</a></b>：调用第三方服务时出示的凭据。写在前端就等于公开，所以要么放服务端，要么配域名白名单。</li>
         </ul>
       </section>
 
@@ -249,7 +254,7 @@ namei -l /var/www/site/index.html   # 逐级检查路径权限</pre>
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.4.2</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.5.0</span>
       </span>
     </div>
 
