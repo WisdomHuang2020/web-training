@@ -106,7 +106,7 @@ code {
 .nav { display: flex; align-items: center; gap: 2px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
 .nav::-webkit-scrollbar { display: none; }
 .nav a {
-  font-size: 14px; font-weight: 500; color: var(--text-2); padding: 7px 11px; border-radius: 7px;
+  font-size: 16px; font-weight: 500; color: var(--text-2); padding: 8px 13px; border-radius: 8px;
   white-space: nowrap; transition: background .18s, color .18s;
 }
 .nav a:hover { color: var(--text); background: var(--surface-2); }
@@ -1077,7 +1077,7 @@ html[data-theme="sea-salt"] {
 .theme-picker { position: relative; flex: 0 0 auto; margin-left: 6px; }
 .theme-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: inherit; font-size: 13.5px; font-weight: 500;
+  font-family: inherit; font-size: 15px; font-weight: 500;
   color: var(--text-2); background: var(--surface); border: 1px solid var(--border);
   border-radius: 999px; padding: 6px 11px; cursor: pointer;
   transition: border-color .18s, color .18s, background .18s;
