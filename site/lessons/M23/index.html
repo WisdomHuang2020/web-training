@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>M23 密钥管理 · 从 0 到上线</title>
-<meta name="description" content="密钥分层、轮换、应急。学完能做到：15 分钟内完成一次密钥轮换。产出物：密钥台账（不含密钥本体）（S5 后台 · 数据 · 权限 · 密钥 · 打通）">
+<title>M23 密钥管理与凭据分层 · 从 0 到上线</title>
+<meta name="description" content="那么多把钥匙，哪把开哪扇门。学完能做到：说清每类凭据的方向、范围与泄露后果，并在 15 分钟内完成一次轮换。产出物：一张「谁能对什么做什么」的凭据地图 + 密钥台账（不含密钥本体）（S5 后台 · 数据 · 权限 · 密钥 · 打通）">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="canonical" href="https://www.web-training.power-knowledge.tech/lessons/M23">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
-<meta property="og:title" content="M23 密钥管理 · 从 0 到上线">
-<meta property="og:description" content="密钥分层、轮换、应急。学完能做到：15 分钟内完成一次密钥轮换。产出物：密钥台账（不含密钥本体）（S5 后台 · 数据 · 权限 · 密钥 · 打通）">
+<meta property="og:title" content="M23 密钥管理与凭据分层 · 从 0 到上线">
+<meta property="og:description" content="那么多把钥匙，哪把开哪扇门。学完能做到：说清每类凭据的方向、范围与泄露后果，并在 15 分钟内完成一次轮换。产出物：一张「谁能对什么做什么」的凭据地图 + 密钥台账（不含密钥本体）（S5 后台 · 数据 · 权限 · 密钥 · 打通）">
 <meta property="og:url" content="https://www.web-training.power-knowledge.tech/lessons/M23">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
@@ -74,7 +74,7 @@
         <span>S5 后台 · 数据 · 权限 · 密钥 · 打通</span>
       </div>
 
-      <h1><span class="num">M23</span>密钥管理</h1>
+      <h1><span class="num">M23</span>密钥管理与凭据分层</h1>
       <div class="meta">
         <span class="tag hi">所属路径 B / C</span>
         <span class="tag">第 23 / 32 讲</span>
@@ -83,86 +83,210 @@
 
       <section class="lsec" id="s1">
         <div class="lede">
-          <div class="q">密钥分层、轮换、应急</div>
-          <div class="ability"><b>学完能</b>15 分钟内完成一次密钥轮换</div>
+          <div class="q">那么多把钥匙，哪把开哪扇门</div>
+          <div class="ability"><b>学完能</b>说清每类凭据的方向、范围与泄露后果，并在 15 分钟内完成一次轮换</div>
         </div>
       </section>
 
       <section class="lsec" id="s2">
         <h2><span class="i">01</span>为什么重要</h2>
-        <div class="why">密钥的价值不在「有」，在「能换」。一把换不掉的密钥，等于一个永久后门；而轮换只要演练过一次，就没那么可怕。</div>
+        <div class="why">密钥的价值不在「有」，在「知道它是哪扇门的」。同一把钥用错地方，代价从「少推一次代码」直接跳到「整台服务器失守」。而每把钥都能换——只要轮换演练过一次，就没那么可怕。</div>
       </section>
 
       <section class="lsec" id="s3">
-        <h2><span class="i">02</span>要讲清的 3 件事<span class="n">核心要点</span></h2>
+        <h2><span class="i">02</span>要讲清的 6 件事<span class="n">核心要点</span></h2>
         <ul class="pts">
-          <li>五类密钥：账号密钥 / 部署密钥 / CI Secrets / API Token / MCP 凭据</li>
-          <li>台账只记用途与日期，不记密钥本体</li>
-          <li>轮换周期与吊销流程；泄露应急五步</li>
+          <li>判断只看一条：<b>谁拿着私钥，谁就是发起方</b>。本机→服务器、本机→GitHub、Actions→服务器、服务器→GitHub，四条链路各有一把私钥，混了就等于把整台服务器交出去</li>
+          <li>公钥是锁、私钥是钥匙：同一把锁可以装到任意多扇门上（服务器的 authorized_keys、GitHub 的 SSH keys 里存的都是公钥），钥匙只有一把，且永不出本机</li>
+          <li>GitHub 五种凭据作用域完全不同：账号 SSH key（能推该账号<b>所有</b>仓库）、Deploy key（<b>单个</b>仓库、可只读）、Fine-grained token（选仓库选权限、必设过期）、Classic token（scope 粗、极易过宽）、GITHUB_TOKEN（单次运行、跑完失效）</li>
+          <li>推式部署要把「能登服务器的私钥」交给 GitHub 存在 Secrets；拉式部署让服务器自己来取，用只读 Deploy key。方向不同，风险面完全不同</li>
+          <li>Secrets 写入后<b>不可回读</b>，只在运行时注入；fork 来的 PR 拿不到 secrets；日志里被打码 ≠ 安全，该不打印就别打印</li>
+          <li>无痛轮换的顺序是「先加新的 → 切换 → 验证 → 再删旧的」，反过来做就是一次事故</li>
         </ul>
       </section>
 
       <section class="lsec" id="s4">
-        <h2><span class="i">03</span>照着做：4 步<span class="n">操作顺序</span></h2>
+        <h2><span class="i">03</span>照着做：7 步<span class="n">操作顺序</span></h2>
         <ol class="steps">
-          <li>列密钥台账：用途、持有人、轮换日期</li>
-          <li>生成新钥并部署到位</li>
-          <li>验证新钥可用后吊销旧钥</li>
-          <li>全仓搜一遍明文密钥</li>
+          <li>画出四条链路：本机→服务器、本机→GitHub、GitHub Actions→服务器、服务器→GitHub</li>
+          <li>每条链路定凭据：发起方持私钥，对方存公钥或令牌；先确认方向再动手</li>
+          <li>能选细的不选粗：优先 Fine-grained token、只读 Deploy key，别一上来给账号级</li>
+          <li>生成并部署：先加新的，旧的先留着，直到新钥验证通过</li>
+          <li>验证要正反都测：该能做的能做成，该拒的确实被拒（只读钥推一次代码看是否失败）</li>
+          <li>写台账：用途、责任人、存放位置、轮换日期 —— 不记密钥本体</li>
+          <li>挑一把做轮换演练，最后拿旧钥再试一次确认失效</li>
         </ol>
         <div class="code-wrap">
         <button class="copy" type="button" aria-label="复制命令">复制</button>
-        <pre class="code">ssh-keygen -t ed25519 -f ~/.ssh/deploy_new -C &quot;deploy-2026&quot;
-ssh-keygen -lf ~/.ssh/deploy_new.pub     # 核对指纹再部署
-<span class="cm"># 部署并验证通过后，再吊销旧钥</span></pre>
+        <pre class="code"><span class="cm"># 生成一对，公钥交出去，私钥留本机（600）</span>
+ssh-keygen -t ed25519 -f ~/.ssh/deploy_new -C &quot;deploy-2026-11&quot;
+ssh-keygen -lf ~/.ssh/deploy_new.pub      # 核对指纹再部署
+
+<span class="cm"># 验完再吊销旧的：先加新、后删旧</span>
+ssh -i ~/.ssh/deploy_new -T git@github.com
+ssh -i ~/.ssh/deploy_new root@你的服务器 &quot;echo ok&quot;</pre>
       </div>
       </section>
 
 
+      <section class="lsec sop" id="sop">
+        <h2><span class="i">04</span>完整 SOP<span class="n">照着能做</span></h2>
+        <p class="sop-p sop-intro">目标：把本机、GitHub、云服务器之间的每一把钥匙对上号 —— 谁持私钥、对方存什么、泄露后最坏怎样、怎么换掉它。</p>
+        <p class="sop-p">目标：把「本机、GitHub、云服务器」三者之间的钥匙理清楚 —— 每把钥是谁的、开哪扇门、泄露后最坏会怎样。这一讲只讲凭据本身；连成一张图和权限边界在 M24。</p>
+<div class="callout tip">学之前先接受一件事：密钥不是「一串要背下来的字符」，而是「一次身份声明」。所以每把钥都能用三个问题定位 —— 谁向谁证明？能做什么？泄露后炸多大？</div>
+<h3>0. 一条判断规则：谁拿私钥，谁就是发起方</h3>
+<p class="sop-p">密钥问题看起来乱，是因为习惯把它们当成一堆字符串。换个问法就清楚了：这条链路上，谁需要证明「我是我」？证明的那一方持私钥，被证明的那一方存公钥。</p>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>链路</th><th>谁持私钥</th><th>对方存什么</th><th>典型凭据</th><th>泄露后最坏结果</th></tr></thead>
+          <tbody><tr><td>本机 → 云服务器</td><td>本机</td><td>服务器 authorized_keys 里的公钥</td><td>SSH 密钥对</td><td>整台服务器，连同上面所有站点</td></tr><tr><td>本机 → GitHub</td><td>本机</td><td>GitHub 账号里的公钥</td><td>账号 SSH key</td><td>该账号所有仓库可读可写</td></tr><tr><td>GitHub Actions → 云服务器</td><td>GitHub（存在 Secrets）</td><td>服务器 authorized_keys 里的公钥</td><td>服务器私钥</td><td>同上，且每次运行都在用</td></tr><tr><td>云服务器 → GitHub</td><td>服务器</td><td>仓库 Deploy key 里的公钥</td><td>Deploy key（可只读）</td><td>该仓库代码可读</td></tr></tbody>
+        </table></div>
+<div class="callout tip">一句话记住：发起方不需要「被允许连出去」，只有接受方需要开一个入口。所以保护重点永远在持私钥的那一头。</div>
+<h3>1. 公钥与私钥：锁和钥匙</h3>
+<p class="sop-p">一对密钥里，公钥是锁、私钥是钥匙。锁可以复制无数把、装到任意多扇门上（服务器的 authorized_keys、GitHub 的 SSH keys 里存的全是锁）；钥匙只有一把，永远留在你手里，谁也不给。</p>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code"><span class="cm"># 一对一把，名字写清用途，别用默认 id_ed25519 到处复用</span>
+ssh-keygen -t ed25519 -f ~/.ssh/deploy_web -C &quot;deploy-web-2026-11&quot;
+
+ls -l ~/.ssh/deploy_web*              # 私钥必须 600，公钥可以 644
+ssh-keygen -lf ~/.ssh/deploy_web.pub  # 记下指纹，部署后核对是不是这一把</pre>
+        </div>
+<div class="callout warn">私钥三条禁忌：不进 git、不发聊天工具、不贴在文档或截图里。公钥相反 —— 它本来就是给出去的东西，贴哪儿都行。</div>
+<div class="callout tip">一把钥对一个用途。多一把钥的代价是多一行 config，收益是出事时只炸一条链路，而不是全线。</div>
+<h3>2. 链路一：本机 → 云服务器</h3>
+<p class="sop-p">你在本机敲 ssh，本机是发起方、持私钥；服务器是接受方，它只做一件事：拿你交过的公钥验证「这次签名是不是那把钥匙签的」。它并不知道你是谁，只认钥匙。</p>
+<ol class="steps"><li>本机生成一对（见上一节），名字按用途取</li><li>把公钥写进服务器的 ~/.ssh/authorized_keys：ssh-copy-id 或手工追加，一行一把</li><li>立刻验证：ssh -i ~/.ssh/deploy_web root@你的服务器 &quot;echo ok&quot;，看到 ok 才算通</li><li>通了以后再考虑关掉密码登录；顺序反了会把自己锁在外面</li></ol>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code">ssh-copy-id -i ~/.ssh/deploy_web.pub root@你的服务器
+
+<span class="cm"># 多把钥时用 ~/.ssh/config 指定，不必每次 -i</span>
+<span class="cm"># Host web</span>
+<span class="cm">#   HostName 你的服务器</span>
+<span class="cm">#   User root</span>
+<span class="cm">#   IdentityFile ~/.ssh/deploy_web</span></pre>
+        </div>
+<div class="callout warn">几个人共用 root、共用同一把钥，是运维里最常见的隐患：出事时日志里全是同一个身份，查不出是谁做的。至少做到一人一把，或每人一个独立账号。</div>
+<h3>3. 链路二：本机 → GitHub（账号级 SSH key）</h3>
+<p class="sop-p">把公钥贴进 GitHub 账号的 SSH keys 之后，这台机器就能推该账号有写权限的所有仓库。这是它和 Deploy key 最大的区别 —— 它是账号级的，不是仓库级的。</p>
+<ol class="steps"><li>复制公钥内容（.pub 结尾那个文件，整行，含开头的 ssh-ed25519）</li><li>GitHub → Settings → SSH and GPG keys → New SSH key，标题写清是哪台机器的</li><li>验证：ssh -T git@github.com，出现 Hi 你的用户名 就对了</li><li>仓库地址要用 SSH 形式（git@github.com:用户名/仓库.git）；HTTPS 走的是另一套凭据</li></ol>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code">ssh -T git@github.com
+<span class="cm"># Hi &lt;你的用户名&gt;! You've successfully authenticated, but GitHub does not provide shell access.</span>
+<span class="cm"># 看到这句 = 认证通过；Permission denied (publickey) = 公钥没贴对，或 ssh-agent 没加载</span></pre>
+        </div>
+<div class="callout danger">不要把账号级 SSH key 拿到服务器上、或塞进 CI 的 Secrets 里。它一旦泄露，等于你所有仓库一起失守；而服务器通常只需要一个仓库，那就该用 Deploy key。</div>
+<h3>4. 链路三：GitHub Actions → 云服务器（推式部署）</h3>
+<p class="sop-p">工作流跑在 GitHub 的机器上，它要 ssh 进你的服务器 —— 这次发起方是 GitHub，所以私钥放进仓库的 Secrets，公钥写到服务器的 authorized_keys。</p>
+<ol class="steps"><li>生成一把专用钥，不加 passphrase —— 非交互使用没法输密码</li><li>公钥追加到服务器的 authorized_keys</li><li>私钥整段内容存到仓库 Settings → Secrets and variables → Actions，命名如 SSH_KEY</li><li>工作流里用它 ssh 或 rsync 到服务器；主机、用户名、路径一并放进 Secrets 或 vars</li><li>跑一次，确认日志里真的连上了 —— 不要只看那一步是不是绿的</li></ol>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code">- name: 部署到服务器
+  run: |
+    install -m 600 /dev/stdin ~/.ssh/deploy &lt;&lt;&lt; &quot;${{ secrets.SSH_KEY }}&quot;
+    ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy \
+      &quot;${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}&quot; 'echo ok'</pre>
+        </div>
+<div class="callout danger">这把钥是「能登服务器」的钥。给它单独账号、只允许做部署动作，不要用 root 全权钥 —— 一旦仓库或工作流被攻破，攻击者拿到的就是你的服务器。</div>
+<div class="callout tip">如果服务器在内网、或你根本不想对外开 SSH，用下一条的拉式，别硬开端口。</div>
+<h3>5. 链路四：云服务器 → GitHub（拉式部署）</h3>
+<p class="sop-p">方向反过来：服务器持私钥，主动去 GitHub 拉代码；GitHub 侧存的是 Deploy key —— 仓库级、可勾只读。这条路不需要把「能登服务器的钥匙」交给任何人。</p>
+<ol class="steps"><li>在服务器上生成一对钥（不要在本地生成再把私钥传过去）</li><li>公钥贴到仓库 Settings → Deploy keys；只有确实需要从服务器推代码时才勾 Allow write access</li><li>把仓库地址改成 SSH 形式，git pull 一次验证</li><li>用 cron 或 systemd timer 定时 pull；拉完做一次自检（版本哨兵、页面 200）</li></ol>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code"><span class="cm"># 服务器上</span>
+git remote set-url origin git@github.com:用户名/仓库.git
+git pull --ff-only &amp;&amp; echo deployed
+
+<span class="cm"># 定时器：systemd timer 比 cron 好在有日志、有状态</span>
+<span class="cm"># systemctl list-timers | grep deploy</span></pre>
+        </div>
+<div class="callout warn">同一把公钥只能给一个仓库当 Deploy key，加到第二个仓库会报 Key already in use。多个仓库就各生成一把，或改用 Fine-grained token。</div>
+<div class="callout tip">拉式的代价是有延迟（定时器间隔），换来的是「服务器不对外开放 SSH 也能上线」。两者不是优劣，是取舍。</div>
+<h3>6. GitHub 的五种凭据，作用域差得很远</h3>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>凭据</th><th>作用域</th><th>能做什么</th><th>典型用途</th><th>过期</th><th>泄露后果</th></tr></thead>
+          <tbody><tr><td>账号 SSH key</td><td>整个账号</td><td>推/拉该账号有权限的所有仓库</td><td>本机日常开发</td><td>自己管，默认不过期</td><td>全部仓库可写</td></tr><tr><td>Deploy key</td><td>单个仓库</td><td>只对该仓库；默认只读，可勾写</td><td>服务器拉代码</td><td>不过期</td><td>该仓库（只读则只能读）</td></tr><tr><td>Fine-grained token</td><td>选定仓库 + 细项权限</td><td>按勾选项，最细到 Contents 只读</td><td>脚本、CI 调 API</td><td>必须设过期</td><td>勾选范围内</td></tr><tr><td>Classic token</td><td>整个账号</td><td>按 scope：repo / workflow / admin:org…</td><td>老集成、个别 CLI</td><td>可以不设过期</td><td>接近账号级</td></tr><tr><td>GITHUB_TOKEN</td><td>当前仓库</td><td>由 workflow 里的 permissions 决定</td><td>Actions 内部操作</td><td>单次运行，跑完失效</td><td>无需管理</td></tr></tbody>
+        </table></div>
+<div class="callout tip">选型顺序：只需要一个仓库 → Deploy key；要调 API 或跨仓库 → Fine-grained token；老集成不认细粒度 → 才用 Classic；只在本机开发 → 账号 SSH key。能用小的就别用大的。</div>
+<h3>7. Secrets and variables：凭据在 CI 里怎么放</h3>
+<p class="sop-p">Secrets 分三级：组织级、仓库级、environment 级（可配审批）。加密保存，写入后不可回读，只在运行时注入。Variables 是明文，适合放主机名、路径这类不敏感配置。</p>
+<ol class="steps"><li>私钥、令牌、密码 → Secrets；域名、路径、用户名 → Variables</li><li>命名写清用途与归属，例如 SSH_KEY_WEB / SSH_HOST_WEB，别叫 KEY1</li><li>environment 级 secrets 适合生产：可要求人工审批后才注入</li><li>用完的临时凭据及时删，别让 Secrets 列表变成垃圾场</li></ol>
+<div class="callout warn">fork 来的 PR 拿不到 secrets —— 这是安全设计，不是 bug。反过来，pull_request_target 能让工作流拿到 secrets，因此它极其危险：千万不要在这种工作流里执行 PR 里的代码。</div>
+<div class="callout danger">GITHUB_TOKEN 虽然每次自动注入、跑完失效，但默认权限可能比你需要的宽。养成在 workflow 顶部写 permissions 的习惯，只给要用的那几项。</div>
+<div class="code-wrap">
+          <button class="copy" type="button" aria-label="复制命令">复制</button>
+          <pre class="code">permissions:/n  contents: read    # 只读代码就够，就不要写
+  pages: write      # 只有发布 Pages 时才需要
+  id-token: write</pre>
+        </div>
+<h3>8. 推式还是拉式：一句话判据</h3>
+<div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th></th><th>推式（Actions → 服务器）</th><th>拉式（服务器 → GitHub）</th></tr></thead>
+          <tbody><tr><td>谁持私钥</td><td>GitHub（存 Secrets）</td><td>服务器自己</td></tr><tr><td>要交出什么</td><td>一把能登服务器的私钥</td><td>一把只读 Deploy key 的公钥</td></tr><tr><td>实时性</td><td>推送即发，秒级</td><td>定时器轮询，分钟级</td></tr><tr><td>服务器要求</td><td>能被外网 SSH 进来</td><td>能出网访问 GitHub</td></tr><tr><td>失败面</td><td>私钥泄露 = 服务器失守；SSH 端口暴露</td><td>拉不到就停在旧版本</td></tr><tr><td>适合</td><td>单机、要即时、能管住 SSH 入口</td><td>多机、内网、不想开放端口</td></tr></tbody>
+        </table></div>
+<div class="callout tip">判据就一句：你愿意把「能登服务器的私钥」交给 GitHub 吗？愿意 → 推式；不愿意 → 拉式。</div>
+<h3>9. 轮换、吊销、台账</h3>
+<p class="sop-p">无痛轮换的核心是顺序：先加新的、再切换、验证通过、最后删旧的。反过来做，中间那几分钟就是一次事故。</p>
+<ol class="steps"><li>生成新钥，把新公钥加进对方（authorized_keys / SSH keys / Deploy keys）—— 此时新旧都能用</li><li>切换：让调用方改用新钥（config、Secrets、git remote 各改一处）</li><li>验证：该能做的能做成；再故意做一次越权操作，确认该拒的确实被拒</li><li>删除旧钥，并拿旧钥再试一次，确认真的进不去了 —— 不试这一步等于没吊销</li></ol>
+<p class="sop-p">泄露应急，顺序不要乱：先止血，再换钥，最后复盘。</p>
+<ol class="steps"><li>立刻吊销：GitHub 删 key / 删 token、服务器删 authorized_keys 那一行；必要时先关端口</li><li>换新钥并验证业务恢复</li><li>查日志：这把钥在有效期内被从哪些 IP 用过、做过什么</li><li>全仓搜索明文凭据（含历史提交）</li><li>写进台账：什么时候、哪把钥、怎么泄露的、改了什么</li></ol>
+<div class="callout danger">删掉文件不等于密钥失效。私钥一旦进过 git，就必须视为已泄露 —— 历史里还在，克隆的人手里也有。唯一正确的动作是吊销并重发。</div>
+<p class="sop-p">台账只记这些：用途、对应哪条链路、放在哪（服务器路径 / Secrets 名）、责任人、生成日期、轮换日期。绝不记密钥本体 —— 台账本身泄露时，不能变成第二份事故。</p>
+<h3>10. 一句话记住</h3>
+<blockquote class="sop-quote">谁拿私钥，谁就是发起方；对方只存锁。所以「这把钥匙能开哪扇门」，永远等于「它持在哪台机器上」。</blockquote>
+      </section>
+
       <section class="lsec" id="s5">
-        <h2><span class="i">04</span>产出物与验收<span class="n">做完怎么算过</span></h2>
+        <h2><span class="i">05</span>产出物与验收<span class="n">做完怎么算过</span></h2>
         <div class="kv2">
           <div class="kv">
             <h3>产出物</h3>
-            <p>密钥台账（不含密钥本体）</p>
+            <p>一张「谁能对什么做什么」的凭据地图 + 密钥台账（不含密钥本体）</p>
           </div>
           <div class="kv">
             <h3>验收判据</h3>
-            <div class="acc-line"><span class="chip h">可验</span><span>全仓搜索无明文密钥；吊销后旧密钥确认失效</span></div>
+            <div class="acc-line"><span class="chip h">可验</span><span>全仓搜索无明文密钥；吊销后旧密钥确认失效（旧钥再试一次真的进不去）</span></div>
+            <div class="acc-line"><span class="chip s">人评</span><span>指着任意一把钥匙，能说出它的方向、作用范围、以及泄露后最坏会发生什么</span></div>
           </div>
         </div>
       </section>
 
       <section class="lsec" id="s6">
-        <h2><span class="i">05</span>练习<span class="n">15 分钟内可做完</span></h2>
-        <div class="drill">换一把部署密钥，走完「生成 → 部署 → 验证 → 吊销旧的」全流程。</div>
+        <h2><span class="i">06</span>练习<span class="n">15 分钟内可做完</span></h2>
+        <div class="drill">换一把部署密钥，走完「生成 → 部署 → 验证 → 吊销旧的」全流程；最后拿旧钥再试一次，确认它真的进不去了。</div>
       </section>
 
       <section class="lsec" id="s7">
-        <h2><span class="i">06</span>最容易踩的坑</h2>
-        <div class="pit">私钥放在项目目录里被一起提交；密钥只存一份，丢了要重建整条链路<div class="cost">后果：密钥只存一份、也没人知道它在哪，丢了就得重建整条链路。</div></div>
+        <h2><span class="i">07</span>最容易踩的坑</h2>
+        <div class="pit">私钥放在项目目录里被一起提交；密钥只存一份，丢了要重建整条链路<div class="cost">后果：用账号级 SSH key 充当服务器部署钥，泄露一次等于该账号全部仓库加上那台服务器一起失守；密钥只存一份、也没人知道它在哪，丢了就得重建整条链路。</div></div>
       </section>
 
       <section class="lsec" id="s8">
-        <h2><span class="i">07</span>自检表<span class="n">进度存在本机浏览器</span></h2>
+        <h2><span class="i">08</span>自检表<span class="n">进度存在本机浏览器</span></h2>
         <div class="check-top">
-          <span class="ptxt" id="ptxt">0 / 6</span>
+          <span class="ptxt" id="ptxt">0 / 10</span>
           <span class="pbar"><i id="pbar"></i></span>
         </div>
         <ul class="check">
-          <li><input type="checkbox" id="c0" data-k="0"><label for="c0"><span class="grp">步骤</span>我已完成：列密钥台账：用途、持有人、轮换日期</label></li>
-          <li><input type="checkbox" id="c1" data-k="1"><label for="c1"><span class="grp">步骤</span>我已完成：生成新钥并部署到位</label></li>
-          <li><input type="checkbox" id="c2" data-k="2"><label for="c2"><span class="grp">步骤</span>我已完成：验证新钥可用后吊销旧钥</label></li>
-          <li><input type="checkbox" id="c3" data-k="3"><label for="c3"><span class="grp">步骤</span>我已完成：全仓搜一遍明文密钥</label></li>
-          <li><input type="checkbox" id="c4" data-k="4"><label for="c4"><span class="grp">验收</span>我能用命令证明：全仓搜索无明文密钥；吊销后旧密钥确认失效</label></li>
-          <li><input type="checkbox" id="c5" data-k="5"><label for="c5"><span class="grp">避坑</span>我确认没有出现：私钥放在项目目录里被一起提交；密钥只存一份，丢了要重建整条链路</label></li>
+          <li><input type="checkbox" id="c0" data-k="0"><label for="c0"><span class="grp">步骤</span>我已完成：画出四条链路：本机→服务器、本机→GitHub、GitHub Actions→服务器、服务器→GitHub</label></li>
+          <li><input type="checkbox" id="c1" data-k="1"><label for="c1"><span class="grp">步骤</span>我已完成：每条链路定凭据：发起方持私钥，对方存公钥或令牌；先确认方向再动手</label></li>
+          <li><input type="checkbox" id="c2" data-k="2"><label for="c2"><span class="grp">步骤</span>我已完成：能选细的不选粗：优先 Fine-grained token、只读 Deploy key，别一上来给账号级</label></li>
+          <li><input type="checkbox" id="c3" data-k="3"><label for="c3"><span class="grp">步骤</span>我已完成：生成并部署：先加新的，旧的先留着，直到新钥验证通过</label></li>
+          <li><input type="checkbox" id="c4" data-k="4"><label for="c4"><span class="grp">步骤</span>我已完成：验证要正反都测：该能做的能做成，该拒的确实被拒（只读钥推一次代码看是否失败）</label></li>
+          <li><input type="checkbox" id="c5" data-k="5"><label for="c5"><span class="grp">步骤</span>我已完成：写台账：用途、责任人、存放位置、轮换日期 —— 不记密钥本体</label></li>
+          <li><input type="checkbox" id="c6" data-k="6"><label for="c6"><span class="grp">步骤</span>我已完成：挑一把做轮换演练，最后拿旧钥再试一次确认失效</label></li>
+          <li><input type="checkbox" id="c7" data-k="7"><label for="c7"><span class="grp">验收</span>我能用命令证明：全仓搜索无明文密钥；吊销后旧密钥确认失效（旧钥再试一次真的进不去）</label></li>
+          <li><input type="checkbox" id="c8" data-k="8"><label for="c8"><span class="grp">验收</span>我能讲清：指着任意一把钥匙，能说出它的方向、作用范围、以及泄露后最坏会发生什么</label></li>
+          <li><input type="checkbox" id="c9" data-k="9"><label for="c9"><span class="grp">避坑</span>我确认没有出现：私钥放在项目目录里被一起提交；密钥只存一份，丢了要重建整条链路</label></li>
         </ul>
       </section>
 
       <section class="lsec" id="s9">
-        <h2><span class="i">08</span>本讲术语<span class="n"><a href="../../glossary/">全部 28 条</a></span></h2>
+        <h2><span class="i">09</span>本讲术语<span class="n"><a href="../../glossary/">全部 28 条</a></span></h2>
         <ul class="pts">
-          <li><b><a href="../../glossary/#g10">MCP</a></b>：一种让工具连接外部系统的标准接口：把仓库、云平台、文档服务接成可调用的能力。</li>
+          <li><b><a href="../../glossary/#g09">Deploy Key</a></b>：只对单个仓库有效的部署密钥，通常设为只读。</li>
           <li><b><a href="../../glossary/#g21">CI 与 Actions</a></b>：CI＝每次提交后自动跑构建与检查；GitHub Actions 是它的一种实现，配置写在 .github/workflows/。</li>
           <li><b><a href="../../glossary/#g22">Secrets</a></b>：仓库里加密保存的变量（如服务器地址与私钥），只在流水线运行时注入，不进代码。</li>
           <li><b><a href="../../glossary/#g23">轮换与吊销</a></b>：轮换＝定期换一把新密钥；吊销＝让旧的立刻失效。泄露时必须先吊销、再换新。</li>
@@ -182,8 +306,9 @@ ssh-keygen -lf ~/.ssh/deploy_new.pub     # 核对指纹再部署
         <ol class="toc">
           <li><a href="#s1">这一讲解决什么</a></li>
           <li><a href="#s2">为什么重要</a></li>
-          <li><a href="#s3">要讲清的 3 件事</a></li>
-          <li><a href="#s4">照着做：4 步</a></li>
+          <li><a href="#s3">要讲清的 6 件事</a></li>
+          <li><a href="#s4">照着做：7 步</a></li>
+          <li><a href="#sop">完整 SOP</a></li>
           <li><a href="#s5">产出物与验收</a></li>
           <li><a href="#s6">练习</a></li>
           <li><a href="#s7">最容易踩的坑</a></li>
@@ -197,7 +322,7 @@ ssh-keygen -lf ~/.ssh/deploy_new.pub     # 核对指纹再部署
           <li><a href="../../lessons/M20/">M20 后台形态选择</a></li>
           <li><a href="../../lessons/M21/">M21 数据库</a></li>
           <li><a href="../../lessons/M22/">M22 权限体系</a></li>
-          <li><a href="../../lessons/M23/" class="on" aria-current="page">M23 密钥管理</a></li>
+          <li><a href="../../lessons/M23/" class="on" aria-current="page">M23 密钥管理与凭据分层</a></li>
           <li><a href="../../lessons/M24/">M24 打通与连接</a></li>
         </ol>
       </div>
@@ -251,7 +376,7 @@ ssh-keygen -lf ~/.ssh/deploy_new.pub     # 核对指纹再部署
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.3.0</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.4.0</span>
         <a class="gh" href="https://github.com/WisdomHuang2020/web-training" target="_blank" rel="noopener noreferrer"><svg class="gh-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
       </span>
     </div>

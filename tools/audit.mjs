@@ -48,9 +48,11 @@ for (const file of pages) {
   else if (title.length < 8) add(file, `title 过短（${title.length} 字）`);
   else if (title.length > 70) add(file, `title 过长（${title.length} 字，搜索结果会被截断）`);
 
+  // noindex 页（后台等）本来就不进索引，description 的长短没有意义，只要求存在
+  const noindex = /name="robots"[^>]*noindex/i.test(head);
   if (!desc) add(file, '缺 meta description');
-  else if (desc.length < 45) add(file, `description 过短（${desc.length} 字）`);
-  else if (desc.length > 180) add(file, `description 过长（${desc.length} 字）`);
+  else if (!noindex && desc.length < 45) add(file, `description 过短（${desc.length} 字）`);
+  else if (!noindex && desc.length > 180) add(file, `description 过长（${desc.length} 字）`);
 
   if (!canon) add(file, '缺 canonical —— 多入口（裸域/www/Pages）时无法归并权重');
   else if (!canon.startsWith(SITE_ORIGIN)) add(file, `canonical 不是规范域：${canon}`);
@@ -118,6 +120,7 @@ if (fs.existsSync(sitemapPath)) {
   const listed = new Set([...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]));
   const missing = pages
     .filter(p => !p.endsWith('404.html'))
+    .filter(p => !/name="robots"[^>]*noindex/i.test(fs.readFileSync(p, 'utf8')))
     .map(p => {
       const rel = '/' + path.relative(SITE, p).replace(/\\/g, '/');
       // 目录式产物：/map/index.html 的公开地址是 /map，/index.html 是 /

@@ -51,6 +51,9 @@ const TERM_KEYS = {
   '服务器快照': ['快照'],
   '哨兵文件': ['哨兵'],
 };
+/** 行内强调：只认 **加粗**。先 esc 再替换，文字里的 < > 不会被当成标签 */
+const inline = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+
 function termsOf(mod) {
   const text = [mod.t, mod.q, mod.can, (mod.pts || []).join(''), mod.out, mod.drill, mod.pit].join(' ');
   return GLOSSARY
@@ -592,7 +595,7 @@ ${topbar({ base: '../../', current: '' })}
       <section class="lsec" id="s3">
         <h2><span class="i">${num()}</span>要讲清的 ${mod.pts.length} 件事<span class="n">核心要点</span></h2>
         <ul class="pts">
-          ${mod.pts.map(p => `<li>${esc(p)}</li>`).join('\n          ')}
+          ${mod.pts.map(p => `<li>${inline(p)}</li>`).join('\n          ')}
         </ul>
       </section>
 
@@ -978,7 +981,7 @@ function feedbackPage() {
   const base = '../';
   return `${head({
     title: '读者留言 · 从 0 到上线',
-    desc: '课程内容的纠错与补充渠道：发现哪一讲、哪一步与你的实际操作不符，可在此提交，仅作者可见。',
+    desc: '课程内容的纠错与补充渠道：发现哪一讲、哪一步与你的实际操作不符，可以在这里具体指出，仅作者可见。',
     prefix: base,
     canon: '/feedback',
   })}
@@ -1092,6 +1095,7 @@ ${topbar({ base, current: '' })}
 
 <section class="sec">
   <div class="shell">
+    <h1 class="page-h1">后台 · 读者留言</h1>
     <div class="fb-box" id="fb-admin">
       <div class="fb-alert" id="fb-alert" hidden></div>
 

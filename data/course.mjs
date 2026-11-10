@@ -16,7 +16,7 @@
  */
 
 export const META = {
-  "version": "v2.3.0",
+  "version": "v2.4.0",
   "date": "2026-11-09",
   "title": "从 0 到上线：网站建设实训课",
   "basis": "素材基准：llc-design-tool（构建型单页应用，CI 推送）与 wx-seastar（零构建多页站 + 内容后台）",
@@ -644,22 +644,29 @@ export const STAGES = [
       },
       {
         "no": "M23",
-        "t": "密钥管理",
-        "q": "密钥分层、轮换、应急",
-        "can": "15 分钟内完成一次密钥轮换",
+        "t": "密钥管理与凭据分层",
+        "q": "那么多把钥匙，哪把开哪扇门",
+        "can": "说清每类凭据的方向、范围与泄露后果，并在 15 分钟内完成一次轮换",
         "pts": [
-          "五类密钥：账号密钥 / 部署密钥 / CI Secrets / API Token / MCP 凭据",
-          "台账只记用途与日期，不记密钥本体",
-          "轮换周期与吊销流程；泄露应急五步"
+          "判断只看一条：**谁拿着私钥，谁就是发起方**。本机→服务器、本机→GitHub、Actions→服务器、服务器→GitHub，四条链路各有一把私钥，混了就等于把整台服务器交出去",
+          "公钥是锁、私钥是钥匙：同一把锁可以装到任意多扇门上（服务器的 authorized_keys、GitHub 的 SSH keys 里存的都是公钥），钥匙只有一把，且永不出本机",
+          "GitHub 五种凭据作用域完全不同：账号 SSH key（能推该账号**所有**仓库）、Deploy key（**单个**仓库、可只读）、Fine-grained token（选仓库选权限、必设过期）、Classic token（scope 粗、极易过宽）、GITHUB_TOKEN（单次运行、跑完失效）",
+          "推式部署要把「能登服务器的私钥」交给 GitHub 存在 Secrets；拉式部署让服务器自己来取，用只读 Deploy key。方向不同，风险面完全不同",
+          "Secrets 写入后**不可回读**，只在运行时注入；fork 来的 PR 拿不到 secrets；日志里被打码 ≠ 安全，该不打印就别打印",
+          "无痛轮换的顺序是「先加新的 → 切换 → 验证 → 再删旧的」，反过来做就是一次事故"
         ],
-        "out": "密钥台账（不含密钥本体）",
+        "out": "一张「谁能对什么做什么」的凭据地图 + 密钥台账（不含密钥本体）",
         "acc": [
           [
             "h",
-            "全仓搜索无明文密钥；吊销后旧密钥确认失效"
+            "全仓搜索无明文密钥；吊销后旧密钥确认失效（旧钥再试一次真的进不去）"
+          ],
+          [
+            "s",
+            "指着任意一把钥匙，能说出它的方向、作用范围、以及泄露后最坏会发生什么"
           ]
         ],
-        "drill": "换一把部署密钥，走完「生成 → 部署 → 验证 → 吊销旧的」全流程。",
+        "drill": "换一把部署密钥，走完「生成 → 部署 → 验证 → 吊销旧的」全流程；最后拿旧钥再试一次，确认它真的进不去了。",
         "pit": "私钥放在项目目录里被一起提交；密钥只存一份，丢了要重建整条链路",
         "p": [
           "B",
@@ -1290,9 +1297,9 @@ export const RICH = {
     "cost": "目录 777，任何人都能改网站内容——包括被入侵之后的攻击者。"
   },
   "M23": {
-    "why": "密钥的价值不在「有」，在「能换」。一把换不掉的密钥，等于一个永久后门；而轮换只要演练过一次，就没那么可怕。",
-    "cmd": "ssh-keygen -t ed25519 -f ~/.ssh/deploy_new -C \"deploy-2026\"\nssh-keygen -lf ~/.ssh/deploy_new.pub     # 核对指纹再部署\n# 部署并验证通过后，再吊销旧钥",
-    "cost": "密钥只存一份、也没人知道它在哪，丢了就得重建整条链路。"
+    "why": "密钥的价值不在「有」，在「知道它是哪扇门的」。同一把钥用错地方，代价从「少推一次代码」直接跳到「整台服务器失守」。而每把钥都能换——只要轮换演练过一次，就没那么可怕。",
+    "cmd": "# 生成一对，公钥交出去，私钥留本机（600）\nssh-keygen -t ed25519 -f ~/.ssh/deploy_new -C \"deploy-2026-11\"\nssh-keygen -lf ~/.ssh/deploy_new.pub      # 核对指纹再部署\n\n# 验完再吊销旧的：先加新、后删旧\nssh -i ~/.ssh/deploy_new -T git@github.com\nssh -i ~/.ssh/deploy_new root@你的服务器 \"echo ok\"",
+    "cost": "用账号级 SSH key 充当服务器部署钥，泄露一次等于该账号全部仓库加上那台服务器一起失守；密钥只存一份、也没人知道它在哪，丢了就得重建整条链路。"
   },
   "M24": {
     "why": "打通的反面不是「没打通」，是「打得太大」。给一个全权 token 最省事，但出事时既查不出是谁做的，也收不回来。",
@@ -1475,10 +1482,13 @@ export const STEPS = {
     "用低权账号试一次越权，确认失败"
   ],
   "M23": [
-    "列密钥台账：用途、持有人、轮换日期",
-    "生成新钥并部署到位",
-    "验证新钥可用后吊销旧钥",
-    "全仓搜一遍明文密钥"
+    "画出四条链路：本机→服务器、本机→GitHub、GitHub Actions→服务器、服务器→GitHub",
+    "每条链路定凭据：发起方持私钥，对方存公钥或令牌；先确认方向再动手",
+    "能选细的不选粗：优先 Fine-grained token、只读 Deploy key，别一上来给账号级",
+    "生成并部署：先加新的，旧的先留着，直到新钥验证通过",
+    "验证要正反都测：该能做的能做成，该拒的确实被拒（只读钥推一次代码看是否失败）",
+    "写台账：用途、责任人、存放位置、轮换日期 —— 不记密钥本体",
+    "挑一把做轮换演练，最后拿旧钥再试一次确认失效"
   ],
   "M24": [
     "画连接图：工具 → 服务器 / 仓库 / 外部服务",
@@ -1653,6 +1663,400 @@ export const PATH_COUNT = MODULES.reduce((acc, m) => {
  * 脱敏：本页对公众开放，发信账号、服务器 IP、内部目录名一律写成占位符。
  */
 export const SOP = {
+  "M23": {
+    "intro": "目标：把本机、GitHub、云服务器之间的每一把钥匙对上号 —— 谁持私钥、对方存什么、泄露后最坏怎样、怎么换掉它。",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "目标：把「本机、GitHub、云服务器」三者之间的钥匙理清楚 —— 每把钥是谁的、开哪扇门、泄露后最坏会怎样。这一讲只讲凭据本身；连成一张图和权限边界在 M24。"
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "学之前先接受一件事：密钥不是「一串要背下来的字符」，而是「一次身份声明」。所以每把钥都能用三个问题定位 —— 谁向谁证明？能做什么？泄露后炸多大？"
+      },
+      {
+        "type": "h",
+        "text": "0. 一条判断规则：谁拿私钥，谁就是发起方"
+      },
+      {
+        "type": "p",
+        "text": "密钥问题看起来乱，是因为习惯把它们当成一堆字符串。换个问法就清楚了：这条链路上，谁需要证明「我是我」？证明的那一方持私钥，被证明的那一方存公钥。"
+      },
+      {
+        "type": "table",
+        "head": [
+          "链路",
+          "谁持私钥",
+          "对方存什么",
+          "典型凭据",
+          "泄露后最坏结果"
+        ],
+        "rows": [
+          [
+            "本机 → 云服务器",
+            "本机",
+            "服务器 authorized_keys 里的公钥",
+            "SSH 密钥对",
+            "整台服务器，连同上面所有站点"
+          ],
+          [
+            "本机 → GitHub",
+            "本机",
+            "GitHub 账号里的公钥",
+            "账号 SSH key",
+            "该账号所有仓库可读可写"
+          ],
+          [
+            "GitHub Actions → 云服务器",
+            "GitHub（存在 Secrets）",
+            "服务器 authorized_keys 里的公钥",
+            "服务器私钥",
+            "同上，且每次运行都在用"
+          ],
+          [
+            "云服务器 → GitHub",
+            "服务器",
+            "仓库 Deploy key 里的公钥",
+            "Deploy key（可只读）",
+            "该仓库代码可读"
+          ]
+        ]
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "一句话记住：发起方不需要「被允许连出去」，只有接受方需要开一个入口。所以保护重点永远在持私钥的那一头。"
+      },
+      {
+        "type": "h",
+        "text": "1. 公钥与私钥：锁和钥匙"
+      },
+      {
+        "type": "p",
+        "text": "一对密钥里，公钥是锁、私钥是钥匙。锁可以复制无数把、装到任意多扇门上（服务器的 authorized_keys、GitHub 的 SSH keys 里存的全是锁）；钥匙只有一把，永远留在你手里，谁也不给。"
+      },
+      {
+        "type": "code",
+        "text": "# 一对一把，名字写清用途，别用默认 id_ed25519 到处复用\nssh-keygen -t ed25519 -f ~/.ssh/deploy_web -C \"deploy-web-2026-11\"\n\nls -l ~/.ssh/deploy_web*              # 私钥必须 600，公钥可以 644\nssh-keygen -lf ~/.ssh/deploy_web.pub  # 记下指纹，部署后核对是不是这一把"
+      },
+      {
+        "type": "note",
+        "kind": "warn",
+        "text": "私钥三条禁忌：不进 git、不发聊天工具、不贴在文档或截图里。公钥相反 —— 它本来就是给出去的东西，贴哪儿都行。"
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "一把钥对一个用途。多一把钥的代价是多一行 config，收益是出事时只炸一条链路，而不是全线。"
+      },
+      {
+        "type": "h",
+        "text": "2. 链路一：本机 → 云服务器"
+      },
+      {
+        "type": "p",
+        "text": "你在本机敲 ssh，本机是发起方、持私钥；服务器是接受方，它只做一件事：拿你交过的公钥验证「这次签名是不是那把钥匙签的」。它并不知道你是谁，只认钥匙。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "本机生成一对（见上一节），名字按用途取",
+          "把公钥写进服务器的 ~/.ssh/authorized_keys：ssh-copy-id 或手工追加，一行一把",
+          "立刻验证：ssh -i ~/.ssh/deploy_web root@你的服务器 \"echo ok\"，看到 ok 才算通",
+          "通了以后再考虑关掉密码登录；顺序反了会把自己锁在外面"
+        ]
+      },
+      {
+        "type": "code",
+        "text": "ssh-copy-id -i ~/.ssh/deploy_web.pub root@你的服务器\n\n# 多把钥时用 ~/.ssh/config 指定，不必每次 -i\n# Host web\n#   HostName 你的服务器\n#   User root\n#   IdentityFile ~/.ssh/deploy_web"
+      },
+      {
+        "type": "note",
+        "kind": "warn",
+        "text": "几个人共用 root、共用同一把钥，是运维里最常见的隐患：出事时日志里全是同一个身份，查不出是谁做的。至少做到一人一把，或每人一个独立账号。"
+      },
+      {
+        "type": "h",
+        "text": "3. 链路二：本机 → GitHub（账号级 SSH key）"
+      },
+      {
+        "type": "p",
+        "text": "把公钥贴进 GitHub 账号的 SSH keys 之后，这台机器就能推该账号有写权限的所有仓库。这是它和 Deploy key 最大的区别 —— 它是账号级的，不是仓库级的。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "复制公钥内容（.pub 结尾那个文件，整行，含开头的 ssh-ed25519）",
+          "GitHub → Settings → SSH and GPG keys → New SSH key，标题写清是哪台机器的",
+          "验证：ssh -T git@github.com，出现 Hi 你的用户名 就对了",
+          "仓库地址要用 SSH 形式（git@github.com:用户名/仓库.git）；HTTPS 走的是另一套凭据"
+        ]
+      },
+      {
+        "type": "code",
+        "text": "ssh -T git@github.com\n# Hi <你的用户名>! You've successfully authenticated, but GitHub does not provide shell access.\n# 看到这句 = 认证通过；Permission denied (publickey) = 公钥没贴对，或 ssh-agent 没加载"
+      },
+      {
+        "type": "note",
+        "kind": "danger",
+        "text": "不要把账号级 SSH key 拿到服务器上、或塞进 CI 的 Secrets 里。它一旦泄露，等于你所有仓库一起失守；而服务器通常只需要一个仓库，那就该用 Deploy key。"
+      },
+      {
+        "type": "h",
+        "text": "4. 链路三：GitHub Actions → 云服务器（推式部署）"
+      },
+      {
+        "type": "p",
+        "text": "工作流跑在 GitHub 的机器上，它要 ssh 进你的服务器 —— 这次发起方是 GitHub，所以私钥放进仓库的 Secrets，公钥写到服务器的 authorized_keys。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "生成一把专用钥，不加 passphrase —— 非交互使用没法输密码",
+          "公钥追加到服务器的 authorized_keys",
+          "私钥整段内容存到仓库 Settings → Secrets and variables → Actions，命名如 SSH_KEY",
+          "工作流里用它 ssh 或 rsync 到服务器；主机、用户名、路径一并放进 Secrets 或 vars",
+          "跑一次，确认日志里真的连上了 —— 不要只看那一步是不是绿的"
+        ]
+      },
+      {
+        "type": "code",
+        "text": "- name: 部署到服务器\n  run: |\n    install -m 600 /dev/stdin ~/.ssh/deploy <<< \"${{ secrets.SSH_KEY }}\"\n    ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy \\\n      \"${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}\" 'echo ok'"
+      },
+      {
+        "type": "note",
+        "kind": "danger",
+        "text": "这把钥是「能登服务器」的钥。给它单独账号、只允许做部署动作，不要用 root 全权钥 —— 一旦仓库或工作流被攻破，攻击者拿到的就是你的服务器。"
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "如果服务器在内网、或你根本不想对外开 SSH，用下一条的拉式，别硬开端口。"
+      },
+      {
+        "type": "h",
+        "text": "5. 链路四：云服务器 → GitHub（拉式部署）"
+      },
+      {
+        "type": "p",
+        "text": "方向反过来：服务器持私钥，主动去 GitHub 拉代码；GitHub 侧存的是 Deploy key —— 仓库级、可勾只读。这条路不需要把「能登服务器的钥匙」交给任何人。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "在服务器上生成一对钥（不要在本地生成再把私钥传过去）",
+          "公钥贴到仓库 Settings → Deploy keys；只有确实需要从服务器推代码时才勾 Allow write access",
+          "把仓库地址改成 SSH 形式，git pull 一次验证",
+          "用 cron 或 systemd timer 定时 pull；拉完做一次自检（版本哨兵、页面 200）"
+        ]
+      },
+      {
+        "type": "code",
+        "text": "# 服务器上\ngit remote set-url origin git@github.com:用户名/仓库.git\ngit pull --ff-only && echo deployed\n\n# 定时器：systemd timer 比 cron 好在有日志、有状态\n# systemctl list-timers | grep deploy"
+      },
+      {
+        "type": "note",
+        "kind": "warn",
+        "text": "同一把公钥只能给一个仓库当 Deploy key，加到第二个仓库会报 Key already in use。多个仓库就各生成一把，或改用 Fine-grained token。"
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "拉式的代价是有延迟（定时器间隔），换来的是「服务器不对外开放 SSH 也能上线」。两者不是优劣，是取舍。"
+      },
+      {
+        "type": "h",
+        "text": "6. GitHub 的五种凭据，作用域差得很远"
+      },
+      {
+        "type": "table",
+        "head": [
+          "凭据",
+          "作用域",
+          "能做什么",
+          "典型用途",
+          "过期",
+          "泄露后果"
+        ],
+        "rows": [
+          [
+            "账号 SSH key",
+            "整个账号",
+            "推/拉该账号有权限的所有仓库",
+            "本机日常开发",
+            "自己管，默认不过期",
+            "全部仓库可写"
+          ],
+          [
+            "Deploy key",
+            "单个仓库",
+            "只对该仓库；默认只读，可勾写",
+            "服务器拉代码",
+            "不过期",
+            "该仓库（只读则只能读）"
+          ],
+          [
+            "Fine-grained token",
+            "选定仓库 + 细项权限",
+            "按勾选项，最细到 Contents 只读",
+            "脚本、CI 调 API",
+            "必须设过期",
+            "勾选范围内"
+          ],
+          [
+            "Classic token",
+            "整个账号",
+            "按 scope：repo / workflow / admin:org…",
+            "老集成、个别 CLI",
+            "可以不设过期",
+            "接近账号级"
+          ],
+          [
+            "GITHUB_TOKEN",
+            "当前仓库",
+            "由 workflow 里的 permissions 决定",
+            "Actions 内部操作",
+            "单次运行，跑完失效",
+            "无需管理"
+          ]
+        ]
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "选型顺序：只需要一个仓库 → Deploy key；要调 API 或跨仓库 → Fine-grained token；老集成不认细粒度 → 才用 Classic；只在本机开发 → 账号 SSH key。能用小的就别用大的。"
+      },
+      {
+        "type": "h",
+        "text": "7. Secrets and variables：凭据在 CI 里怎么放"
+      },
+      {
+        "type": "p",
+        "text": "Secrets 分三级：组织级、仓库级、environment 级（可配审批）。加密保存，写入后不可回读，只在运行时注入。Variables 是明文，适合放主机名、路径这类不敏感配置。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "私钥、令牌、密码 → Secrets；域名、路径、用户名 → Variables",
+          "命名写清用途与归属，例如 SSH_KEY_WEB / SSH_HOST_WEB，别叫 KEY1",
+          "environment 级 secrets 适合生产：可要求人工审批后才注入",
+          "用完的临时凭据及时删，别让 Secrets 列表变成垃圾场"
+        ]
+      },
+      {
+        "type": "note",
+        "kind": "warn",
+        "text": "fork 来的 PR 拿不到 secrets —— 这是安全设计，不是 bug。反过来，pull_request_target 能让工作流拿到 secrets，因此它极其危险：千万不要在这种工作流里执行 PR 里的代码。"
+      },
+      {
+        "type": "note",
+        "kind": "danger",
+        "text": "GITHUB_TOKEN 虽然每次自动注入、跑完失效，但默认权限可能比你需要的宽。养成在 workflow 顶部写 permissions 的习惯，只给要用的那几项。"
+      },
+      {
+        "type": "code",
+        "text": "permissions:/n  contents: read    # 只读代码就够，就不要写\n  pages: write      # 只有发布 Pages 时才需要\n  id-token: write"
+      },
+      {
+        "type": "h",
+        "text": "8. 推式还是拉式：一句话判据"
+      },
+      {
+        "type": "table",
+        "head": [
+          "",
+          "推式（Actions → 服务器）",
+          "拉式（服务器 → GitHub）"
+        ],
+        "rows": [
+          [
+            "谁持私钥",
+            "GitHub（存 Secrets）",
+            "服务器自己"
+          ],
+          [
+            "要交出什么",
+            "一把能登服务器的私钥",
+            "一把只读 Deploy key 的公钥"
+          ],
+          [
+            "实时性",
+            "推送即发，秒级",
+            "定时器轮询，分钟级"
+          ],
+          [
+            "服务器要求",
+            "能被外网 SSH 进来",
+            "能出网访问 GitHub"
+          ],
+          [
+            "失败面",
+            "私钥泄露 = 服务器失守；SSH 端口暴露",
+            "拉不到就停在旧版本"
+          ],
+          [
+            "适合",
+            "单机、要即时、能管住 SSH 入口",
+            "多机、内网、不想开放端口"
+          ]
+        ]
+      },
+      {
+        "type": "note",
+        "kind": "tip",
+        "text": "判据就一句：你愿意把「能登服务器的私钥」交给 GitHub 吗？愿意 → 推式；不愿意 → 拉式。"
+      },
+      {
+        "type": "h",
+        "text": "9. 轮换、吊销、台账"
+      },
+      {
+        "type": "p",
+        "text": "无痛轮换的核心是顺序：先加新的、再切换、验证通过、最后删旧的。反过来做，中间那几分钟就是一次事故。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "生成新钥，把新公钥加进对方（authorized_keys / SSH keys / Deploy keys）—— 此时新旧都能用",
+          "切换：让调用方改用新钥（config、Secrets、git remote 各改一处）",
+          "验证：该能做的能做成；再故意做一次越权操作，确认该拒的确实被拒",
+          "删除旧钥，并拿旧钥再试一次，确认真的进不去了 —— 不试这一步等于没吊销"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "泄露应急，顺序不要乱：先止血，再换钥，最后复盘。"
+      },
+      {
+        "type": "steps",
+        "items": [
+          "立刻吊销：GitHub 删 key / 删 token、服务器删 authorized_keys 那一行；必要时先关端口",
+          "换新钥并验证业务恢复",
+          "查日志：这把钥在有效期内被从哪些 IP 用过、做过什么",
+          "全仓搜索明文凭据（含历史提交）",
+          "写进台账：什么时候、哪把钥、怎么泄露的、改了什么"
+        ]
+      },
+      {
+        "type": "note",
+        "kind": "danger",
+        "text": "删掉文件不等于密钥失效。私钥一旦进过 git，就必须视为已泄露 —— 历史里还在，克隆的人手里也有。唯一正确的动作是吊销并重发。"
+      },
+      {
+        "type": "p",
+        "text": "台账只记这些：用途、对应哪条链路、放在哪（服务器路径 / Secrets 名）、责任人、生成日期、轮换日期。绝不记密钥本体 —— 台账本身泄露时，不能变成第二份事故。"
+      },
+      {
+        "type": "h",
+        "text": "10. 一句话记住"
+      },
+      {
+        "type": "quote",
+        "text": "谁拿私钥，谁就是发起方；对方只存锁。所以「这把钥匙能开哪扇门」，永远等于「它持在哪台机器上」。"
+      }
+    ]
+  },
   M31: {
     intro: '目标：官网收到客户留言后自动发邮件到指定收件箱，不用天天登后台翻。适用范围：每一台对外提供本站服务的机器都要配一次——少配一台，那台上的留言就不发信。',
     blocks: [

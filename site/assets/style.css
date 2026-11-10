@@ -315,6 +315,11 @@ code {
 .mod .tags i.q { color: var(--accent-light); border-color: rgba(245, 158, 11, .35); }
 .mod.done .no::after { content: " ✓"; color: var(--success); }
 
+.page-h1 {
+  font-size: 22px; font-weight: 700; letter-spacing: -.01em;
+  color: var(--text); margin: 8px 0 18px;
+}
+
 /* ============================ 首页阶段索引 ============================ */
 /* 首页只放 9 行，31 张卡在 /map。列表做成一张卡片里的行，行与行之间是细线隔开。 */
 .stage-index { border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); overflow: hidden; }
