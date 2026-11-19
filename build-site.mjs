@@ -577,6 +577,371 @@ const FIGURES = {
     <text x="208" y="134" text-anchor="middle" font-size="9" fill="var(--text-3)">3 栏</text>
     <text x="370" y="134" text-anchor="middle" font-size="9" fill="var(--text-3)">6 栏</text>
   </svg>`,
+
+  /* ---- 布局与结构（D2）---- */
+  '容器（Container）': `<svg viewBox="0 0 480 148" role="img" aria-label="固定宽度容器示意">
+    <rect x="6" y="10" width="468" height="128" rx="8" fill="none" stroke="var(--border)" stroke-width="1.3" stroke-dasharray="4 3"/>
+    <text x="16" y="25" font-size="9" fill="var(--text-3)">视口 viewport</text>
+    <rect x="96" y="34" width="288" height="78" rx="6" fill="var(--brand-light)" opacity=".11" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <text x="240" y="58" text-anchor="middle" font-size="11" fill="var(--brand-light)">容器 Container</text>
+    <text x="240" y="74" text-anchor="middle" font-size="9" fill="var(--text-2)">max-width: 1200px; margin: auto</text>
+    <g fill="var(--text-3)" opacity=".26">
+      <rect x="110" y="88" width="60" height="14" rx="3"/><rect x="178" y="88" width="60" height="14" rx="3"/>
+      <rect x="246" y="88" width="60" height="14" rx="3"/><rect x="314" y="88" width="56" height="14" rx="3"/>
+    </g>
+    <path d="M96 122h288M96 118v8M384 118v8" stroke="var(--text-3)" stroke-width="1"/>
+    <text x="240" y="140" text-anchor="middle" font-size="9" fill="var(--text-3)">视口越宽，两侧留白越多；内容宽度不跟着无限拉长</text>
+  </svg>`,
+
+  '面包屑（Breadcrumb）': `<svg viewBox="0 0 480 148" role="img" aria-label="面包屑导航示意">
+    <rect x="6" y="6" width="468" height="136" rx="9" fill="var(--surface-2)" opacity=".45" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="20" y="34" font-size="11" fill="var(--text-3)">首页</text>
+    <path d="M50 29l5 5-5 5" stroke="var(--text-3)" stroke-width="1.4" fill="none"/>
+    <text x="64" y="34" font-size="11" fill="var(--text-3)">课程</text>
+    <path d="M94 29l5 5-5 5" stroke="var(--text-3)" stroke-width="1.4" fill="none"/>
+    <text x="108" y="34" font-size="11" fill="var(--text-3)">M23</text>
+    <path d="M140 29l5 5-5 5" stroke="var(--text-3)" stroke-width="1.4" fill="none"/>
+    <text x="154" y="34" font-size="11" fill="var(--brand-light)">术语表</text>
+    <path d="M20 50h440" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="20" y="72" font-size="10" fill="var(--text-2)">除了最后一级，每一级都是能点回去的链接</text>
+    <text x="154" y="72" font-size="10" fill="var(--brand-light)">← 当前位置，不可点</text>
+    <g fill="var(--text-3)" opacity=".24">
+      <rect x="20" y="88" width="180" height="9" rx="4"/><rect x="20" y="104" width="420" height="7" rx="3.5"/>
+      <rect x="20" y="118" width="380" height="7" rx="3.5"/>
+    </g>
+  </svg>`,
+
+  '抽屉（Drawer）': `<svg viewBox="0 0 480 148" role="img" aria-label="侧边抽屉示意">
+    <rect x="6" y="10" width="468" height="128" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <rect x="6" y="10" width="314" height="128" rx="8" fill="#000" opacity=".34"/>
+    <g fill="var(--text-3)" opacity=".3">
+      <rect x="20" y="28" width="120" height="9" rx="4"/><rect x="20" y="48" width="240" height="7" rx="3.5"/>
+      <rect x="20" y="64" width="210" height="7" rx="3.5"/><rect x="20" y="80" width="228" height="7" rx="3.5"/>
+    </g>
+    <path d="M292 74h26m0 0-8-7m8 7-8 7" stroke="var(--brand-light)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <rect x="322" y="10" width="152" height="128" rx="8" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.5"/>
+    <text x="336" y="34" font-size="10.5" fill="var(--brand-light)">抽屉 Drawer</text>
+    <path d="M455 25l8 8M463 25l-8 8" stroke="var(--text-3)" stroke-width="1.6" stroke-linecap="round"/>
+    <g fill="var(--text-3)" opacity=".3">
+      <rect x="336" y="50" width="110" height="7" rx="3.5"/><rect x="336" y="66" width="92" height="7" rx="3.5"/>
+      <rect x="336" y="82" width="104" height="7" rx="3.5"/>
+    </g>
+    <text x="398" y="124" text-anchor="middle" font-size="9" fill="var(--text-3)">从边缘滑入，不跳页</text>
+  </svg>`,
+
+  '手风琴 / 折叠面板（Accordion）': `<svg viewBox="0 0 480 148" role="img" aria-label="折叠面板展开与收起示意">
+    <rect x="26" y="12" width="428" height="30" rx="6" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="40" y="32" font-size="10.5" fill="var(--text-2)">1. 什么是门禁？</text>
+    <path d="M436 22v10M431 27h10" stroke="var(--text-3)" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="26" y="48" width="428" height="30" rx="6" fill="var(--brand-light)" opacity=".13" stroke="var(--brand-light)" stroke-width="1.3"/>
+    <text x="40" y="68" font-size="10.5" fill="var(--brand-light)">2. 怎么过门禁？</text>
+    <path d="M431 63h10" stroke="var(--brand-light)" stroke-width="1.5" stroke-linecap="round"/>
+    <g fill="var(--text-3)" opacity=".3">
+      <rect x="42" y="88" width="396" height="6" rx="3"/><rect x="42" y="100" width="350" height="6" rx="3"/>
+    </g>
+    <rect x="26" y="114" width="428" height="26" rx="6" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="40" y="131" font-size="10.5" fill="var(--text-2)">3. 门禁失败怎么办？</text>
+    <path d="M436 121v10M431 126h10" stroke="var(--text-3)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+
+  '选项卡（Tabs）': `<svg viewBox="0 0 480 148" role="img" aria-label="选项卡切换示意">
+    <path d="M30 40h110M150 40h100M260 40h100" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="85" y="36" text-anchor="middle" font-size="10.5" fill="var(--text-3)">概览</text>
+    <text x="200" y="36" text-anchor="middle" font-size="10.5" fill="var(--brand-light)">步骤</text>
+    <path d="M150 42h100" stroke="var(--brand-light)" stroke-width="2.4"/>
+    <text x="310" y="36" text-anchor="middle" font-size="10.5" fill="var(--text-3)">验收</text>
+    <rect x="30" y="54" width="420" height="80" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="44" y="76" font-size="10.5" fill="var(--text-2)">选中「步骤」时，下面只显示步骤面板</text>
+    <g fill="var(--text-3)" opacity=".28">
+      <rect x="44" y="88" width="380" height="7" rx="3.5"/><rect x="44" y="102" width="340" height="7" rx="3.5"/>
+      <rect x="44" y="116" width="286" height="7" rx="3.5"/>
+    </g>
+    <text x="240" y="145" text-anchor="middle" font-size="9" fill="var(--text-3)">同一时刻只露一个面板</text>
+  </svg>`,
+
+  '断点（Breakpoint）': `<svg viewBox="0 0 480 148" role="img" aria-label="响应式断点示意">
+    <rect x="14" y="26" width="92" height="82" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <text x="60" y="72" text-anchor="middle" font-size="10" fill="var(--text-3)">1 栏</text>
+    <text x="60" y="124" text-anchor="middle" font-size="9" fill="var(--text-3)">&lt; 768</text>
+    <rect x="132" y="26" width="130" height="82" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <text x="197" y="72" text-anchor="middle" font-size="10" fill="var(--text-3)">2 栏</text>
+    <text x="197" y="124" text-anchor="middle" font-size="9" fill="var(--brand-light)">≥ 768</text>
+    <rect x="288" y="26" width="178" height="82" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <text x="377" y="72" text-anchor="middle" font-size="10" fill="var(--text-3)">3 栏</text>
+    <text x="377" y="124" text-anchor="middle" font-size="9" fill="var(--brand-light)">≥ 1024</text>
+    <path d="M112 16v100M270 16v100" stroke="var(--brand-light)" stroke-width="1.2" stroke-dasharray="3 3" opacity=".7"/>
+    <text x="240" y="10" text-anchor="middle" font-size="9" fill="var(--text-3)">断点是「布局换挡」的宽度，不是设备型号</text>
+  </svg>`,
+
+  '骨架屏（Skeleton Screen）': `<svg viewBox="0 0 480 148" role="img" aria-label="骨架屏占位示意">
+    <rect x="10" y="14" width="200" height="120" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="110" y="32" text-anchor="middle" font-size="9.5" fill="var(--text-3)">加载中：骨架屏</text>
+    <rect x="24" y="44" width="56" height="56" rx="6" fill="var(--text-3)" opacity=".25"/>
+    <g fill="var(--text-3)" opacity=".25"><rect x="92" y="48" width="100" height="8" rx="4"/><rect x="92" y="64" width="76" height="8" rx="4"/><rect x="24" y="112" width="168" height="8" rx="4"/></g>
+    <path d="M226 74h28m0 0-8-7m8 7-8 7" stroke="var(--brand-light)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <rect x="270" y="14" width="200" height="120" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="370" y="32" text-anchor="middle" font-size="9.5" fill="var(--text-3)">加载完：真实内容</text>
+    <rect x="284" y="44" width="56" height="56" rx="6" fill="var(--brand-light)" opacity=".3"/>
+    <circle cx="312" cy="68" r="9" fill="var(--brand-light)" opacity=".45"/>
+    <g fill="var(--text-2)" opacity=".65"><rect x="352" y="48" width="100" height="8" rx="4"/><rect x="352" y="64" width="76" height="8" rx="4"/><rect x="284" y="112" width="168" height="8" rx="4"/></g>
+    <text x="370" y="145" text-anchor="middle" font-size="9" fill="var(--text-3)">先给形状，避免内容到位时页面猛地一跳</text>
+  </svg>`,
+
+  /* ---- 排版与字体（D3）---- */
+  '基线（Baseline）': `<svg viewBox="0 0 480 148" role="img" aria-label="字体基线与上下伸部示意">
+    <g stroke-dasharray="4 4" stroke-width="1">
+      <path d="M24 44h400" stroke="var(--text-3)" opacity=".5"/>
+      <path d="M24 62h400" stroke="var(--brand-light)" opacity=".6"/>
+      <path d="M24 90h400" stroke="var(--brand-light)" stroke-width="1.6"/>
+      <path d="M24 106h400" stroke="var(--text-3)" opacity=".5"/>
+    </g>
+    <text x="40" y="94" font-size="44" fill="var(--text)">Hg 网</text>
+    <text x="440" y="40" text-anchor="end" font-size="9" fill="var(--text-3)">上伸部线 Ascender</text>
+    <text x="440" y="58" text-anchor="end" font-size="9" fill="var(--brand-light)">x-height 线</text>
+    <text x="440" y="86" text-anchor="end" font-size="9.5" fill="var(--brand-light)">基线 Baseline</text>
+    <text x="440" y="120" text-anchor="end" font-size="9" fill="var(--text-3)">下伸部线 Descender</text>
+    <text x="24" y="136" font-size="9" fill="var(--text-3)">几种字号混排时，都贴着同一条基线走，才不会飘</text>
+  </svg>`,
+
+  '行高（Leading / Line-height）': `<svg viewBox="0 0 480 148" role="img" aria-label="行高示意">
+    <g fill="var(--text-2)" opacity=".8">
+      <rect x="40" y="26" width="230" height="9" rx="4"/><rect x="40" y="62" width="286" height="9" rx="4"/>
+      <rect x="40" y="98" width="204" height="9" rx="4"/>
+    </g>
+    <g stroke="var(--brand-light)" stroke-width="1.2" fill="none">
+      <path d="M340 26v36m0 0-5-8m5 8 5-8"/><path d="M340 62v36m0 0-5-8m5 8 5-8"/>
+    </g>
+    <text x="356" y="48" font-size="10" fill="var(--brand-light)">line-height: 1.6</text>
+    <text x="356" y="84" font-size="10" fill="var(--brand-light)">= 字号 × 倍数</text>
+    <path d="M40 14v116M40 14h8M40 130h8" stroke="var(--text-3)" stroke-width="1"/>
+    <text x="40" y="143" font-size="9" fill="var(--text-3)">量的是两行同一位置的间距，不是字与字之间的空隙</text>
+  </svg>`,
+
+  '多行截断（Line Clamp）': `<svg viewBox="0 0 480 148" role="img" aria-label="多行截断示意">
+    <rect x="34" y="16" width="278" height="112" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <g fill="var(--text-2)" opacity=".6">
+      <rect x="50" y="34" width="244" height="8" rx="4"/><rect x="50" y="54" width="244" height="8" rx="4"/>
+    </g>
+    <rect x="50" y="74" width="196" height="8" rx="4" fill="var(--text-2)" opacity=".6"/>
+    <text x="250" y="82" font-size="11" fill="var(--brand-light)">…</text>
+    <path d="M50 96h244" stroke="var(--brand-light)" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <text x="172" y="115" text-anchor="middle" font-size="9" fill="var(--text-3)">第 3 行之后不显示了</text>
+    <text x="330" y="52" font-size="10" fill="var(--text-2)">display: -webkit-box</text>
+    <text x="330" y="72" font-size="10" fill="var(--text-2)">-webkit-line-clamp: 3</text>
+    <text x="330" y="92" font-size="10" fill="var(--text-2)">overflow: hidden</text>
+    <text x="330" y="118" font-size="9" fill="var(--text-3)">别把关键信息藏进去</text>
+  </svg>`,
+
+  /* ---- 技术实现与文件（D4）---- */
+  '懒加载（Lazy Loading）': `<svg viewBox="0 0 480 148" role="img" aria-label="首屏外图片延迟加载示意">
+    <rect x="18" y="10" width="176" height="128" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1.3"/>
+    <path d="M18 76h176" stroke="var(--brand-light)" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <text x="30" y="26" font-size="9" fill="var(--brand-light)">视口之内：立刻加载</text>
+    <g fill="var(--brand-light)" opacity=".3"><rect x="30" y="34" width="152" height="34" rx="4"/><rect x="30" y="82" width="152" height="34" rx="4"/></g>
+    <text x="30" y="70" font-size="9" fill="var(--text-3)">── 首屏边界 ──</text>
+    <g fill="none" stroke="var(--text-3)" stroke-width="1.2" stroke-dasharray="4 3"><rect x="30" y="82" width="152" height="34" rx="4"/></g>
+    <text x="30" y="130" font-size="9" fill="var(--text-3)">视口之外：占位，先不加载</text>
+    <path d="M212 98h36m0 0-8-7m8 7-8 7" stroke="var(--brand-light)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <text x="264" y="60" font-size="10" fill="var(--text-2)">滚动到这里</text>
+    <text x="264" y="80" font-size="10" fill="var(--text-2)">才发图片请求</text>
+    <text x="264" y="108" font-size="10" fill="var(--brand-light)">loading="lazy"</text>
+    <text x="264" y="130" font-size="9" fill="var(--text-3)">首屏大图别懒加载</text>
+  </svg>`,
+
+  '响应式图片（Responsive Images / srcset）': `<svg viewBox="0 0 480 148" role="img" aria-label="srcset 按屏幕挑选图片示意">
+    <rect x="12" y="28" width="160" height="88" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="26" y="48" font-size="10" fill="var(--brand-light)">img srcset=</text>
+    <text x="26" y="66" font-size="9.5" fill="var(--text-2)">small.jpg 480w,</text>
+    <text x="26" y="82" font-size="9.5" fill="var(--text-2)">big.jpg 960w</text>
+    <text x="26" y="104" font-size="9.5" fill="var(--text-3)">sizes="(max-width:600px)</text>
+    <path d="M182 72h32m0 0-8-7m8 7-8 7" stroke="var(--brand-light)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <text x="232" y="28" font-size="9.5" fill="var(--text-3)">浏览器按视口宽度和 DPR 自己挑</text>
+    <g stroke="var(--border)" stroke-width="1.2" fill="var(--surface-2)">
+      <rect x="232" y="40" width="72" height="34" rx="5"/><rect x="316" y="40" width="72" height="34" rx="5"/><rect x="400" y="40" width="68" height="34" rx="5"/>
+    </g>
+    <text x="268" y="62" text-anchor="middle" font-size="9" fill="var(--text-3)">480w</text>
+    <text x="352" y="62" text-anchor="middle" font-size="9" fill="var(--brand-light)">960w ✓</text>
+    <text x="434" y="62" text-anchor="middle" font-size="9" fill="var(--text-3)">2x</text>
+    <text x="336" y="98" text-anchor="middle" font-size="10" fill="var(--text-2)">只下载被选中的那一张</text>
+    <text x="336" y="124" text-anchor="middle" font-size="9" fill="var(--text-3)">不是 CSS 把大图缩小显示</text>
+  </svg>`,
+
+  '文档对象模型（DOM）': `<svg viewBox="0 0 480 148" role="img" aria-label="HTML 字符串解析成 DOM 树示意">
+    <rect x="10" y="26" width="190" height="96" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="24" y="48" font-size="10" fill="var(--brand-light)">&lt;main&gt;</text>
+    <text x="38" y="68" font-size="10" fill="var(--text-2)">&lt;h1&gt;标题&lt;/h1&gt;</text>
+    <text x="24" y="88" font-size="10" fill="var(--brand-light)">&lt;/main&gt;</text>
+    <text x="24" y="110" font-size="9" fill="var(--text-3)">源码：一段文本</text>
+    <path d="M214 74h36m0 0-8-7m8 7-8 7" stroke="var(--brand-light)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <text x="232" y="62" text-anchor="middle" font-size="9" fill="var(--text-3)">解析</text>
+    <g stroke="var(--brand-light)" stroke-width="1.2" fill="none">
+      <path d="M300 40v20M300 60h-56M300 60h56M244 60v16M356 60v16"/>
+    </g>
+    <rect x="274" y="24" width="52" height="18" rx="4" fill="var(--brand-light)" opacity=".2"/>
+    <text x="300" y="37" text-anchor="middle" font-size="9" fill="var(--brand-light)">main</text>
+    <rect x="206" y="76" width="74" height="18" rx="4" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="243" y="89" text-anchor="middle" font-size="9" fill="var(--text-2)">h1</text>
+    <rect x="322" y="76" width="68" height="18" rx="4" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="356" y="89" text-anchor="middle" font-size="9" fill="var(--text-2)">文本</text>
+    <text x="300" y="122" text-anchor="middle" font-size="9" fill="var(--text-3)">DOM：能脚本操作的树，JS 改的是树不是源码</text>
+  </svg>`,
+
+  /* ---- 交互、状态与无障碍（D5）---- */
+  '交互状态（Interaction State）': `<svg viewBox="0 0 480 148" role="img" aria-label="按钮四种交互状态示意">
+    <rect x="16" y="34" width="98" height="40" rx="7" fill="var(--brand-light)" opacity=".85"/>
+    <text x="65" y="59" text-anchor="middle" font-size="10.5" fill="#04211d" font-weight="600">默认 Default</text>
+    <text x="65" y="94" text-anchor="middle" font-size="9" fill="var(--text-3)">平时长这样</text>
+    <rect x="138" y="34" width="98" height="40" rx="7" fill="var(--brand-light)" stroke="#fff" stroke-width="2"/>
+    <text x="187" y="59" text-anchor="middle" font-size="10.5" fill="#04211d" font-weight="600">悬停 Hover</text>
+    <text x="187" y="94" text-anchor="middle" font-size="9" fill="var(--text-3)">鼠标移上去</text>
+    <rect x="260" y="34" width="98" height="40" rx="7" fill="var(--brand-light)" opacity=".5" transform="translate(1 2)"/>
+    <text x="309" y="59" text-anchor="middle" font-size="10.5" fill="var(--text)" font-weight="600">按下 Active</text>
+    <text x="309" y="94" text-anchor="middle" font-size="9" fill="var(--text-3)">真被点到了</text>
+    <rect x="382" y="34" width="82" height="40" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="423" y="59" text-anchor="middle" font-size="10.5" fill="var(--text-3)">禁用</text>
+    <text x="423" y="94" text-anchor="middle" font-size="9" fill="var(--text-3)">点了没反应</text>
+    <text x="240" y="130" text-anchor="middle" font-size="9.5" fill="var(--text-2)">四种状态都要设计；只画「默认」，上线后就是一堆没反馈的按钮</text>
+  </svg>`,
+
+  '聚焦 / 焦点环（Focus / Focus Ring）': `<svg viewBox="0 0 480 148" role="img" aria-label="键盘焦点环示意">
+    <rect x="42" y="28" width="84" height="28" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="84" y="47" text-anchor="middle" font-size="10" fill="var(--text-3)">上一个</text>
+    <path d="M136 42h30m0 0-8-6m8 6-8 6" stroke="var(--brand-light)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <rect x="176" y="22" width="108" height="40" rx="8" fill="var(--brand-light)" opacity=".18" stroke="var(--brand-light)" stroke-width="2.4" stroke-dasharray="5 3"/>
+    <rect x="182" y="28" width="96" height="28" rx="6" fill="var(--brand-light)" opacity=".8"/>
+    <text x="230" y="47" text-anchor="middle" font-size="10.5" fill="#04211d" font-weight="600">当前焦点</text>
+    <path d="M294 42h30m0 0-8-6m8 6-8 6" stroke="var(--text-3)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <rect x="334" y="28" width="84" height="28" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="376" y="47" text-anchor="middle" font-size="10" fill="var(--text-3)">下一个</text>
+    <rect x="196" y="88" width="68" height="26" rx="5" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="230" y="106" text-anchor="middle" font-size="11" fill="var(--text-2)">Tab</text>
+    <text x="240" y="138" text-anchor="middle" font-size="9.5" fill="var(--text-3)">焦点环告诉键盘用户「现在轮到谁」；别只为了好看把它去掉</text>
+  </svg>`,
+
+  '表单校验（Form Validation）': `<svg viewBox="0 0 480 148" role="img" aria-label="表单成功与错误校验提示示意">
+    <text x="20" y="26" font-size="10" fill="var(--text-2)">邮箱</text>
+    <rect x="20" y="34" width="200" height="32" rx="6" fill="var(--surface-2)" stroke="#22c55e" stroke-width="1.6"/>
+    <text x="32" y="55" font-size="10" fill="var(--text)">name@example.com</text>
+    <circle cx="208" cy="50" r="8" fill="#22c55e" opacity=".22"/>
+    <path d="M204 50l3 3 6-7" stroke="#22c55e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <text x="20" y="87" font-size="9.5" fill="#22c55e">✓ 格式正确</text>
+    <text x="260" y="26" font-size="10" fill="var(--text-2)">邮箱</text>
+    <rect x="260" y="34" width="200" height="32" rx="6" fill="var(--surface-2)" stroke="#ef4444" stroke-width="1.6"/>
+    <text x="272" y="55" font-size="10" fill="var(--text)">name@example</text>
+    <circle cx="448" cy="50" r="8" fill="#ef4444" opacity=".2"/>
+    <path d="M444 46l8 8M452 46l-8 8" stroke="#ef4444" stroke-width="1.6" stroke-linecap="round"/>
+    <text x="260" y="87" font-size="9.5" fill="#ef4444">✗ 缺少域名后缀</text>
+    <rect x="20" y="102" width="440" height="30" rx="6" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="32" y="122" font-size="9.5" fill="var(--text-3)">写清楚「哪里错了、怎么改」，别只弹一个「输入有误」</text>
+  </svg>`,
+
+  '触控目标（Touch Target）': `<svg viewBox="0 0 480 148" role="img" aria-label="触控目标最小尺寸示意">
+    <circle cx="96" cy="70" r="11" fill="var(--text-3)" opacity=".35" stroke="#ef4444" stroke-width="1.5"/>
+    <text x="96" y="112" text-anchor="middle" font-size="9.5" fill="#ef4444">太小：手指点不准</text>
+    <text x="96" y="128" text-anchor="middle" font-size="9" fill="var(--text-3)">约 20 × 20</text>
+    <path d="M188 70h30m0 0-8-7m8 7-8 7" stroke="var(--brand-light)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <circle cx="300" cy="70" r="30" fill="var(--brand-light)" opacity=".2" stroke="var(--brand-light)" stroke-width="1.6"/>
+    <circle cx="300" cy="70" r="9" fill="var(--brand-light)"/>
+    <text x="300" y="112" text-anchor="middle" font-size="9.5" fill="var(--brand-light)">至少 44 × 44 CSS px</text>
+    <text x="300" y="128" text-anchor="middle" font-size="9" fill="var(--text-3)">看得小也没关系，点击区域要够大</text>
+    <text x="404" y="64" font-size="9.5" fill="var(--text-3)">相邻目标</text>
+    <text x="404" y="80" font-size="9.5" fill="var(--text-3)">之间也要</text>
+    <text x="404" y="96" font-size="9.5" fill="var(--text-3)">留间距</text>
+  </svg>`,
+
+  /* ---- 性能与 SEO 度量（D8）---- */
+  '核心网页指标（Core Web Vitals）': `<svg viewBox="0 0 480 148" role="img" aria-label="三项核心网页指标示意">
+    <g stroke="var(--border)" stroke-width="1.2" fill="var(--surface-2)">
+      <rect x="14" y="24" width="144" height="96" rx="8"/><rect x="168" y="24" width="144" height="96" rx="8"/><rect x="322" y="24" width="144" height="96" rx="8"/>
+    </g>
+    <text x="86" y="52" text-anchor="middle" font-size="15" fill="var(--brand-light)" font-family="var(--font-mono)">LCP</text>
+    <text x="86" y="74" text-anchor="middle" font-size="9.5" fill="var(--text-2)">最大内容绘制</text>
+    <text x="86" y="102" text-anchor="middle" font-size="10" fill="var(--brand-light)">≤ 2.5 s</text>
+    <text x="240" y="52" text-anchor="middle" font-size="15" fill="var(--brand-light)" font-family="var(--font-mono)">INP</text>
+    <text x="240" y="74" text-anchor="middle" font-size="9.5" fill="var(--text-2)">交互响应时延</text>
+    <text x="240" y="102" text-anchor="middle" font-size="10" fill="var(--brand-light)">≤ 200 ms</text>
+    <text x="394" y="52" text-anchor="middle" font-size="15" fill="var(--brand-light)" font-family="var(--font-mono)">CLS</text>
+    <text x="394" y="74" text-anchor="middle" font-size="9.5" fill="var(--text-2)">累积布局偏移</text>
+    <text x="394" y="102" text-anchor="middle" font-size="10" fill="var(--brand-light)">≤ 0.1</text>
+    <text x="240" y="140" text-anchor="middle" font-size="9" fill="var(--text-3)">分别管：加载快不快、点了跟不跟手、页面晃不晃</text>
+  </svg>`,
+
+  '累积布局偏移（CLS (Cumulative Layout Shift)）': `<svg viewBox="0 0 480 148" role="img" aria-label="图片挤动正文造成布局偏移示意">
+    <rect x="14" y="16" width="204" height="116" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="26" y="32" font-size="9.5" fill="var(--text-3)">图片加载前</text>
+    <g fill="var(--text-2)" opacity=".6"><rect x="26" y="44" width="180" height="7" rx="3.5"/><rect x="26" y="58" width="156" height="7" rx="3.5"/></g>
+    <rect x="26" y="76" width="180" height="42" rx="4" fill="var(--text-3)" opacity=".28" stroke="var(--text-3)" stroke-dasharray="3 3"/>
+    <text x="116" y="102" text-anchor="middle" font-size="9" fill="var(--text-3)">图片还没占位置</text>
+    <path d="M232 74h26m0 0-8-7m8 7-8 7" stroke="var(--brand-light)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <rect x="272" y="16" width="194" height="116" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="284" y="32" font-size="9.5" fill="var(--text-3)">图片加载后</text>
+    <rect x="284" y="42" width="170" height="42" rx="4" fill="var(--brand-light)" opacity=".3"/>
+    <path d="M284 78l46-26 44 22 34-12 46 16" stroke="var(--brand-light)" stroke-width="1.2" fill="none" opacity=".6"/>
+    <g fill="var(--text-2)" opacity=".6"><rect x="284" y="94" width="170" height="7" rx="3.5"/><rect x="284" y="108" width="146" height="7" rx="3.5"/></g>
+    <path d="M380 60v20m0 0-4-7m4 7 4-7" stroke="#ef4444" stroke-width="1.4" fill="none"/>
+    <text x="240" y="143" text-anchor="middle" font-size="9" fill="var(--text-3)">给图片写死 width / height（或 aspect-ratio），正文就不会被挤走</text>
+  </svg>`,
+
+  /* ---- 建站流程里的关键机制（S3 / S4）---- */
+  'try_files': `<svg viewBox="0 0 480 148" role="img" aria-label="nginx try_files 依次查找示意">
+    <rect x="12" y="58" width="82" height="32" rx="6" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="53" y="79" text-anchor="middle" font-size="10" fill="var(--text-2)">请求 /map</text>
+    <path d="M100 74h26m0 0-7-6m7 6-7 6" stroke="var(--brand-light)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <g stroke="var(--border)" stroke-width="1.2" fill="var(--surface-2)">
+      <rect x="136" y="18" width="140" height="30" rx="6"/><rect x="136" y="59" width="140" height="30" rx="6"/><rect x="136" y="100" width="140" height="30" rx="6"/>
+    </g>
+    <text x="150" y="38" font-size="10" fill="var(--brand-light)">① $uri/index.html</text>
+    <text x="150" y="79" font-size="10" fill="var(--text-3)">② $uri</text>
+    <text x="150" y="120" font-size="10" fill="var(--text-3)">③ $uri.html</text>
+    <path d="M282 33h26m0 0-7-6m7 6-7 6" stroke="var(--brand-light)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <rect x="318" y="18" width="144" height="30" rx="6" fill="var(--brand-light)" opacity=".2" stroke="var(--brand-light)" stroke-width="1.2"/>
+    <text x="390" y="38" text-anchor="middle" font-size="10" fill="var(--brand-light)">命中 → 直接返回 200</text>
+    <text x="318" y="80" font-size="9.5" fill="var(--text-2)">都不存在 → 404</text>
+    <text x="318" y="112" font-size="9.5" fill="var(--text-3)">顺序决定行为：</text>
+    <text x="318" y="128" font-size="9.5" fill="var(--text-3)">index 要排在 $uri 前面</text>
+  </svg>`,
+
+  '公钥与私钥': `<svg viewBox="0 0 480 148" role="img" aria-label="私钥在发起方、公钥在接收方示意">
+    <rect x="14" y="24" width="186" height="92" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <text x="28" y="46" font-size="10" fill="var(--text-3)">本机 / Actions</text>
+    <text x="28" y="76" font-size="12" fill="var(--brand-light)" font-family="var(--font-mono)">私钥 private key</text>
+    <text x="28" y="98" font-size="9.5" fill="var(--text-2)">绝不外传，只用来证明「我是我」</text>
+    <path d="M212 70h48m0 0-9-8m9 8-9 8" stroke="var(--brand-light)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <text x="236" y="58" text-anchor="middle" font-size="9" fill="var(--text-3)">握手</text>
+    <rect x="272" y="24" width="194" height="92" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <text x="286" y="46" font-size="10" fill="var(--text-3)">服务器 / GitHub</text>
+    <text x="286" y="76" font-size="12" fill="var(--brand-light)" font-family="var(--font-mono)">公钥 public key</text>
+    <text x="286" y="98" font-size="9.5" fill="var(--text-2)">存在锁的位置，公开也没关系</text>
+    <text x="240" y="138" text-anchor="middle" font-size="10" fill="var(--brand-light)">判断只看一条：谁拿私钥，谁就是发起方</text>
+  </svg>`,
+
+  '推式部署': `<svg viewBox="0 0 480 148" role="img" aria-label="推式部署链路示意">
+    <rect x="14" y="30" width="130" height="78" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="79" y="56" text-anchor="middle" font-size="11" fill="var(--text-2)">GitHub</text>
+    <text x="79" y="76" text-anchor="middle" font-size="9.5" fill="var(--text-3)">Actions / Runner</text>
+    <text x="79" y="96" text-anchor="middle" font-size="9" fill="var(--brand-light)">私钥在 Secrets 里</text>
+    <path d="M156 69h150m0 0-12-9m12 9-12 9" stroke="var(--brand-light)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <text x="231" y="56" text-anchor="middle" font-size="9.5" fill="var(--brand-light)">构建完主动推过去</text>
+    <rect x="318" y="30" width="148" height="78" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="392" y="56" text-anchor="middle" font-size="11" fill="var(--text-2)">云服务器</text>
+    <text x="392" y="76" text-anchor="middle" font-size="9.5" fill="var(--text-3)">只存公钥和目录</text>
+    <text x="392" y="96" text-anchor="middle" font-size="9" fill="var(--text-3)">被动接收</text>
+    <text x="240" y="136" text-anchor="middle" font-size="9.5" fill="var(--text-3)">服务器不用出网拉取；但私钥要放进 CI 的 Secrets</text>
+  </svg>`,
+
+  '拉取式部署': `<svg viewBox="0 0 480 148" role="img" aria-label="拉取式部署链路示意">
+    <rect x="318" y="30" width="148" height="78" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="392" y="56" text-anchor="middle" font-size="11" fill="var(--text-2)">GitHub</text>
+    <text x="392" y="76" text-anchor="middle" font-size="9.5" fill="var(--text-3)">源码 / 仓库</text>
+    <text x="392" y="96" text-anchor="middle" font-size="9" fill="var(--text-3)">只放公钥或读令牌</text>
+    <path d="M312 69H162m0 0 12-9m-12 9 12 9" stroke="var(--brand-light)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <text x="237" y="56" text-anchor="middle" font-size="9.5" fill="var(--brand-light)">服务器定时拉回来</text>
+    <rect x="14" y="30" width="140" height="78" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="84" y="56" text-anchor="middle" font-size="11" fill="var(--text-2)">云服务器</text>
+    <text x="84" y="76" text-anchor="middle" font-size="9.5" fill="var(--text-3)">私钥留在本机</text>
+    <text x="84" y="96" text-anchor="middle" font-size="9" fill="var(--text-3)">cron / webhook 触发</text>
+    <text x="240" y="136" text-anchor="middle" font-size="9.5" fill="var(--text-3)">私钥不必进 CI；但服务器要能出网，且拉取有延迟</text>
+  </svg>`,
 };
 
 /* ============================== 完整 SOP 区块 ============================== */
@@ -989,6 +1354,7 @@ function glossaryPage() {
     return `<div id="${termId(i)}"${fig ? ' class="has-fig"' : ''}><dt>${esc(g[0])}</dt><dd>${esc(g[1])}</dd>${rows}${fig}</div>`;
   };
   const idxOf = sid => GLOSSARY.map((g, i) => (g[2] === sid ? i : -1)).filter(i => i >= 0);
+  const figN = Object.keys(FIGURES).filter(k => GLOSSARY.some(g => g[0] === k)).length;
   const GROUP_LIST = [...STAGES.map(st => [st.id, st.name]), ...D_CATS];
   const groups = GROUP_LIST.map(([id, name]) => {
     const idx = idxOf(id);
@@ -1031,7 +1397,7 @@ ${topbar({ base: '../', current: 'glossary' })}
   <div class="shell">
     <div class="kicker">Reference · 术语</div>
     <h1>术语表</h1>
-    <p class="lead">共 ${GLOSSARY.length} 条：${STAGES.filter(s => idxOf(s.id).length).length} 组按课程阶段，${D_CATS.filter(([c]) => idxOf(c).length).length} 组按设计类别。通用术语取自建站全流程，本站自造的词（门禁、打通、假绿、哨兵…）也在里面 —— 这是第 ${REDLINES.length} 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。</p>
+    <p class="lead">共 ${GLOSSARY.length} 条：${STAGES.filter(s => idxOf(s.id).length).length} 组按课程阶段，${D_CATS.filter(([c]) => idxOf(c).length).length} 组按设计类别。通用术语取自建站全流程，本站自造的词（门禁、打通、假绿、哨兵…）也在里面 —— 这是第 ${REDLINES.length} 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。其中 ${figN} 条配了示意图 —— 光看文字想不出来的，画出来。</p>
   </div>
 </section>
 
@@ -1456,9 +1822,15 @@ const allLessons = MODULES.map(m => fs.readFileSync(path.join(OUT, 'lessons', m.
 checks.push([`${TOTAL} 讲都含自检表`, allLessons.every(h => h.includes('class="check"'))]);
 checks.push([`${TOTAL} 讲都含返回总览`, allLessons.every(h => h.includes('class="crumb"') && h.includes('href="../../">总览</a>'))]);
 // 全站统一干净 URL：页面里不该再出现 .html 的站内链接（文件本身仍是 .html）
+const glossaryHtml = fs.readFileSync(path.join(OUT, 'glossary', 'index.html'), 'utf8');
 const allHtml = [...allLessons, home, mapHtml,
-  fs.readFileSync(path.join(OUT, 'gates', 'index.html'), 'utf8'),
-  fs.readFileSync(path.join(OUT, 'glossary', 'index.html'), 'utf8')];
+  fs.readFileSync(path.join(OUT, 'gates', 'index.html'), 'utf8'), glossaryHtml];
+// 示意图的 key 必须与术语名完全一致；写错一个字就会静默不出图，这里兜住
+const figKeys = Object.keys(FIGURES);
+const figAlive = figKeys.filter(k => GLOSSARY.some(g => g[0] === k));
+checks.push([`${figKeys.length} 张示意图的键名都对应真实术语`, figAlive.length === figKeys.length]);
+checks.push([`${figAlive.length} 张示意图全部输出到术语页`,
+  (glossaryHtml.match(/<figure class="gl-fig">/g) || []).length === figAlive.length]);
 checks.push(['全站链接不再带 .html', allHtml.every(h =>
   !/(href|src)="(?![a-z]+:)[^"]*\.html(#[^"]*)?"/i.test(h))]);
 // 顶栏 Logo 与页签图标必须同源：两边都含同一段赤道路径，改一处忘一处会在这里报
