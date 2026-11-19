@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>术语表 · 从 0 到上线</title>
-<meta name="description" content="共 106 条术语，附出处讲次与反查索引。凡本站自造的词（门禁、打通、假绿、哨兵）都在这里有定义 —— 自造的词必须在使用处给定义。">
+<meta name="description" content="共 292 条术语，附出处讲次与反查索引。凡本站自造的词（门禁、打通、假绿、哨兵）都在这里有定义 —— 自造的词必须在使用处给定义。">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="canonical" href="https://www.web-training.power-knowledge.tech/glossary">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="从 0 到上线 · 网站建设实训课">
 <meta property="og:title" content="术语表 · 从 0 到上线">
-<meta property="og:description" content="共 106 条术语，附出处讲次与反查索引。凡本站自造的词（门禁、打通、假绿、哨兵）都在这里有定义 —— 自造的词必须在使用处给定义。">
+<meta property="og:description" content="共 292 条术语，附出处讲次与反查索引。凡本站自造的词（门禁、打通、假绿、哨兵）都在这里有定义 —— 自造的词必须在使用处给定义。">
 <meta property="og:url" content="https://www.web-training.power-knowledge.tech/glossary">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
@@ -70,14 +70,23 @@
   <div class="shell">
     <div class="kicker">Reference · 术语</div>
     <h1>术语表</h1>
-    <p class="lead">共 106 条，9 组，按课程阶段排。通用术语取自建站全流程，本站自造的词（门禁、打通、假绿、哨兵…）也在里面 —— 这是第 11 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。</p>
+    <p class="lead">共 292 条：9 组按课程阶段，8 组按设计类别。通用术语取自建站全流程，本站自造的词（门禁、打通、假绿、哨兵…）也在里面 —— 这是第 11 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。</p>
   </div>
 </section>
 
 <section class="sec" id="list">
   <div class="shell">
+    <div class="gl-search">
+      <input id="gl-q" type="search" autocomplete="off" placeholder="搜术语：中文、英文、缩写都行（如 状态码 / Hero / CWV）" aria-label="搜索术语">
+      <button type="button" id="gl-clear" class="gl-clear" hidden aria-label="清空搜索">×</button>
+      <span class="gl-count" id="gl-count" aria-live="polite"></span>
+    </div>
+
     <nav class="gl-jump" aria-label="按阶段跳转">
       <span class="gl-jump-t">按阶段</span><a href="#s0">S0<b>11</b></a><a href="#s1">S1<b>10</b></a><a href="#s2">S2<b>14</b></a><a href="#s3">S3<b>21</b></a><a href="#s4">S4<b>16</b></a><a href="#s5">S5<b>18</b></a><a href="#s6">S6<b>3</b></a><a href="#s7">S7<b>8</b></a><a href="#s9">S9<b>5</b></a>
+    </nav>
+    <nav class="gl-jump" aria-label="按类别跳转">
+      <span class="gl-jump-t">按类别</span><a href="#d1">D1<b>32</b></a><a href="#d2">D2<b>32</b></a><a href="#d3">D3<b>26</b></a><a href="#d4">D4<b>24</b></a><a href="#d5">D5<b>30</b></a><a href="#d6">D6<b>18</b></a><a href="#d7">D7<b>12</b></a><a href="#d8">D8<b>12</b></a>
     </nav>
     <h2 class="gl-head" id="s0">S0 起手式<span class="n">11 条</span></h2>
     <div class="gloss">
@@ -212,12 +221,309 @@
       <div id="g105"><dt>SPF / DKIM</dt><dd>两条 DNS 记录：告诉收件方「哪些服务器可以代表这个域名发信」「这封信中途没被改过」。配好才不容易进垃圾箱。</dd></div>
       <div id="g106"><dt>API Key</dt><dd>调用第三方服务时出示的凭据。写在前端就等于公开，所以要么放服务端，要么配域名白名单。</dd></div>
     </div>
+    <h2 class="gl-head" id="d1">D1 页面视觉元素与品牌资产<span class="n">32 条</span></h2>
+    <div class="gloss">
+      <div id="g107"><dt>首屏大图 / 横幅（Hero Image / Banner）</dt><dd>位于页面顶部的大尺寸视觉区域，用户进入网站第一眼看到，用于传达核心信息或氛围</dd></div>
+      <div id="g108" class="has-fig"><dt>首屏区块（Hero Section）</dt><dd>首屏整块区域（图 + 标题 + 副标 + CTA 的组合），Hero Image 只是其中一张图</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="首屏区块示意">
+    <rect x="6" y="6" width="468" height="136" rx="9" fill="none" stroke="var(--border)" stroke-width="1.4"/>
+    <path d="M6 30h468" stroke="var(--border)" stroke-width="1.4"/>
+    <circle cx="20" cy="18" r="3.2" fill="var(--text-3)" opacity=".45"/><circle cx="31" cy="18" r="3.2" fill="var(--text-3)" opacity=".3"/><circle cx="42" cy="18" r="3.2" fill="var(--text-3)" opacity=".3"/>
+    <rect x="18" y="40" width="444" height="66" rx="6" fill="var(--brand-light)" opacity=".13" stroke="var(--brand-light)" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <text x="240" y="66" text-anchor="middle" font-size="11.5" fill="var(--brand-light)">首屏区块 Hero Section</text>
+    <text x="240" y="83" text-anchor="middle" font-size="9.5" fill="var(--text-3)">大图 + 标题 + 副标 + CTA 的组合</text>
+    <rect x="196" y="89" width="88" height="13" rx="6.5" fill="var(--brand-light)" opacity=".28"/>
+    <text x="240" y="99" text-anchor="middle" font-size="8.5" fill="var(--text)">CTA 按钮</text>
+    <rect x="18" y="114" width="150" height="8" rx="4" fill="var(--text-3)" opacity=".22"/>
+    <rect x="18" y="127" width="108" height="8" rx="4" fill="var(--text-3)" opacity=".14"/>
+    <text x="462" y="126" text-anchor="end" font-size="9" fill="var(--text-3)">↓ 首屏以下内容</text>
+  </svg></figure></div>
+      <div id="g109"><dt>社交分享图（OG Image (Open Graph Image)）</dt><dd>网页链接被分享到社交媒体时展示的卡片预览缩略图</dd></div>
+      <div id="g110"><dt>触摸图标（Touch Icon）</dt><dd>为移动设备（如 iOS 添加到主屏幕）设计的图标，通常比 favicon 尺寸更大，有特定圆角/背景处理要求</dd></div>
+      <div id="g111" class="has-fig"><dt>灯箱（Lightbox）</dt><dd>点击缩略图后在当前页面之上弹出遮罩层并放大显示图片/内容的交互效果</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="灯箱示意">
+    <g fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2">
+      <rect x="10" y="20" width="52" height="36" rx="4"/><rect x="70" y="20" width="52" height="36" rx="4"/>
+      <rect x="10" y="64" width="52" height="36" rx="4"/><rect x="70" y="64" width="52" height="36" rx="4"/>
+    </g>
+    <text x="36" y="122" text-anchor="middle" font-size="9" fill="var(--text-3)">缩略图列表</text>
+    <path d="M132 74h26m0 0-7-7m7 7-7 7" stroke="var(--brand-light)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <text x="145" y="122" text-anchor="middle" font-size="9" fill="var(--text-3)">点击</text>
+    <rect x="170" y="10" width="300" height="120" rx="8" fill="#000" opacity=".42"/>
+    <rect x="196" y="26" width="212" height="72" rx="5" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <path d="M196 98l50-40 40 28 34-22 88 34" stroke="var(--brand-light)" stroke-width="1.3" fill="none" opacity=".55"/>
+    <circle cx="242" cy="48" r="9" fill="var(--brand-light)" opacity=".25"/>
+    <path d="M432 22l8 8M440 22l-8 8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+    <text x="302" y="118" text-anchor="middle" font-size="9" fill="#fff" opacity=".8">遮罩之上放大显示，ESC / 点遮罩关闭</text>
+  </svg></figure></div>
+      <div id="g112" class="has-fig"><dt>模态窗口（Modal Window）</dt><dd>强制用户交互的弹窗，关闭前无法操作背后页面内容</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="模态窗口示意">
+    <rect x="6" y="6" width="468" height="136" rx="9" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <rect x="6" y="6" width="468" height="136" rx="9" fill="#000" opacity=".38"/>
+    <rect x="24" y="26" width="120" height="9" rx="4" fill="var(--text-3)" opacity=".45"/>
+    <rect x="24" y="44" width="200" height="7" rx="3.5" fill="var(--text-3)" opacity=".28"/>
+    <rect x="24" y="60" width="170" height="7" rx="3.5" fill="var(--text-3)" opacity=".28"/>
+    <rect x="140" y="34" width="200" height="86" rx="8" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.5"/>
+    <rect x="140" y="34" width="200" height="22" rx="8" fill="var(--brand-light)" opacity=".14"/>
+    <text x="152" y="49" font-size="9.5" fill="var(--brand-light)">模态窗口 Modal</text>
+    <path d="M320 41l7 7M327 41l-7 7" stroke="var(--text-3)" stroke-width="1.6" stroke-linecap="round"/>
+    <rect x="152" y="66" width="130" height="6" rx="3" fill="var(--text-3)" opacity=".3"/>
+    <rect x="152" y="78" width="100" height="6" rx="3" fill="var(--text-3)" opacity=".2"/>
+    <rect x="252" y="95" width="76" height="16" rx="8" fill="var(--brand-light)" opacity=".3"/>
+    <text x="268" y="106" font-size="8.5" fill="var(--text)">确认</text>
+    <text x="380" y="130" text-anchor="end" font-size="9" fill="#fff" opacity=".75">背后的页面被遮住且不可点</text>
+  </svg></figure></div>
+      <div id="g113"><dt>标识（Logo）</dt><dd>品牌的总称；实际分 Logomark（纯图形标）与 Logotype（纯字标）两种形态</dd></div>
+      <div id="g114"><dt>启动图 / 开屏页（Splash Screen）</dt><dd>App 冷启动或网页加载首帧显示的品牌画面，用来遮住加载空白</dd></div>
+      <div id="g115"><dt>应用图标（App Icon）</dt><dd>App 在桌面、应用商店、分享卡片上使用的方形图标，各平台有独立规格与圆角遮罩</dd></div>
+      <div id="g116" class="has-fig"><dt>头像（Avatar）</dt><dd>用户或实体的圆形/方形小图，无图时用首字母或默认剪影兜底</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="头像三种形态">
+    <circle cx="90" cy="60" r="34" fill="var(--brand-light)" opacity=".18" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <circle cx="90" cy="50" r="12" fill="var(--brand-light)" opacity=".55"/>
+    <path d="M68 84a22 22 0 0 1 44 0" fill="var(--brand-light)" opacity=".4"/>
+    <text x="90" y="118" text-anchor="middle" font-size="9" fill="var(--text-3)">有照片</text>
+    <circle cx="215" cy="60" r="34" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.4"/>
+    <text x="215" y="68" text-anchor="middle" font-size="18" fill="var(--text-2)">ZH</text>
+    <text x="215" y="118" text-anchor="middle" font-size="9" fill="var(--text-3)">无照片：首字母兜底</text>
+    <circle cx="340" cy="60" r="34" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.4"/>
+    <circle cx="340" cy="50" r="10" fill="var(--text-3)" opacity=".45"/>
+    <path d="M320 82a20 20 0 0 1 40 0" fill="var(--text-3)" opacity=".3"/>
+    <text x="340" y="118" text-anchor="middle" font-size="9" fill="var(--text-3)">连首字母都没有：剪影</text>
+    <text x="418" y="56" font-size="9.5" fill="var(--text-3)">三档兜底</text>
+    <text x="418" y="72" font-size="9.5" fill="var(--text-3)">缺一档就露</text>
+    <text x="418" y="88" font-size="9.5" fill="var(--text-3)">出破图</text>
+  </svg></figure></div>
+      <div id="g117"><dt>缩略图（Thumbnail）</dt><dd>大图、视频或文章的小尺寸预览图，通常配合 Lightbox 放大</dd></div>
+      <div id="g118" class="has-fig"><dt>角标 / 徽标（Badge）</dt><dd>挂在图标或卡片角上的小标记，用于计数（如未读数）或状态（如&quot;NEW&quot;）</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="角标示意">
+    <rect x="60" y="40" width="72" height="72" rx="16" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <path d="M84 84V64a12 12 0 0 1 24 0v20" stroke="var(--text-3)" stroke-width="2" fill="none"/>
+    <circle cx="128" cy="44" r="12" fill="#ef4444"/>
+    <text x="128" y="48" text-anchor="middle" font-size="10" fill="#fff">3</text>
+    <text x="96" y="132" text-anchor="middle" font-size="9" fill="var(--text-3)">计数角标</text>
+    <rect x="220" y="52" width="72" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <rect x="262" y="44" width="40" height="16" rx="8" fill="var(--brand-light)" opacity=".9"/>
+    <text x="282" y="55" text-anchor="middle" font-size="8.5" fill="#04211d" font-weight="600">NEW</text>
+    <text x="256" y="132" text-anchor="middle" font-size="9" fill="var(--text-3)">状态徽标</text>
+    <text x="352" y="66" font-size="10" fill="var(--text-3)">挂在角上，</text>
+    <text x="352" y="82" font-size="10" fill="var(--text-3)">不占布局空间，</text>
+    <text x="352" y="98" font-size="10" fill="var(--text-3)">所以别用它承载</text>
+    <text x="352" y="114" font-size="10" fill="var(--text-3)">关键信息。</text>
+  </svg></figure></div>
+      <div id="g119"><dt>插画（Illustration）</dt><dd>与摄影相对的手绘/矢量叙事图，常用于空状态、报错页、功能介绍</dd></div>
+      <div id="g120"><dt>图标集（Icon Set）</dt><dd>同一风格、同一网格与线宽约束下的一整套图标，避免混用不同来源图标</dd></div>
+      <div id="g121"><dt>渐变（Gradient）</dt><dd>两色及以上的连续过渡填充；分线性、径向、锥形三类</dd></div>
+      <div id="g122"><dt>投影（Drop Shadow）</dt><dd>元素下方的模糊偏移阴影，用来表达层级高低，滥用会让页面发灰</dd></div>
+      <div id="g123"><dt>圆角（Corner Radius）</dt><dd>矩形四角的圆滑半径；同一页面内圆角档位应统一（如 0 / 8 / 16）</dd></div>
+      <div id="g124"><dt>描边（Stroke / Border）</dt><dd>沿形状边缘的实线、虚线或点线；用于分隔、强调或表达&quot;可编辑/占位&quot;等语义</dd></div>
+      <div id="g125"><dt>不透明度（Opacity）</dt><dd>元素整体的透明程度；与仅改变填充色透明度的 rgba 不同，它会连带子元素一起变淡</dd></div>
+      <div id="g126"><dt>遮罩层 / 蒙层（Overlay）</dt><dd>覆盖在页面之上的半透明层，用于聚焦弹窗、图片上的文字可读性</dd></div>
+      <div id="g127"><dt>蒙版（Mask）</dt><dd>用形状或明暗控制元素哪部分可见，做异形裁切、渐隐边缘</dd></div>
+      <div id="g128"><dt>混合模式（Blend Mode）</dt><dd>上下两层像素的合成算法（正片叠底、滤色等），用于给图片统一色调</dd></div>
+      <div id="g129"><dt>底纹（Background Pattern）</dt><dd>平铺的纹理或几何图形，用于低成本地增加质感</dd></div>
+      <div id="g130"><dt>通栏满幅（Full-bleed）</dt><dd>内容突破容器宽度、直抵屏幕两侧版式，常用于大图段落</dd></div>
+      <div id="g131"><dt>留白 / 负空间（Whitespace / Negative Space）</dt><dd>元素之间刻意留出的空区，不是&quot;没排满&quot;，是分组与呼吸的主要手段</dd></div>
+      <div id="g132"><dt>视觉层级（Visual Hierarchy）</dt><dd>用大小、颜色、位置、留白让读者按设计者预期的顺序看内容</dd></div>
+      <div id="g133"><dt>色板（Color Palette）</dt><dd>整套配色方案；专业做法分主色、辅助色、强调色、语义色、中性灰阶</dd></div>
+      <div id="g134"><dt>主色 / 辅助色 / 强调色（Primary / Secondary / Accent Color）</dt><dd>主色定基调（约占 60%），辅助色配角，强调色只给 CTA 与关键数字</dd></div>
+      <div id="g135"><dt>语义色（Semantic Color）</dt><dd>绑定含义而非装饰的颜色，如成功绿、警示橙、错误红、信息蓝</dd></div>
+      <div id="g136"><dt>中性色 / 灰阶（Neutral / Gray Scale）</dt><dd>从近黑到近白的无彩序列，承担正文、边框、背景与层级差异</dd></div>
+      <div id="g137"><dt>深色 / 浅色模式（Dark Mode / Light Mode）</dt><dd>两套配色方案；深色模式不是简单反色，需单独校对比度与图片处理</dd></div>
+      <div id="g138"><dt>主题（Theme）</dt><dd>一套可整体切换的配色 + 字体 + 圆角等变量集合，品牌换肤的最小单位</dd></div>
+    </div>
+    <h2 class="gl-head" id="d2">D2 布局与结构<span class="n">32 条</span></h2>
+    <div class="gloss">
+      <div id="g139"><dt>首屏（Above the Fold）</dt><dd>用户无需滚动即可看到的页面区域，通常放置 hero 和最核心信息</dd></div>
+      <div id="g140" class="has-fig"><dt>网格系统（Grid System）</dt><dd>利用列和行构成的隐形框架对齐布局元素，使设计规整有条理</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="栅格系统示意">
+    <g fill="var(--brand-light)" opacity=".16">
+      <rect x="16" y="30" width="26" height="56" rx="2"/><rect x="54" y="30" width="26" height="56" rx="2"/>
+      <rect x="92" y="30" width="26" height="56" rx="2"/><rect x="130" y="30" width="26" height="56" rx="2"/>
+      <rect x="168" y="30" width="26" height="56" rx="2"/><rect x="206" y="30" width="26" height="56" rx="2"/>
+      <rect x="244" y="30" width="26" height="56" rx="2"/><rect x="282" y="30" width="26" height="56" rx="2"/>
+      <rect x="320" y="30" width="26" height="56" rx="2"/><rect x="358" y="30" width="26" height="56" rx="2"/>
+      <rect x="396" y="30" width="26" height="56" rx="2"/><rect x="434" y="30" width="26" height="56" rx="2"/>
+    </g>
+    <rect x="16" y="100" width="120" height="18" rx="3" fill="var(--brand-light)" opacity=".45"/>
+    <rect x="148" y="100" width="120" height="18" rx="3" fill="var(--brand-light)" opacity=".3"/>
+    <rect x="280" y="100" width="180" height="18" rx="3" fill="var(--brand-light)" opacity=".2"/>
+    <path d="M42 22h12M60 18v8M42 18v8" stroke="var(--text-3)" stroke-width="1"/>
+    <text x="240" y="18" text-anchor="middle" font-size="9" fill="var(--text-3)">12 栏 · 栏宽一致 · 间距（gutter）固定</text>
+    <text x="76" y="134" text-anchor="middle" font-size="9" fill="var(--text-3)">3 栏</text>
+    <text x="208" y="134" text-anchor="middle" font-size="9" fill="var(--text-3)">3 栏</text>
+    <text x="370" y="134" text-anchor="middle" font-size="9" fill="var(--text-3)">6 栏</text>
+  </svg></figure></div>
+      <div id="g141"><dt>栏 / 列（Column）</dt><dd>网格的最小纵向单位；12 栏是最通用的切分方式，便于 2/3/4/6 等分</dd></div>
+      <div id="g142"><dt>间距 / 栏间距（Gutter）</dt><dd>网格布局中两栏内容之间的空白间隙</dd></div>
+      <div id="g143"><dt>外边距（Margin）</dt><dd>元素边框之外的空白区域，控制该元素与其他元素的距离</dd></div>
+      <div id="g144"><dt>内边距（Padding）</dt><dd>元素边框到内部内容的距离，决定&quot;内容在框里松不松&quot;</dd></div>
+      <div id="g145"><dt>线框图（Wireframe）</dt><dd>低保真页面结构草图，在视觉设计和内容填充前确定布局与功能元素位置</dd></div>
+      <div id="g146"><dt>容器（Container）</dt><dd>限制内容最大宽度并水平居中的外层盒子，保证不同屏宽下版心一致</dd></div>
+      <div id="g147"><dt>断点（Breakpoint）</dt><dd>触发布局重排的屏宽临界值（常见 640 / 768 / 1024 / 1280），是响应式设计的骨架</dd></div>
+      <div id="g148"><dt>视口（Viewport）</dt><dd>浏览器可用于显示页面的那块区域；移动端需 meta 声明避免被缩放</dd></div>
+      <div id="g149"><dt>安全区（Safe Area）</dt><dd>刘海屏、圆角屏、手势条附近不可被内容遮挡的边距区域</dd></div>
+      <div id="g150"><dt>响应式设计（Responsive Design）</dt><dd>同一套代码随屏宽连续重排、缩放，断点之间是流动的</dd></div>
+      <div id="g151"><dt>自适应设计（Adaptive Design）</dt><dd>针对几种固定屏宽各做一套版式，断点处跳变，不连续</dd></div>
+      <div id="g152"><dt>流式布局（Fluid Layout）</dt><dd>用百分比、弹性单位让元素随容器伸缩，不用固定像素定位</dd></div>
+      <div id="g153"><dt>移动优先（Mobile First）</dt><dd>先设计窄屏、再逐级加宽补内容，保证核心信息在任何尺寸都成立</dd></div>
+      <div id="g154"><dt>吸顶导航（Sticky Header）</dt><dd>页面滚动后仍固定在顶部的导航条，需处理遮挡与高度补偿</dd></div>
+      <div id="g155"><dt>页头 / 导航栏（Header / Navbar）</dt><dd>页面顶部承载 Logo、主菜单、搜索、账户入口的区域</dd></div>
+      <div id="g156"><dt>页脚（Footer）</dt><dd>页面底部承载站点地图、备案、联系方式、版权等次要但必备信息</dd></div>
+      <div id="g157"><dt>侧栏（Sidebar）</dt><dd>与主内容并排的窄列，放筛选、目录、相关链接</dd></div>
+      <div id="g158"><dt>面包屑（Breadcrumb）</dt><dd>&quot;首页 &gt; 分类 &gt; 详情&quot;的路径导航，帮助定位层级与快速回退</dd></div>
+      <div id="g159"><dt>卡片（Card）</dt><dd>把一条独立信息（图 + 标题 + 摘要 + 操作）打包的矩形单元，列表页的基本砖块</dd></div>
+      <div id="g160"><dt>抽屉（Drawer）</dt><dd>从屏幕边缘滑出的面板，移动端常用于筛选、菜单，可覆盖或挤压布局</dd></div>
+      <div id="g161"><dt>手风琴 / 折叠面板（Accordion）</dt><dd>可展开收起的条目列表，用于收纳长 FAQ 或分组说明，节省纵向空间</dd></div>
+      <div id="g162"><dt>选项卡（Tabs）</dt><dd>同一区域内在多组平级内容间切换，避免并列堆叠过长</dd></div>
+      <div id="g163"><dt>轮播（Carousel / Slider）</dt><dd>多张内容自动或手动横向切换；自动轮播需可暂停且不超过 5 秒一帧</dd></div>
+      <div id="g164"><dt>瀑布流（Masonry）</dt><dd>不等高卡片按列紧凑堆叠、逐列补齐的布局，常见于图片墙</dd></div>
+      <div id="g165"><dt>骨架屏（Skeleton Screen）</dt><dd>加载时用灰块勾勒内容形状，比转圈更能预告版式、减少跳动感</dd></div>
+      <div id="g166"><dt>占位（Placeholder）</dt><dd>内容未就绪时的临时元素：占位图、占位文案、输入框提示文字，三者语境不同</dd></div>
+      <div id="g167"><dt>空状态（Empty State）</dt><dd>无数据时的专门页面/区块，需说明为什么空、下一步做什么</dd></div>
+      <div id="g168"><dt>宽高比（Aspect Ratio）</dt><dd>图片与视频容器的比例；预留比例可防止图片加载前布局跳动（CLS）</dd></div>
+      <div id="g169"><dt>层级（Z-index）</dt><dd>元素在垂直方向的堆叠顺序；应只保留少数几档（如 1 / 10 / 100 / 1000）</dd></div>
+      <div id="g170"><dt>粘性 / 固定定位（Sticky / Fixed Position）</dt><dd>Sticky 到阈值才吸附，Fixed 相对视口不动；两者都会脱离正常文档流影响布局</dd></div>
+    </div>
+    <h2 class="gl-head" id="d3">D3 排版与字体<span class="n">26 条</span></h2>
+    <div class="gloss">
+      <div id="g171"><dt>行高（Leading / Line-height）</dt><dd>相邻两行文字之间的垂直间距</dd></div>
+      <div id="g172"><dt>字偶间距（Kerning）</dt><dd>调整特定两个字母之间的水平间距，使视觉更平衡（如 A 与 V 之间需收紧）</dd></div>
+      <div id="g173"><dt>字间距（Tracking / Letter-spacing）</dt><dd>统一调整一段文字中所有字母之间的水平间距</dd></div>
+      <div id="g174"><dt>上伸部（Ascender）</dt><dd>小写字母（如 h、l、b）超出字体中线（x-height）向上伸出的部分</dd></div>
+      <div id="g175"><dt>下伸部（Descender）</dt><dd>小写字母（如 p、y、g）低于基线向下延伸的部分</dd></div>
+      <div id="g176"><dt>基线（Baseline）</dt><dd>字母底端所坐的那条隐形水平线，行高与多列对齐都以它为基准</dd></div>
+      <div id="g177"><dt>字身高度（x-height）</dt><dd>小写字母 x 的高度，决定同一字号下&quot;看起来大字还是小字&quot;</dd></div>
+      <div id="g178"><dt>大写高度（Cap Height）</dt><dd>大写字母从基线到顶端的高度，通常略高于 x-height</dd></div>
+      <div id="g179"><dt>字型（Typeface）</dt><dd>一整套设计风格统一的书体（如 Helvetica）；日常口语里被叫&quot;字体&quot;</dd></div>
+      <div id="g180"><dt>字体文件 / 字重实例（Font）</dt><dd>Typeface 的具体实现，如 Helvetica Neue Regular 这个文件</dd></div>
+      <div id="g181"><dt>字族（Font Family）</dt><dd>一个 Typeface 的全部字重与斜体变体集合</dd></div>
+      <div id="g182"><dt>字体栈（Font Stack）</dt><dd>CSS 中按优先级排列的字体列表，末尾必须落到通用族（sans-serif）兜底</dd></div>
+      <div id="g183"><dt>字重（Font Weight）</dt><dd>笔画粗细档位（300 / 400 / 500 / 700）；正文用 400，标题才上 600–700</dd></div>
+      <div id="g184"><dt>字号阶梯（Type Scale）</dt><dd>按固定比例（如 1.25、1.333）推导出的一组字号，保证层级有节奏</dd></div>
+      <div id="g185"><dt>行宽（Measure / Line Length）</dt><dd>单行可容纳的字数，拉丁文 45–75 字符（约 66 最佳）最易读</dd></div>
+      <div id="g186"><dt>对齐（Alignment）</dt><dd>左对齐（最易读）、右对齐、居中（只适合短标题）、两端对齐四类</dd></div>
+      <div id="g187"><dt>两端对齐（Justified）</dt><dd>左右都齐平，容易产生字间&quot;河流&quot;，需配合连字符断词</dd></div>
+      <div id="g188"><dt>参差边缘（Rag）</dt><dd>左对齐文本右侧不齐的轮廓，应尽量平缓避免尖锐锯齿</dd></div>
+      <div id="g189"><dt>孤行 / 寡行（Widow / Orphan）</dt><dd>段落末尾单独落到下一行的短词（孤行）、段首被留在页尾的行（寡行），排版上须消除</dd></div>
+      <div id="g190"><dt>文本截断 / 省略号（Text Truncation / Ellipsis）</dt><dd>单行超长时以&quot;…&quot;收尾，需保证悬停或点击能看到全文</dd></div>
+      <div id="g191"><dt>多行截断（Line Clamp）</dt><dd>限定显示行数（如 2 行）后截断，用于卡片摘要统一高度</dd></div>
+      <div id="g192"><dt>可变字体（Variable Font）</dt><dd>单个文件内含连续的字重/字宽轴，一个文件替代多档字重，省流量</dd></div>
+      <div id="g193"><dt>等宽数字（Tabular Figures）</dt><dd>每个数字占同样宽度，表格与价格对齐时必需</dd></div>
+      <div id="g194"><dt>图标字体（Icon Font）</dt><dd>把图标做成字符的旧方案；已被 SVG 取代，残留方案易出现锯齿与无障碍问题</dd></div>
+      <div id="g195"><dt>后备字体（Fallback Font）</dt><dd>首选字体缺失时系统替换的字体，中文站常需为英文与中文分别指定</dd></div>
+      <div id="g196"><dt>连字符断词（Hyphenation）</dt><dd>长词在行尾按音节断开，两端对齐或窄栏时使用</dd></div>
+    </div>
+    <h2 class="gl-head" id="d4">D4 技术实现与文件<span class="n">24 条</span></h2>
+    <div class="gloss">
+      <div id="g197"><dt>可缩放矢量图形（SVG）</dt><dd>基于 XML 的图像格式，放大不失真，适合图标和 Logo</dd></div>
+      <div id="g198"><dt>WebP 图像格式（WebP）</dt><dd>现代图像格式，相比 JPG/PNG 在保证质量的同时压缩率更好，加快加载</dd></div>
+      <div id="g199"><dt>元描述（Meta Description）</dt><dd>HTML 中简短的网页内容摘要，搜索引擎有时展示在搜索结果标题下方</dd></div>
+      <div id="g200"><dt>文档对象模型（DOM）</dt><dd>浏览器把 HTML 解析成的树形对象结构，JS 通过它读写页面</dd></div>
+      <div id="g201"><dt>矢量图 / 位图（Vector / Raster）</dt><dd>矢量由路径与填充定义、可无限缩放（SVG、字体）；位图由像素网格构成（JPG、PNG）</dd></div>
+      <div id="g202"><dt>AVIF 图像格式（AVIF）</dt><dd>基于 AV1 的新一代格式，同画质下体积常小于 WebP，需准备回退格式</dd></div>
+      <div id="g203"><dt>高清屏 / 二倍图（Retina / @2x）</dt><dd>高分屏按 2 倍像素输出图片，CSS 里仍按逻辑尺寸显示，避免发虚</dd></div>
+      <div id="g204"><dt>雪碧图（Image Sprite）</dt><dd>把小图标拼进一张大图、用背景定位取用；HTTP/2 时代多被 SVG 与图标集替代</dd></div>
+      <div id="g205"><dt>响应式图片（Responsive Images / srcset）</dt><dd>用 srcset、sizes 让浏览器按屏宽与像素密度自选合适尺寸的图，避免大图小用</dd></div>
+      <div id="g206"><dt>懒加载（Lazy Loading）</dt><dd>图片、视频接近视口才开始加载；首屏图不可懒加载，否则拖慢 LCP</dd></div>
+      <div id="g207"><dt>预加载 / 预取（Preload / Prefetch）</dt><dd>Preload 提前取当前页必需资源，Prefetch 空闲时预取下一跳资源</dd></div>
+      <div id="g208"><dt>压缩（Minify）</dt><dd>去掉代码注释与空白以减小体积，混淆（Obfuscation）是另一回事</dd></div>
+      <div id="g209"><dt>缓存刷新（Cache Busting）</dt><dd>文件名加版本号或哈希，强制浏览器取新文件，避免改了不生效</dd></div>
+      <div id="g210"><dt>重定向（Redirect）</dt><dd>旧链接指向新地址；改版换 URL 必须用 301 保住既有搜索权重</dd></div>
+      <div id="g211"><dt>404 页（404 Page）</dt><dd>找不到页面时的兜底页，应给出返回入口与推荐内容，而非只写&quot;页面不存在&quot;</dd></div>
+      <div id="g212"><dt>元标签（Meta Tags）</dt><dd>head 里描述页面属性的标签集合（字符集、视口、描述、分享卡片、robots）</dd></div>
+      <div id="g213"><dt>替代文本（Alt Text）</dt><dd>图片的文字说明，供屏幕阅读器朗读、供图片加载失败时显示，也是图片 SEO 的主要依据</dd></div>
+      <div id="g214"><dt>规范链接（Canonical）</dt><dd>告诉搜索引擎&quot;多个相似 URL 中哪个是正本&quot;，避免重复内容分散权重</dd></div>
+      <div id="g215"><dt>爬虫规则文件（robots.txt）</dt><dd>站点根目录的文本文件，声明允许/禁止抓取的路径与 sitemap 位置</dd></div>
+      <div id="g216"><dt>站点地图文件（sitemap.xml）</dt><dd>列出全站可索引 URL 的 XML，供搜索引擎发现深层页面</dd></div>
+      <div id="g217"><dt>结构化数据（Structured Data / JSON-LD）</dt><dd>用 JSON-LD 标注文章、产品、FAQ 等类型，让搜索结果出现富摘要</dd></div>
+      <div id="g218"><dt>语义化标记（Semantic HTML）</dt><dd>用 header、nav、main、section、article 等标签表达结构，利于无障碍与 SEO</dd></div>
+      <div id="g219"><dt>站点清单（Web App Manifest）</dt><dd>声明名称、图标、主题色的 JSON，决定&quot;添加到主屏幕&quot;后的表现</dd></div>
+      <div id="g220"><dt>字体子集化（Font Subsetting）</dt><dd>只打包页面实际用到的字符，中文字体动辄数 MB，必须裁剪</dd></div>
+    </div>
+    <h2 class="gl-head" id="d5">D5 交互、状态与无障碍<span class="n">30 条</span></h2>
+    <div class="gloss">
+      <div id="g221"><dt>行动号召（CTA (Call to Action)）</dt><dd>引导用户完成目标动作的按钮或链接（购买、试用、咨询），一屏一个主 CTA</dd></div>
+      <div id="g222"><dt>交互状态（Interaction State）</dt><dd>同一控件的一组状态：默认、悬停、聚焦、按下、禁用、加载，设计稿须全部给出</dd></div>
+      <div id="g223"><dt>悬停（Hover）</dt><dd>指针移入时的高亮反馈；触屏无悬停，不能把关键信息只放在悬停里</dd></div>
+      <div id="g224"><dt>聚焦 / 焦点环（Focus / Focus Ring）</dt><dd>键盘 Tab 选中时的可视边框；可以美化但不可删除，否则键盘用户会&quot;迷路&quot;</dd></div>
+      <div id="g225"><dt>按下（Active / Pressed）</dt><dd>点击瞬间的反馈（位移、压暗），让操作有被接收的确认感</dd></div>
+      <div id="g226"><dt>禁用（Disabled）</dt><dd>不可用状态；应同时说明原因或给出替代路径，不要只把按钮变灰</dd></div>
+      <div id="g227"><dt>加载态（Loading State）</dt><dd>操作进行中的反馈，超过 1 秒必须有可见进度，避免用户重复提交</dd></div>
+      <div id="g228"><dt>错误态（Error State）</dt><dd>失败时的说明与补救入口，必须写清&quot;哪里错、怎么改&quot;，而不是只报错误码</dd></div>
+      <div id="g229"><dt>成功态（Success State）</dt><dd>操作完成后的确认，通常配下一步动作（查看订单、继续浏览）</dd></div>
+      <div id="g230"><dt>微交互（Micro-interaction）</dt><dd>点赞、切换、完成等小动作的即时反馈动效，用于强化因果关系</dd></div>
+      <div id="g231"><dt>过渡（Transition）</dt><dd>属性值变化时的补间动画；时长通常 150–300ms，超过 500ms 会显得迟钝</dd></div>
+      <div id="g232"><dt>缓动（Easing）</dt><dd>过渡的速度曲线（ease-out 入场、ease-in 出场、linear 匀速），决定动效&quot;手感&quot;</dd></div>
+      <div id="g233"><dt>关键帧（Keyframe）</dt><dd>用 0%–100% 定义多段动画的节点，配合 animation 使用</dd></div>
+      <div id="g234"><dt>轻提示（Toast / Snackbar）</dt><dd>短暂浮出、自动消失的提示条，不阻断操作，适合&quot;已保存&quot;这类弱反馈</dd></div>
+      <div id="g235"><dt>工具提示（Tooltip）</dt><dd>悬停或聚焦时出现的小黑框解释，只承载补充说明，不能放必须读的信息</dd></div>
+      <div id="g236"><dt>气泡浮层（Popover）</dt><dd>比 Tooltip 重、比 Modal 轻的浮层，可含按钮与表单</dd></div>
+      <div id="g237"><dt>下拉菜单（Dropdown）</dt><dd>点开后展开的选项列表，用于导航分组或筛选</dd></div>
+      <div id="g238"><dt>汉堡菜单（Hamburger Menu）</dt><dd>三条横线的菜单入口，移动端常用；展开后需可关闭且有明确当前页标记</dd></div>
+      <div id="g239"><dt>表单校验（Form Validation）</dt><dd>输入合法性检查；实时校验优于提交后一次性报错，错误提示应贴在对应字段旁</dd></div>
+      <div id="g240"><dt>自动填充 / 联想（Autocomplete）</dt><dd>输入时给出候选或调用浏览器历史填充，减少键入</dd></div>
+      <div id="g241"><dt>步进器（Stepper）</dt><dd>分步流程的进度指示（1 选择 → 2 填写 → 3 完成），让长流程可预期</dd></div>
+      <div id="g242"><dt>分页（Pagination）</dt><dd>把长列表切页并给出总数与当前位置，同时保留可分享的页码 URL</dd></div>
+      <div id="g243"><dt>无限滚动（Infinite Scroll）</dt><dd>触底自动续载，沉浸感强但难回到上次位置，重要列表页慎用</dd></div>
+      <div id="g244"><dt>键盘导航（Keyboard Navigation）</dt><dd>仅用 Tab、方向键、回车完成全部操作的能力，是验收硬指标</dd></div>
+      <div id="g245"><dt>跳转链接（Skip Link）</dt><dd>页面首个可聚焦元素，让键盘用户跳过导航直达正文</dd></div>
+      <div id="g246"><dt>无障碍（A11y (Accessibility)）</dt><dd>让视觉、听觉、运动能力受限者也能用；含对比度、替代文本、键盘可达、语义标签</dd></div>
+      <div id="g247"><dt>无障碍属性（ARIA）</dt><dd>给无法用原生语义表达的自定义组件补 role、aria-label 等说明</dd></div>
+      <div id="g248"><dt>对比度（Contrast Ratio）</dt><dd>文字与背景的亮度比；正文 ≥ 4.5:1，大字号（≥ 24px 或 18.66px 粗体）≥ 3:1</dd></div>
+      <div id="g249"><dt>触控目标（Touch Target）</dt><dd>可点击区域的最小尺寸，iOS 建议 ≥ 44×44 pt，Android 建议 ≥ 48×48 dp</dd></div>
+      <div id="g250"><dt>减少动效（Reduced Motion）</dt><dd>尊重系统&quot;减弱动态效果&quot;设置，关闭位移与视差，只保留淡入淡出</dd></div>
+    </div>
+    <h2 class="gl-head" id="d6">D6 设计流程与协作<span class="n">18 条</span></h2>
+    <div class="gloss">
+      <div id="g251"><dt>低保真 / 高保真（Low-fi / High-fi）</dt><dd>低保真只谈结构与流程，高保真接近上线观感；两者用途不同，不要用高保真讨论结构</dd></div>
+      <div id="g252"><dt>视觉稿（Mockup）</dt><dd>静态的成品外观稿，像素级呈现配色、字体、图片，但不含真实交互</dd></div>
+      <div id="g253"><dt>原型（Prototype）</dt><dd>可点击走通流程的模型，用于验证路径与逻辑，而非最终视觉</dd></div>
+      <div id="g254"><dt>设计系统（Design System）</dt><dd>组件 + 规范 + 令牌 + 文档的整体，是&quot;能规模化复用&quot;的最小完整集合</dd></div>
+      <div id="g255"><dt>设计令牌（Design Token）</dt><dd>把颜色、字号、间距、圆角抽成命名变量（如 color-text-primary），一处改动全站生效</dd></div>
+      <div id="g256"><dt>组件库（Component Library）</dt><dd>可复用组件的代码与设计资产集合，需覆盖状态、尺寸、禁用与错误变体</dd></div>
+      <div id="g257"><dt>样式规范（Style Guide）</dt><dd>规定怎么用（字号阶梯、色板、间距、图标风格）的文档，是设计系统的一部分</dd></div>
+      <div id="g258"><dt>标注（Redline / Spec）</dt><dd>在设计稿上标出尺寸、间距、色值、字号，供开发取值；令牌化后标注逐步被替代</dd></div>
+      <div id="g259"><dt>交付（Handoff）</dt><dd>设计向开发的移交，交付物应含状态图、边界情况、切图与令牌，而非只有一张漂亮图</dd></div>
+      <div id="g260"><dt>设计走查（Design Review / Walkthrough）</dt><dd>上线前逐项核对实现的偏差，含间距、字号、颜色、状态与文案</dd></div>
+      <div id="g261"><dt>信息架构（IA (Information Architecture)）</dt><dd>内容的分类、层级与命名体系，决定用户能不能&quot;想到去哪找&quot;</dd></div>
+      <div id="g262"><dt>站点结构图（Sitemap（设计侧））</dt><dd>全站页面清单与层级关系图，与技术侧的 sitemap.xml 不是一回事</dd></div>
+      <div id="g263"><dt>用户旅程（User Journey）</dt><dd>用户从认知到完成目标的完整路径与情绪起伏，用于发现断点</dd></div>
+      <div id="g264"><dt>用户画像（Persona）</dt><dd>基于调研抽象出的典型用户档案，用于在争论时回到&quot;给谁做&quot;</dd></div>
+      <div id="g265"><dt>用户流程（User Flow）</dt><dd>单个任务的分步路径图（含分支与异常），比旅程更聚焦操作</dd></div>
+      <div id="g266"><dt>A/B 测试（A/B Test）</dt><dd>同流量下对比两个版本的表现，一次只改一个变量，需足够样本才有结论</dd></div>
+      <div id="g267"><dt>转化率（Conversion Rate）</dt><dd>完成目标动作的人数占访问人数的比例，是落地页的核心度量</dd></div>
+      <div id="g268"><dt>漏斗（Funnel）</dt><dd>从曝光到成交的分层转化，用于定位&quot;哪一层在漏&quot;</dd></div>
+    </div>
+    <h2 class="gl-head" id="d7">D7 营销落地页与内容<span class="n">12 条</span></h2>
+    <div class="gloss">
+      <div id="g269"><dt>落地页（Landing Page）</dt><dd>承接广告或搜索点击的单目标页面，只保留一条转化路径</dd></div>
+      <div id="g270"><dt>价值主张（Value Proposition）</dt><dd>一句话说清&quot;给谁、解决什么、凭什么信&quot;，落地页首屏的第一信息</dd></div>
+      <div id="g271"><dt>社会认同（Social Proof）</dt><dd>客户 Logo 墙、认证、数据、媒体报道等第三方证据，用来降低决策风险</dd></div>
+      <div id="g272"><dt>用户评价（Testimonial）</dt><dd>具名客户的原话引用，附身份与场景比匿名好评可信</dd></div>
+      <div id="g273"><dt>价格表（Pricing Table）</dt><dd>多档方案的并排对比，需标注推荐档与差异项，避免只列功能名</dd></div>
+      <div id="g274"><dt>常见问题（FAQ）</dt><dd>集中回答犹豫点（价格、交付、退款、兼容性），同时是 FAQ 结构化数据的来源</dd></div>
+      <div id="g275"><dt>线索表单（Lead Form）</dt><dd>收集联系方式换取资料或试用的表单，字段越少转化越高</dd></div>
+      <div id="g276"><dt>内容优先（Content-First）</dt><dd>先定文案与信息顺序、再谈视觉表现的设计方法，避免&quot;图很满、话说不清&quot;</dd></div>
+      <div id="g277"><dt>按钮层级（CTA Button Hierarchy）</dt><dd>一屏内区分主按钮、次按钮、文字链，让用户知道&quot;最该点哪个&quot;</dd></div>
+      <div id="g278"><dt>常驻 CTA（Sticky CTA）</dt><dd>滚动时固定在视口内的转化按钮，移动端常用，需避免遮挡内容</dd></div>
+      <div id="g279"><dt>分享卡片（Social Share Card）</dt><dd>链接在社交平台展开后的图 + 标题 + 描述组合，由 OG 标签决定</dd></div>
+      <div id="g280"><dt>转化路径（Conversion Path）</dt><dd>用户从进入到完成动作的步骤数；步骤越多，流失越多</dd></div>
+    </div>
+    <h2 class="gl-head" id="d8">D8 性能与 SEO 度量<span class="n">12 条</span></h2>
+    <div class="gloss">
+      <div id="g281"><dt>核心网页指标（Core Web Vitals）</dt><dd>谷歌用于衡量真实用户体验的三项指标：LCP、INP、CLS</dd></div>
+      <div id="g282"><dt>最大内容绘制（LCP (Largest Contentful Paint)）</dt><dd>首屏最大元素完成绘制的时间；良好阈值 ≤ 2.5 秒</dd></div>
+      <div id="g283"><dt>交互响应时延（INP (Interaction to Next Paint)）</dt><dd>用户操作到画面更新的延迟；良好阈值 ≤ 200 毫秒</dd></div>
+      <div id="g284"><dt>累积布局偏移（CLS (Cumulative Layout Shift)）</dt><dd>加载过程中元素意外位移的总量；良好阈值 ≤ 0.1，图片与广告位须预留尺寸</dd></div>
+      <div id="g285"><dt>首字节时间（TTFB (Time to First Byte)）</dt><dd>请求发出到收到第一个字节的时间，反映服务端与网络链路</dd></div>
+      <div id="g286"><dt>首次绘制 / 首次内容绘制（First Paint / FCP）</dt><dd>页面开始出现像素、出现第一块内容的时间</dd></div>
+      <div id="g287"><dt>页面体积（Page Weight）</dt><dd>单页需下载的总字节数（含图片、字体、脚本），是移动端体验的总闸门</dd></div>
+      <div id="g288"><dt>渲染阻塞（Render Blocking）</dt><dd>阻塞首屏渲染的 CSS 与同步脚本，应内联关键 CSS 并给脚本加 defer/async</dd></div>
+      <div id="g289"><dt>性能审计工具（Lighthouse）</dt><dd>浏览器内置的综合审计，给出性能、无障碍、SEO 分数与改进清单</dd></div>
+      <div id="g290"><dt>搜索引擎优化（SEO）</dt><dd>让页面可被抓取、可被理解、可被排序的一组技术与内容工作</dd></div>
+      <div id="g291"><dt>搜索结果页（SERP）</dt><dd>搜索关键词后呈现的列表页，标题、描述、富摘要决定点击率</dd></div>
+      <div id="g292"><dt>搜索引擎营销（SEM）</dt><dd>付费搜索广告，与 SEO 是两条并行路径，落地页往往共用</dd></div>
+    </div>
   </div>
 </section>
 
 <section class="sec" id="index">
   <div class="shell">
-    <div class="sec-head"><span class="idx">02</span><h2>按术语找讲次</h2><span class="note">70 条有出处</span></div>
+    <div class="sec-head"><span class="idx">02</span><h2>按术语找讲次</h2><span class="note">88 条有出处</span></div>
     <p class="sec-desc">记不住术语在哪讲的，从这里反查。</p>
     <div class="gloss-index">
       <div class="gi-row"><a class="gi-t" href="#g02">心智模型</a><span class="gi-m"><a href="../lessons/M04/">M04</a></span></div>
@@ -290,6 +596,24 @@
       <div class="gi-row"><a class="gi-t" href="#g103">客户端专用密码</a><span class="gi-m"><a href="../lessons/M31/">M31</a></span></div>
       <div class="gi-row"><a class="gi-t" href="#g104">SMTP</a><span class="gi-m"><a href="../lessons/M31/">M31</a></span></div>
       <div class="gi-row"><a class="gi-t" href="#g106">API Key</a><span class="gi-m"><a href="../lessons/M05/">M05</a><a href="../lessons/M19/">M19</a><a href="../lessons/M22/">M22</a><a href="../lessons/M24/">M24</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g113">标识（Logo）</a><span class="gi-m"><a href="../lessons/M12/">M12</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g115">应用图标（App Icon）</a><span class="gi-m"><a href="../lessons/M32/">M32</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g139">首屏（Above the Fold）</a><span class="gi-m"><a href="../lessons/M31/">M31</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g146">容器（Container）</a><span class="gi-m"><a href="../lessons/M32/">M32</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g156">页脚（Footer）</a><span class="gi-m"><a href="../lessons/M12/">M12</a><a href="../lessons/M13/">M13</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g208">压缩（Minify）</a><span class="gi-m"><a href="../lessons/M28/">M28</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g211">404 页（404 Page）</a><span class="gi-m"><a href="../lessons/M15/">M15</a><a href="../lessons/M19/">M19</a><a href="../lessons/M29/">M29</a><a href="../lessons/M32/">M32</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g215">爬虫规则文件（robots.txt）</a><span class="gi-m"><a href="../lessons/M13/">M13</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g216">站点地图文件（sitemap.xml）</a><span class="gi-m"><a href="../lessons/M13/">M13</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g219">站点清单（Web App Manifest）</a><span class="gi-m"><a href="../lessons/M14/">M14</a><a href="../lessons/M32/">M32</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g221">行动号召（CTA (Call to Action)）</a><span class="gi-m"><a href="../lessons/M23/">M23</a><a href="../lessons/M24/">M24</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g226">禁用（Disabled）</a><span class="gi-m"><a href="../lessons/M04/">M04</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g255">设计令牌（Design Token）</a><span class="gi-m"><a href="../lessons/M24/">M24</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g266">A/B 测试（A/B Test）</a><span class="gi-m"><a href="../lessons/M18/">M18</a><a href="../lessons/M31/">M31</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g281">核心网页指标（Core Web Vitals）</a><span class="gi-m"><a href="../lessons/M32/">M32</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g283">交互响应时延（INP (Interaction to Next Paint)）</a><span class="gi-m"><a href="../lessons/M23/">M23</a><a href="../lessons/M24/">M24</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g285">首字节时间（TTFB (Time to First Byte)）</a><span class="gi-m"><a href="../lessons/M23/">M23</a><a href="../lessons/M24/">M24</a></span></div>
+      <div class="gi-row"><a class="gi-t" href="#g290">搜索引擎优化（SEO）</a><span class="gi-m"><a href="../lessons/M10/">M10</a></span></div>
     </div>
   </div>
 </section>
@@ -340,7 +664,7 @@
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.6.0</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.7.0</span>
       </span>
     </div>
 

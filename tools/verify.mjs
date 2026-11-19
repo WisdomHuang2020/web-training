@@ -16,10 +16,28 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const BASE = process.env.BASE || 'http://localhost:5178';
 
-// playwright 装在 npx 缓存里，按绝对路径载入，避免为此给项目加 node_modules
-const PW = process.env.PW_PATH
-  || 'C:/Users/xuexi/AppData/Local/npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright/index.mjs';
-const { chromium } = await import('file:///' + PW.replace(/\\/g, '/'));
+// playwright 装在 npx 缓存里，按绝对路径载入，避免为此给项目加 node_modules。
+// npx 缓存的目录名是随机哈希，会随重装变化 —— 所以不能写死，按候选路径找第一个存在的。
+import fs from 'node:fs';
+import os from 'node:os';
+
+const findPW = () => {
+  if (process.env.PW_PATH) return process.env.PW_PATH;
+  const roots = [
+    path.join(os.homedir(), 'AppData/Local/npm-cache/_npx'),
+    path.join(os.homedir(), '.npm/_npx'),
+  ];
+  for (const root of roots) {
+    if (!fs.existsSync(root)) continue;
+    for (const d of fs.readdirSync(root)) {
+      const p = path.join(root, d, 'node_modules', 'playwright', 'index.mjs');
+      if (fs.existsSync(p)) return p;
+    }
+  }
+  throw new Error('找不到 playwright：请先 npx playwright 跑一次，或设置 PW_PATH');
+};
+
+const { chromium } = await import('file:///' + findPW().replace(/\\/g, '/'));
 
 const VIEWPORTS = [
   { name: '桌面 1440', width: 1440, height: 900 },

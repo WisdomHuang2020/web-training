@@ -112,6 +112,49 @@
     paint();
   }
 
+  /* ---------------- 术语表：搜索 ---------------- */
+  function initGlossary() {
+    var q = document.getElementById('gl-q');
+    if (!q) return;
+    var clear = document.getElementById('gl-clear');
+    var count = document.getElementById('gl-count');
+    var heads = [].slice.call(document.querySelectorAll('.gl-head'));
+    var total = 0;
+    heads.forEach(function (h) { if (h.nextElementSibling) total += h.nextElementSibling.children.length; });
+
+    function apply() {
+      var s = q.value.trim().toLowerCase();
+      var shown = 0;
+      heads.forEach(function (h) {
+        var box = h.nextElementSibling;
+        if (!box) return;
+        var vis = 0;
+        [].forEach.call(box.children, function (row) {
+          var hit = !s || row.textContent.toLowerCase().indexOf(s) >= 0;
+          row.hidden = !hit;
+          if (hit) vis++;
+        });
+        h.hidden = vis === 0;
+        box.hidden = vis === 0;
+        shown += vis;
+      });
+      clear.hidden = !s;
+      count.textContent = !s ? '' : (shown ? '匹配 ' + shown + ' / ' + total + ' 条' : '没有匹配的术语');
+    }
+
+    q.addEventListener('input', apply);
+    clear.addEventListener('click', function () { q.value = ''; apply(); q.focus(); });
+    q.addEventListener('keydown', function (e) { if (e.key === 'Escape') { q.value = ''; apply(); } });
+    // 按 / 直接聚焦搜索框（输入框里按 / 不拦截）
+    document.addEventListener('keydown', function (e) {
+      if (e.key === '/' && document.activeElement !== q &&
+          !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
+        e.preventDefault(); q.focus();
+      }
+    });
+    apply();
+  }
+
   /* ---------------- 课程地图页（/map）---------------- */
   function initMapPage() {
     var grid = document.getElementById('map-list');
@@ -243,6 +286,7 @@
     var p = document.body.dataset.page;
     if (p === 'lesson') initLesson();
     if (p === 'map') initMapPage();
+    if (p === 'glossary') initGlossary();
     if (p === 'home') paintCoursePill();
     initToc();
     initCopy();

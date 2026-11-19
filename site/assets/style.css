@@ -390,6 +390,33 @@ code {
 .redlines li:hover { color: var(--text); }
 
 /* ============================ 术语表 ============================ */
+/* hidden 属性必须压过作者样式里的 display：.gl-head 是 flex，不加这条藏不住 */
+[hidden] { display: none !important; }
+
+/* 术语表搜索 */
+.gl-search { position: relative; display: flex; align-items: center; gap: 12px; margin: 2px 0 16px; }
+.gl-search input {
+  flex: 1 1 auto; min-width: 0; font: inherit; font-size: 14px; color: var(--text);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 9px;
+  padding: 10px 36px 10px 13px;
+}
+.gl-search input::placeholder { color: var(--text-3); }
+.gl-search input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.gl-search input:focus { outline: none; border-color: var(--brand-light); box-shadow: 0 0 0 3px rgba(20, 184, 166, .12); }
+.gl-clear {
+  position: absolute; right: 84px; top: 50%; transform: translateY(-50%);
+  width: 22px; height: 22px; line-height: 1; font-size: 15px;
+  color: var(--text-3); background: var(--surface-2); border: none; border-radius: 50%; cursor: pointer;
+}
+.gl-clear:hover { color: var(--text); }
+.gl-count { flex: 0 0 auto; font-size: 12px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+/* 示意图：给「光看文字想不出来」的词条配，跨两栏显示 */
+.gloss > div.has-fig { column-span: all; }
+.gl-fig { margin: 12px 0 2px; }
+.gl-fig { display: flex; justify-content: center; }
+.gl-fig svg { display: block; width: 100%; max-width: 680px; height: auto; }
+
 /* 术语表：按阶段分组。跳转条 + 每组一个 h2，组内仍是两栏 */
 .gl-jump {
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px;

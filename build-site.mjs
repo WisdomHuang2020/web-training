@@ -454,6 +454,125 @@ ${footer({ prefix: '', base: '' })}
 `;
 }
 
+
+/* 术语表的分组：先按课程阶段，再按设计类别（D1–D8，来自《网页设计与开发专有名词速查表》） */
+const D_CATS = [
+  ['D1', '页面视觉元素与品牌资产'],
+  ['D2', '布局与结构'],
+  ['D3', '排版与字体'],
+  ['D4', '技术实现与文件'],
+  ['D5', '交互、状态与无障碍'],
+  ['D6', '设计流程与协作'],
+  ['D7', '营销落地页与内容'],
+  ['D8', '性能与 SEO 度量'],
+];
+
+/**
+ * 示意图：只给「光看文字想不出来」的词条配。
+ * 全部用内联 SVG + CSS 变量，跟着主题换色，不额外请求图片，
+ * 也不受深色/浅色模式影响可读性（线条用 currentColor 系）。
+ */
+const FIGURES = {
+  '首屏区块（Hero Section）': `<svg viewBox="0 0 480 148" role="img" aria-label="首屏区块示意">
+    <rect x="6" y="6" width="468" height="136" rx="9" fill="none" stroke="var(--border)" stroke-width="1.4"/>
+    <path d="M6 30h468" stroke="var(--border)" stroke-width="1.4"/>
+    <circle cx="20" cy="18" r="3.2" fill="var(--text-3)" opacity=".45"/><circle cx="31" cy="18" r="3.2" fill="var(--text-3)" opacity=".3"/><circle cx="42" cy="18" r="3.2" fill="var(--text-3)" opacity=".3"/>
+    <rect x="18" y="40" width="444" height="66" rx="6" fill="var(--brand-light)" opacity=".13" stroke="var(--brand-light)" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <text x="240" y="66" text-anchor="middle" font-size="11.5" fill="var(--brand-light)">首屏区块 Hero Section</text>
+    <text x="240" y="83" text-anchor="middle" font-size="9.5" fill="var(--text-3)">大图 + 标题 + 副标 + CTA 的组合</text>
+    <rect x="196" y="89" width="88" height="13" rx="6.5" fill="var(--brand-light)" opacity=".28"/>
+    <text x="240" y="99" text-anchor="middle" font-size="8.5" fill="var(--text)">CTA 按钮</text>
+    <rect x="18" y="114" width="150" height="8" rx="4" fill="var(--text-3)" opacity=".22"/>
+    <rect x="18" y="127" width="108" height="8" rx="4" fill="var(--text-3)" opacity=".14"/>
+    <text x="462" y="126" text-anchor="end" font-size="9" fill="var(--text-3)">↓ 首屏以下内容</text>
+  </svg>`,
+
+  '模态窗口（Modal Window）': `<svg viewBox="0 0 480 148" role="img" aria-label="模态窗口示意">
+    <rect x="6" y="6" width="468" height="136" rx="9" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <rect x="6" y="6" width="468" height="136" rx="9" fill="#000" opacity=".38"/>
+    <rect x="24" y="26" width="120" height="9" rx="4" fill="var(--text-3)" opacity=".45"/>
+    <rect x="24" y="44" width="200" height="7" rx="3.5" fill="var(--text-3)" opacity=".28"/>
+    <rect x="24" y="60" width="170" height="7" rx="3.5" fill="var(--text-3)" opacity=".28"/>
+    <rect x="140" y="34" width="200" height="86" rx="8" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.5"/>
+    <rect x="140" y="34" width="200" height="22" rx="8" fill="var(--brand-light)" opacity=".14"/>
+    <text x="152" y="49" font-size="9.5" fill="var(--brand-light)">模态窗口 Modal</text>
+    <path d="M320 41l7 7M327 41l-7 7" stroke="var(--text-3)" stroke-width="1.6" stroke-linecap="round"/>
+    <rect x="152" y="66" width="130" height="6" rx="3" fill="var(--text-3)" opacity=".3"/>
+    <rect x="152" y="78" width="100" height="6" rx="3" fill="var(--text-3)" opacity=".2"/>
+    <rect x="252" y="95" width="76" height="16" rx="8" fill="var(--brand-light)" opacity=".3"/>
+    <text x="268" y="106" font-size="8.5" fill="var(--text)">确认</text>
+    <text x="380" y="130" text-anchor="end" font-size="9" fill="#fff" opacity=".75">背后的页面被遮住且不可点</text>
+  </svg>`,
+
+  '灯箱（Lightbox）': `<svg viewBox="0 0 480 148" role="img" aria-label="灯箱示意">
+    <g fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2">
+      <rect x="10" y="20" width="52" height="36" rx="4"/><rect x="70" y="20" width="52" height="36" rx="4"/>
+      <rect x="10" y="64" width="52" height="36" rx="4"/><rect x="70" y="64" width="52" height="36" rx="4"/>
+    </g>
+    <text x="36" y="122" text-anchor="middle" font-size="9" fill="var(--text-3)">缩略图列表</text>
+    <path d="M132 74h26m0 0-7-7m7 7-7 7" stroke="var(--brand-light)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <text x="145" y="122" text-anchor="middle" font-size="9" fill="var(--text-3)">点击</text>
+    <rect x="170" y="10" width="300" height="120" rx="8" fill="#000" opacity=".42"/>
+    <rect x="196" y="26" width="212" height="72" rx="5" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <path d="M196 98l50-40 40 28 34-22 88 34" stroke="var(--brand-light)" stroke-width="1.3" fill="none" opacity=".55"/>
+    <circle cx="242" cy="48" r="9" fill="var(--brand-light)" opacity=".25"/>
+    <path d="M432 22l8 8M440 22l-8 8" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+    <text x="302" y="118" text-anchor="middle" font-size="9" fill="#fff" opacity=".8">遮罩之上放大显示，ESC / 点遮罩关闭</text>
+  </svg>`,
+
+  '角标 / 徽标（Badge）': `<svg viewBox="0 0 480 148" role="img" aria-label="角标示意">
+    <rect x="60" y="40" width="72" height="72" rx="16" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <path d="M84 84V64a12 12 0 0 1 24 0v20" stroke="var(--text-3)" stroke-width="2" fill="none"/>
+    <circle cx="128" cy="44" r="12" fill="#ef4444"/>
+    <text x="128" y="48" text-anchor="middle" font-size="10" fill="#fff">3</text>
+    <text x="96" y="132" text-anchor="middle" font-size="9" fill="var(--text-3)">计数角标</text>
+    <rect x="220" y="52" width="72" height="48" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.3"/>
+    <rect x="262" y="44" width="40" height="16" rx="8" fill="var(--brand-light)" opacity=".9"/>
+    <text x="282" y="55" text-anchor="middle" font-size="8.5" fill="#04211d" font-weight="600">NEW</text>
+    <text x="256" y="132" text-anchor="middle" font-size="9" fill="var(--text-3)">状态徽标</text>
+    <text x="352" y="66" font-size="10" fill="var(--text-3)">挂在角上，</text>
+    <text x="352" y="82" font-size="10" fill="var(--text-3)">不占布局空间，</text>
+    <text x="352" y="98" font-size="10" fill="var(--text-3)">所以别用它承载</text>
+    <text x="352" y="114" font-size="10" fill="var(--text-3)">关键信息。</text>
+  </svg>`,
+
+  '头像（Avatar）': `<svg viewBox="0 0 480 148" role="img" aria-label="头像三种形态">
+    <circle cx="90" cy="60" r="34" fill="var(--brand-light)" opacity=".18" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <circle cx="90" cy="50" r="12" fill="var(--brand-light)" opacity=".55"/>
+    <path d="M68 84a22 22 0 0 1 44 0" fill="var(--brand-light)" opacity=".4"/>
+    <text x="90" y="118" text-anchor="middle" font-size="9" fill="var(--text-3)">有照片</text>
+    <circle cx="215" cy="60" r="34" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.4"/>
+    <text x="215" y="68" text-anchor="middle" font-size="18" fill="var(--text-2)">ZH</text>
+    <text x="215" y="118" text-anchor="middle" font-size="9" fill="var(--text-3)">无照片：首字母兜底</text>
+    <circle cx="340" cy="60" r="34" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.4"/>
+    <circle cx="340" cy="50" r="10" fill="var(--text-3)" opacity=".45"/>
+    <path d="M320 82a20 20 0 0 1 40 0" fill="var(--text-3)" opacity=".3"/>
+    <text x="340" y="118" text-anchor="middle" font-size="9" fill="var(--text-3)">连首字母都没有：剪影</text>
+    <text x="418" y="56" font-size="9.5" fill="var(--text-3)">三档兜底</text>
+    <text x="418" y="72" font-size="9.5" fill="var(--text-3)">缺一档就露</text>
+    <text x="418" y="88" font-size="9.5" fill="var(--text-3)">出破图</text>
+  </svg>`,
+
+  '网格系统（Grid System）': `<svg viewBox="0 0 480 148" role="img" aria-label="栅格系统示意">
+    <g fill="var(--brand-light)" opacity=".16">
+      <rect x="16" y="30" width="26" height="56" rx="2"/><rect x="54" y="30" width="26" height="56" rx="2"/>
+      <rect x="92" y="30" width="26" height="56" rx="2"/><rect x="130" y="30" width="26" height="56" rx="2"/>
+      <rect x="168" y="30" width="26" height="56" rx="2"/><rect x="206" y="30" width="26" height="56" rx="2"/>
+      <rect x="244" y="30" width="26" height="56" rx="2"/><rect x="282" y="30" width="26" height="56" rx="2"/>
+      <rect x="320" y="30" width="26" height="56" rx="2"/><rect x="358" y="30" width="26" height="56" rx="2"/>
+      <rect x="396" y="30" width="26" height="56" rx="2"/><rect x="434" y="30" width="26" height="56" rx="2"/>
+    </g>
+    <rect x="16" y="100" width="120" height="18" rx="3" fill="var(--brand-light)" opacity=".45"/>
+    <rect x="148" y="100" width="120" height="18" rx="3" fill="var(--brand-light)" opacity=".3"/>
+    <rect x="280" y="100" width="180" height="18" rx="3" fill="var(--brand-light)" opacity=".2"/>
+    <path d="M42 22h12M60 18v8M42 18v8" stroke="var(--text-3)" stroke-width="1"/>
+    <text x="240" y="18" text-anchor="middle" font-size="9" fill="var(--text-3)">12 栏 · 栏宽一致 · 间距（gutter）固定</text>
+    <text x="76" y="134" text-anchor="middle" font-size="9" fill="var(--text-3)">3 栏</text>
+    <text x="208" y="134" text-anchor="middle" font-size="9" fill="var(--text-3)">3 栏</text>
+    <text x="370" y="134" text-anchor="middle" font-size="9" fill="var(--text-3)">6 栏</text>
+  </svg>`,
+};
+
 /* ============================== 完整 SOP 区块 ============================== */
 
 /**
@@ -860,22 +979,26 @@ function glossaryPage() {
     const rows = Array.isArray(g[3]) && g[3].length
       ? `<dl class="gl-sub">${g[3].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`
       : '';
-    return `<div id="${termId(i)}"><dt>${esc(g[0])}</dt><dd>${esc(g[1])}</dd>${rows}</div>`;
+    const fig = FIGURES[g[0]] ? `<figure class="gl-fig">${FIGURES[g[0]]}</figure>` : '';
+    return `<div id="${termId(i)}"${fig ? ' class="has-fig"' : ''}><dt>${esc(g[0])}</dt><dd>${esc(g[1])}</dd>${rows}${fig}</div>`;
   };
   const idxOf = sid => GLOSSARY.map((g, i) => (g[2] === sid ? i : -1)).filter(i => i >= 0);
-  const groups = STAGES.map(st => {
-    const idx = idxOf(st.id);
+  const GROUP_LIST = [...STAGES.map(st => [st.id, st.name]), ...D_CATS];
+  const groups = GROUP_LIST.map(([id, name]) => {
+    const idx = idxOf(id);
     if (!idx.length) return '';
-    return `<h2 class="gl-head" id="${st.id.toLowerCase()}">${st.id} ${esc(st.name)}<span class="n">${idx.length} 条</span></h2>
+    return `<h2 class="gl-head" id="${id.toLowerCase()}">${id} ${esc(name)}<span class="n">${idx.length} 条</span></h2>
     <div class="gloss">
       ${idx.map(rowOf).join('\n      ')}
     </div>`;
   }).filter(Boolean).join('\n    ');
 
-  const jump = STAGES.map(st => {
-    const n = idxOf(st.id).length;
-    return n ? `<a href="#${st.id.toLowerCase()}">${st.id}<b>${n}</b></a>` : '';
-  }).filter(Boolean).join('');
+  const chip = id => {
+    const n = idxOf(id).length;
+    return n ? `<a href="#${id.toLowerCase()}">${id}<b>${n}</b></a>` : '';
+  };
+  const jumpStage = STAGES.map(st => chip(st.id)).filter(Boolean).join('');
+  const jumpCat = D_CATS.map(([id]) => chip(id)).filter(Boolean).join('');
 
   /* 每条术语反查：哪几讲讲到了它 —— 让术语表不只是词典，还能当索引用 */
   const usedIn = GLOSSARY.map((g, i) => {
@@ -902,14 +1025,23 @@ ${topbar({ base: '../', current: 'glossary' })}
   <div class="shell">
     <div class="kicker">Reference · 术语</div>
     <h1>术语表</h1>
-    <p class="lead">共 ${GLOSSARY.length} 条，${STAGES.filter(s => idxOf(s.id).length).length} 组，按课程阶段排。通用术语取自建站全流程，本站自造的词（门禁、打通、假绿、哨兵…）也在里面 —— 这是第 ${REDLINES.length} 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。</p>
+    <p class="lead">共 ${GLOSSARY.length} 条：${STAGES.filter(s => idxOf(s.id).length).length} 组按课程阶段，${D_CATS.filter(([c]) => idxOf(c).length).length} 组按设计类别。通用术语取自建站全流程，本站自造的词（门禁、打通、假绿、哨兵…）也在里面 —— 这是第 ${REDLINES.length} 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。</p>
   </div>
 </section>
 
 <section class="sec" id="list">
   <div class="shell">
+    <div class="gl-search">
+      <input id="gl-q" type="search" autocomplete="off" placeholder="搜术语：中文、英文、缩写都行（如 状态码 / Hero / CWV）" aria-label="搜索术语">
+      <button type="button" id="gl-clear" class="gl-clear" hidden aria-label="清空搜索">×</button>
+      <span class="gl-count" id="gl-count" aria-live="polite"></span>
+    </div>
+
     <nav class="gl-jump" aria-label="按阶段跳转">
-      <span class="gl-jump-t">按阶段</span>${jump}
+      <span class="gl-jump-t">按阶段</span>${jumpStage}
+    </nav>
+    <nav class="gl-jump" aria-label="按类别跳转">
+      <span class="gl-jump-t">按类别</span>${jumpCat}
     </nav>
     ${groups}
   </div>
