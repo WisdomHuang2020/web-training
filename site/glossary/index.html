@@ -76,7 +76,7 @@
   <div class="shell">
     <div class="kicker">Reference · 术语</div>
     <h1>术语表</h1>
-    <p class="lead">共 292 条：9 组按课程阶段，8 组按设计类别。通用术语取自建站全流程，本站自造的词（门禁、打通、假绿、哨兵…）也在里面 —— 这是第 11 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。其中 29 条配了示意图 —— 光看文字想不出来的，画出来。</p>
+    <p class="lead">共 292 条：9 组按课程阶段，8 组按设计类别。通用术语取自建站全流程，本站自造的词（门禁、打通、假绿、哨兵…）也在里面 —— 这是第 11 条红线：<b>自造的词必须在使用处给定义，否则就是给别人留债</b>。其中 58 条配了示意图 —— 光看文字想不出来的，画出来。</p>
   </div>
 </section>
 
@@ -119,14 +119,38 @@
       <div id="g18"><dt>分支</dt><dd>从主线（main）分出来的独立改动线，做完再合回去。一个人做小站可以不用，但它决定了你敢不敢大改。</dd></div>
       <div id="g19"><dt>.gitignore</dt><dd>告诉 Git「这些不要跟踪」的清单。密钥、依赖目录、构建产物都该在里面；漏了就是永久留痕。</dd></div>
       <div id="g20"><dt>工作区与暂存区</dt><dd>Git 的三层：工作区是你正在改的文件，暂存区是这次准备提交的部分，仓库是提交之后的历史。</dd></div>
-      <div id="g21"><dt>合并冲突</dt><dd>两边改了同一处，Git 不知道该听谁的，交给人决定。冲突不是错误，是它在提醒你这里需要判断。</dd></div>
+      <div id="g21" class="has-fig"><dt>合并冲突</dt><dd>两边改了同一处，Git 不知道该听谁的，交给人决定。冲突不是错误，是它在提醒你这里需要判断。</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="Git 合并冲突标记示意">
+    <rect x="24" y="12" width="432" height="118" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <g font-family="var(--font-mono)" font-size="10">
+      <text x="38" y="38" fill="#ef4444">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</text>
+      <text x="38" y="58" fill="var(--text)">这里是你的改动</text>
+      <text x="38" y="76" fill="#ef4444">=======</text>
+      <text x="38" y="94" fill="var(--text)">这里是远端的改动</text>
+      <text x="38" y="112" fill="#ef4444">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature</text>
+    </g>
+    <text x="240" y="144" text-anchor="middle" font-size="9.5" fill="var(--text-2)">别删标记假装没事：读懂两边，改完再提交</text>
+  </svg></figure></div>
     </div>
     <h2 class="gl-head" id="s2">S2 买与备<span class="n">14 条</span></h2>
     <div class="gloss">
       <div id="g22"><dt>域名（Domain）</dt><dd>服务器的人类可读名字，本身不含位置信息，只是指向某个 IP 的标签。</dd></div>
       <div id="g23"><dt>裸域与子域</dt><dd>裸域＝不带任何前缀的注册域名（example.com）；子域＝在它前面加标签（www.example.com、llc.example.com）。</dd></div>
       <div id="g24"><dt>DNS</dt><dd>互联网的电话簿：把人能读的域名翻译成机器能连的 IP。</dd></div>
-      <div id="g25"><dt>A 记录 / CNAME</dt><dd>A 记录把域名指到一个 IP；CNAME 把域名指到另一个域名，由后者再解析。</dd></div>
+      <div id="g25" class="has-fig"><dt>A 记录 / CNAME</dt><dd>A 记录把域名指到一个 IP；CNAME 把域名指到另一个域名，由后者再解析。</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="A 记录与 CNAME 区别示意">
+    <text x="20" y="22" font-size="10" fill="var(--brand-light)">A 记录：名字 → IP</text>
+    <rect x="30" y="34" width="140" height="28" rx="5" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="100" y="53" text-anchor="middle" font-size="10" fill="var(--text)">www.example.com</text>
+    <path d="M176 48h60m0 0-8-6m8 6-8 6" stroke="var(--brand-light)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <rect x="242" y="34" width="120" height="28" rx="5" fill="var(--brand-light)" opacity=".2" stroke="var(--brand-light)"/>
+    <text x="302" y="53" text-anchor="middle" font-size="10" fill="var(--text)">1.2.3.4</text>
+    <text x="20" y="86" font-size="10" fill="var(--text-2)">CNAME：名字 → 另一个名字</text>
+    <rect x="30" y="98" width="140" height="28" rx="5" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="100" y="117" text-anchor="middle" font-size="10" fill="var(--text)">shop.example.com</text>
+    <path d="M176 112h60m0 0-8-6m8 6-8 6" stroke="var(--text-3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <rect x="242" y="98" width="180" height="28" rx="5" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="332" y="117" text-anchor="middle" font-size="9.5" fill="var(--text-2)">cname.provider.com → IP</text>
+    <text x="240" y="144" text-anchor="middle" font-size="9" fill="var(--text-3)">CNAME 最终还是要落到某条 A 记录上</text>
+  </svg></figure></div>
       <div id="g26"><dt>TTL</dt><dd>DNS 记录的缓存时长。改解析之前先调小，切换才快；切完再调回去。</dd></div>
       <div id="g27"><dt>云服务器 / VPS</dt><dd>云厂商把一台物理机切成多台虚拟机出租，你租的那台有独立的 CPU / 内存 / 磁盘 / IP。</dd></div>
       <div id="g28"><dt>ICP 备案</dt><dd>在中国境内提供互联网信息服务的行政许可：在工信部系统登记主办者信息、取得备案号。</dd></div>
@@ -182,7 +206,22 @@
       <div id="g47"><dt>ACME 与证书挑战</dt><dd>让证书申请、验证、续期全自动的协议。CA 通过「挑战」确认域名归你：HTTP-01 在网站上放一个文件，DNS-01 加一条解析记录。</dd></div>
       <div id="g48"><dt>301 重定向</dt><dd>永久搬家：告诉浏览器和搜索引擎「这个地址以后看新地址」，权重会跟过去。临时搬家用 302。</dd></div>
       <div id="g49"><dt>server_name 与 default_server</dt><dd>server_name 决定这个 server 块接哪个域名；default_server 接住所有没匹配上的 Host（通常返回 444）。</dd></div>
-      <div id="g50"><dt>反向代理与 proxy_pass</dt><dd>nginx 收到请求不自己处理，转给后面的程序，拿到结果再返回。地址末尾带不带斜杠，含义不同。</dd></div>
+      <div id="g50" class="has-fig"><dt>反向代理与 proxy_pass</dt><dd>nginx 收到请求不自己处理，转给后面的程序，拿到结果再返回。地址末尾带不带斜杠，含义不同。</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="反向代理链路示意">
+    <rect x="18" y="40" width="110" height="60" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="73" y="76" text-anchor="middle" font-size="10.5" fill="var(--text)">访客浏览器</text>
+    <path d="M134 70h44m0 0-9-7m9 7-9 7" stroke="var(--brand-light)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+    <text x="156" y="58" text-anchor="middle" font-size="9" fill="var(--text-3)">:443</text>
+    <rect x="186" y="28" width="112" height="84" rx="7" fill="var(--brand-light)" opacity=".15" stroke="var(--brand-light)" stroke-width="1.5"/>
+    <text x="242" y="56" text-anchor="middle" font-size="11" fill="var(--brand-light)">nginx</text>
+    <text x="242" y="76" text-anchor="middle" font-size="9" fill="var(--text-2)">终止 TLS / 静站</text>
+    <text x="242" y="94" text-anchor="middle" font-size="9" fill="var(--text-2)">location 分流</text>
+    <path d="M304 70h44m0 0-9-7m9 7-9 7" stroke="var(--text-3)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+    <text x="326" y="58" text-anchor="middle" font-size="9" fill="var(--text-3)">proxy_pass</text>
+    <rect x="356" y="40" width="106" height="60" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="409" y="70" text-anchor="middle" font-size="10.5" fill="var(--text)">后端应用</text>
+    <text x="409" y="88" text-anchor="middle" font-size="9" fill="var(--text-3)">127.0.0.1:3000</text>
+    <text x="240" y="136" text-anchor="middle" font-size="9.5" fill="var(--text-2)">访客只看见 nginx；后端端口不必对外开放</text>
+  </svg></figure></div>
       <div id="g51"><dt>请求头与响应头</dt><dd>HTTP 里附带的元信息：Host 说明找谁、Content-Type 说明是什么格式、Cookie 带身份、ETag 标记版本。</dd></div>
       <div id="g52"><dt>证书与 CA（含 SAN）</dt><dd>证书由 CA 签发，用来证明「这个域名归这台服务器」；SAN 是它覆盖的域名清单，一张证书可以列多个。</dd></div>
       <div id="g53"><dt>SNI</dt><dd>一个 IP 上跑多个 HTTPS 站点时，浏览器在握手阶段就报出「我要访问哪个域名」，服务器据此挑证书。</dd></div>
@@ -231,7 +270,21 @@
       <div id="g69"><dt>Artifact</dt><dd>工作流运行中产出的文件包（构建产物、测试报告），可以在 job 之间传递，也能事后下载。</dd></div>
       <div id="g70"><dt>tar over ssh</dt><dd>把目录打成 tar 流，直接通过 ssh 管道解到服务器。不需要 rsync，一条命令就传完。</dd></div>
       <div id="g71"><dt>孤儿文件</dt><dd>服务器上还留着、但新版本里已经删掉的文件。所以发布要么整目录替换，要么明确清理。</dd></div>
-      <div id="g72"><dt>原子发布</dt><dd>要么整站是新版，要么整站是旧版，不允许一半新一半旧。目录整体替换、软链切换都是常见做法。</dd></div>
+      <div id="g72" class="has-fig"><dt>原子发布</dt><dd>要么整站是新版，要么整站是旧版，不允许一半新一半旧。目录整体替换、软链切换都是常见做法。</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="原子发布软链切换示意">
+    <text x="16" y="18" font-size="9.5" fill="var(--text-3)">发布前</text>
+    <rect x="30" y="28" width="120" height="34" rx="5" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="90" y="50" text-anchor="middle" font-size="10" fill="var(--text-2)">current → v1</text>
+    <path d="M186 46h26m0 0-8-6m8 6-8 6" stroke="var(--text-3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <rect x="220" y="28" width="120" height="34" rx="5" fill="var(--brand-light)" opacity=".2" stroke="var(--brand-light)"/>
+    <text x="280" y="50" text-anchor="middle" font-size="10" fill="var(--text)">v2 已备好</text>
+    <text x="360" y="50" font-size="9" fill="var(--text-3)">先备好新版</text>
+    <text x="16" y="94" font-size="9.5" fill="var(--brand-light)">切换一瞬间</text>
+    <rect x="30" y="104" width="120" height="34" rx="5" fill="var(--brand-light)" opacity=".3" stroke="var(--brand-light)"/>
+    <text x="90" y="126" text-anchor="middle" font-size="10" fill="var(--text)">current → v2</text>
+    <text x="220" y="110" font-size="10" fill="var(--text-2)">改软链或原子换目录</text>
+    <text x="220" y="132" font-size="10" fill="var(--text-2)">请求要么旧版，要么新版</text>
+    <text x="360" y="94" font-size="9" fill="var(--text-3)">不出现半新半旧</text>
+  </svg></figure></div>
     </div>
     <h2 class="gl-head" id="s5">S5 后台 · 数据 · 权限 · 密钥 · 打通<span class="n">18 条</span></h2>
     <div class="gloss">
@@ -264,7 +317,19 @@
     <div class="gloss">
       <div id="g94"><dt>缓存与 Cache-Control</dt><dd>浏览器把资源存本地，下次直接用。Cache-Control 决定存多久：HTML 要 no-cache 才更新得及时，带内容哈希的资源才敢长缓存。</dd></div>
       <div id="g95"><dt>gzip</dt><dd>传输前把文本资源压一遍，浏览器收到自动解压。JSON / CSS / JS 通常能省一半以上流量。</dd></div>
-      <div id="g96"><dt>CDN</dt><dd>把静态资源复制到各地边缘节点，用户从最近的节点取，不都挤在你那一台服务器上。</dd></div>
+      <div id="g96" class="has-fig"><dt>CDN</dt><dd>把静态资源复制到各地边缘节点，用户从最近的节点取，不都挤在你那一台服务器上。</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="CDN 边缘节点回源示意">
+    <rect x="20" y="52" width="92" height="44" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="66" y="80" text-anchor="middle" font-size="10.5" fill="var(--text)">访客</text>
+    <path d="M118 74h52m0 0-9-7m9 7-9 7" stroke="var(--brand-light)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+    <rect x="178" y="38" width="124" height="72" rx="7" fill="var(--brand-light)" opacity=".16" stroke="var(--brand-light)" stroke-width="1.5"/>
+    <text x="240" y="64" text-anchor="middle" font-size="10.5" fill="var(--brand-light)">边缘节点</text>
+    <text x="240" y="84" text-anchor="middle" font-size="9" fill="var(--text-2)">有缓存就直返</text>
+    <text x="240" y="100" text-anchor="middle" font-size="9" fill="var(--text-3)">没有就回源</text>
+    <path d="M308 74h48m0 0-9-7m9 7-9 7" stroke="var(--text-3)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+    <rect x="364" y="52" width="96" height="44" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="412" y="80" text-anchor="middle" font-size="10.5" fill="var(--text)">源站</text>
+    <text x="240" y="140" text-anchor="middle" font-size="9.5" fill="var(--text-2)">静态资源放 CDN，离用户近，还替源站挡流量</text>
+  </svg></figure></div>
       <div id="g97"><dt>回滚</dt><dd>把线上退回上一个可用版本。能做回滚的前提是：每次发布都留了可回退的版本点。</dd></div>
       <div id="g98"><dt>健康检查</dt><dd>定期问一句「你还活着吗」，看状态码与关键页面内容——而不是等用户来报障。</dd></div>
       <div id="g99"><dt>强缓存与协商缓存</dt><dd>强缓存：不问直接用；协商缓存：问一句「变了吗」，没变就回 304。Cache-Control 决定走哪种。</dd></div>
@@ -295,7 +360,21 @@
     <rect x="18" y="127" width="108" height="8" rx="4" fill="var(--text-3)" opacity=".14"/>
     <text x="462" y="126" text-anchor="end" font-size="9" fill="var(--text-3)">↓ 首屏以下内容</text>
   </svg></figure></div>
-      <div id="g109"><dt>社交分享图（OG Image (Open Graph Image)）</dt><dd>网页链接被分享到社交媒体时展示的卡片预览缩略图</dd></div>
+      <div id="g109" class="has-fig"><dt>社交分享图（OG Image (Open Graph Image)）</dt><dd>网页链接被分享到社交媒体时展示的卡片预览缩略图</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="社交分享卡片示意">
+    <rect x="14" y="12" width="272" height="124" rx="9" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="28" y="32" font-size="9.5" fill="var(--text-3)">在聊天里粘贴一个链接</text>
+    <rect x="28" y="42" width="244" height="78" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1.2"/>
+    <rect x="36" y="50" width="62" height="62" rx="5" fill="var(--brand-light)" opacity=".26"/>
+    <circle cx="67" cy="72" r="9" fill="var(--brand-light)" opacity=".5"/>
+    <path d="M44 104l22-20 18 14 14-9 6 15" stroke="var(--brand-light)" stroke-width="1.2" fill="none" opacity=".6"/>
+    <text x="108" y="64" font-size="10.5" fill="var(--text)">标题 og:title</text>
+    <text x="108" y="82" font-size="9.5" fill="var(--text-2)">摘要 og:description</text>
+    <text x="108" y="104" font-size="9" fill="var(--text-3)">www.example.com</text>
+    <text x="304" y="56" font-size="10" fill="var(--brand-light)">og:image → 缩略图</text>
+    <text x="304" y="80" font-size="10" fill="var(--brand-light)">og:title → 标题</text>
+    <text x="304" y="104" font-size="10" fill="var(--brand-light)">og:desc → 摘要</text>
+    <text x="304" y="130" font-size="9" fill="var(--text-3)">不写就随机抓图</text>
+  </svg></figure></div>
       <div id="g110"><dt>触摸图标（Touch Icon）</dt><dd>为移动设备（如 iOS 添加到主屏幕）设计的图标，通常比 favicon 尺寸更大，有特定圆角/背景处理要求</dd></div>
       <div id="g111" class="has-fig"><dt>灯箱（Lightbox）</dt><dd>点击缩略图后在当前页面之上弹出遮罩层并放大显示图片/内容的交互效果</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="灯箱示意">
     <g fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2">
@@ -364,17 +443,56 @@
     <text x="352" y="114" font-size="10" fill="var(--text-3)">关键信息。</text>
   </svg></figure></div>
       <div id="g119"><dt>插画（Illustration）</dt><dd>与摄影相对的手绘/矢量叙事图，常用于空状态、报错页、功能介绍</dd></div>
-      <div id="g120"><dt>图标集（Icon Set）</dt><dd>同一风格、同一网格与线宽约束下的一整套图标，避免混用不同来源图标</dd></div>
+      <div id="g120" class="has-fig"><dt>图标集（Icon Set）</dt><dd>同一风格、同一网格与线宽约束下的一整套图标，避免混用不同来源图标</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="成套图标风格一致示意">
+    <text x="16" y="16" font-size="9.5" fill="var(--text-3)">同一套：线宽、圆角、视角都一致</text>
+    <g stroke="var(--brand-light)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="34" y="40" width="30" height="30" rx="5"/><path d="M42 70V54h14v16"/>
+      <circle cx="126" cy="55" r="14"/><path d="M112 82a14 14 0 0 1 28 0"/>
+      <path d="M186 70l10-28 10 28M192 61h8"/>
+      <rect x="228" y="40" width="30" height="30" rx="5"/><path d="M243 48v14M236 55h14"/>
+      <path d="M298 40l24 15-24 15z"/>
+      <rect x="352" y="40" width="30" height="30" rx="5"/><path d="M360 50h14M360 57h14M360 64h10"/>
+    </g>
+    <g font-size="9" fill="var(--text-3)" text-anchor="middle">
+      <text x="49" y="92">首页</text><text x="126" y="92">用户</text><text x="196" y="92">警告</text>
+      <text x="243" y="92">新增</text><text x="310" y="92">播放</text><text x="367" y="92">菜单</text>
+    </g>
+    <text x="240" y="118" text-anchor="middle" font-size="10" fill="var(--text-2)">一样粗的线、一样大的圆角 → 扫一眼就是一家人</text>
+    <text x="240" y="140" text-anchor="middle" font-size="9" fill="var(--text-3)">混搭描边、填充、立体图标，会显得东拼西凑</text>
+  </svg></figure></div>
       <div id="g121"><dt>渐变（Gradient）</dt><dd>两色及以上的连续过渡填充；分线性、径向、锥形三类</dd></div>
       <div id="g122"><dt>投影（Drop Shadow）</dt><dd>元素下方的模糊偏移阴影，用来表达层级高低，滥用会让页面发灰</dd></div>
       <div id="g123"><dt>圆角（Corner Radius）</dt><dd>矩形四角的圆滑半径；同一页面内圆角档位应统一（如 0 / 8 / 16）</dd></div>
       <div id="g124"><dt>描边（Stroke / Border）</dt><dd>沿形状边缘的实线、虚线或点线；用于分隔、强调或表达&quot;可编辑/占位&quot;等语义</dd></div>
       <div id="g125"><dt>不透明度（Opacity）</dt><dd>元素整体的透明程度；与仅改变填充色透明度的 rgba 不同，它会连带子元素一起变淡</dd></div>
-      <div id="g126"><dt>遮罩层 / 蒙层（Overlay）</dt><dd>覆盖在页面之上的半透明层，用于聚焦弹窗、图片上的文字可读性</dd></div>
+      <div id="g126" class="has-fig"><dt>遮罩层 / 蒙层（Overlay）</dt><dd>覆盖在页面之上的半透明层，用于聚焦弹窗、图片上的文字可读性</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="遮罩层示意">
+    <rect x="10" y="10" width="460" height="128" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <g fill="var(--text-3)" opacity=".3">
+      <rect x="24" y="24" width="120" height="10" rx="5"/><rect x="24" y="44" width="400" height="7" rx="3.5"/>
+      <rect x="24" y="60" width="360" height="7" rx="3.5"/><rect x="24" y="76" width="380" height="7" rx="3.5"/>
+    </g>
+    <rect x="10" y="10" width="460" height="128" rx="8" fill="#000" opacity=".55"/>
+    <rect x="158" y="34" width="164" height="80" rx="8" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.5"/>
+    <text x="240" y="58" text-anchor="middle" font-size="11" fill="var(--brand-light)">遮罩层 Overlay</text>
+    <text x="240" y="78" text-anchor="middle" font-size="9.5" fill="var(--text-2)">盖住底层，自己可以点</text>
+    <rect x="196" y="90" width="88" height="14" rx="7" fill="var(--brand-light)" opacity=".8"/>
+    <text x="240" y="101" text-anchor="middle" font-size="8.5" fill="#04211d">知道了</text>
+    <text x="240" y="142" text-anchor="middle" font-size="9" fill="var(--text-3)">它只负责「盖」和「挡」，内容仍在上面那张卡里</text>
+  </svg></figure></div>
       <div id="g127"><dt>蒙版（Mask）</dt><dd>用形状或明暗控制元素哪部分可见，做异形裁切、渐隐边缘</dd></div>
       <div id="g128"><dt>混合模式（Blend Mode）</dt><dd>上下两层像素的合成算法（正片叠底、滤色等），用于给图片统一色调</dd></div>
       <div id="g129"><dt>底纹（Background Pattern）</dt><dd>平铺的纹理或几何图形，用于低成本地增加质感</dd></div>
-      <div id="g130"><dt>通栏满幅（Full-bleed）</dt><dd>内容突破容器宽度、直抵屏幕两侧版式，常用于大图段落</dd></div>
+      <div id="g130" class="has-fig"><dt>通栏满幅（Full-bleed）</dt><dd>内容突破容器宽度、直抵屏幕两侧版式，常用于大图段落</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="通栏满幅与容器宽度对比">
+    <text x="16" y="16" font-size="9.5" fill="var(--text-3)">普通容器</text>
+    <rect x="16" y="24" width="196" height="102" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <rect x="40" y="38" width="148" height="74" rx="4" fill="var(--brand-light)" opacity=".24"/>
+    <text x="114" y="79" text-anchor="middle" font-size="10" fill="var(--text-2)">图片被收在内容区</text>
+    <text x="244" y="16" font-size="9.5" fill="var(--brand-light)">通栏满幅</text>
+    <rect x="244" y="24" width="220" height="102" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <rect x="244" y="38" width="220" height="74" fill="var(--brand-light)" opacity=".3"/>
+    <text x="354" y="79" text-anchor="middle" font-size="10" fill="var(--text)">图片冲到视口两边</text>
+    <text x="240" y="142" text-anchor="middle" font-size="9" fill="var(--text-3)">只让背景或大图通栏；正文仍留在容器里，否则行宽失控</text>
+  </svg></figure></div>
       <div id="g131"><dt>留白 / 负空间（Whitespace / Negative Space）</dt><dd>元素之间刻意留出的空区，不是&quot;没排满&quot;，是分组与呼吸的主要手段</dd></div>
       <div id="g132"><dt>视觉层级（Visual Hierarchy）</dt><dd>用大小、颜色、位置、留白让读者按设计者预期的顺序看内容</dd></div>
       <div id="g133"><dt>色板（Color Palette）</dt><dd>整套配色方案；专业做法分主色、辅助色、强调色、语义色、中性灰阶</dd></div>
@@ -407,9 +525,43 @@
   </svg></figure></div>
       <div id="g141"><dt>栏 / 列（Column）</dt><dd>网格的最小纵向单位；12 栏是最通用的切分方式，便于 2/3/4/6 等分</dd></div>
       <div id="g142"><dt>间距 / 栏间距（Gutter）</dt><dd>网格布局中两栏内容之间的空白间隙</dd></div>
-      <div id="g143"><dt>外边距（Margin）</dt><dd>元素边框之外的空白区域，控制该元素与其他元素的距离</dd></div>
-      <div id="g144"><dt>内边距（Padding）</dt><dd>元素边框到内部内容的距离，决定&quot;内容在框里松不松&quot;</dd></div>
-      <div id="g145"><dt>线框图（Wireframe）</dt><dd>低保真页面结构草图，在视觉设计和内容填充前确定布局与功能元素位置</dd></div>
+      <div id="g143" class="has-fig"><dt>外边距（Margin）</dt><dd>元素边框之外的空白区域，控制该元素与其他元素的距离</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="外边距示意">
+    <rect x="30" y="38" width="140" height="70" rx="7" fill="var(--brand-light)" opacity=".2" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <text x="100" y="80" text-anchor="middle" font-size="11" fill="var(--text)">盒子 A</text>
+    <rect x="290" y="38" width="140" height="70" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.4"/>
+    <text x="360" y="80" text-anchor="middle" font-size="11" fill="var(--text)">盒子 B</text>
+    <path d="M176 73h110m0 0-9-7m9 7-9 7" stroke="var(--text-3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="230" y="62" text-anchor="middle" font-size="10" fill="var(--brand-light)">margin</text>
+    <text x="230" y="100" text-anchor="middle" font-size="9" fill="var(--text-3)">两个盒子之间的距离</text>
+    <text x="240" y="136" text-anchor="middle" font-size="9.5" fill="var(--text-2)">margin 是「推开别人」，padding 是「撑开自己」</text>
+  </svg></figure></div>
+      <div id="g144" class="has-fig"><dt>内边距（Padding）</dt><dd>元素边框到内部内容的距离，决定&quot;内容在框里松不松&quot;</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="内边距示意">
+    <text x="16" y="16" font-size="9.5" fill="var(--text-3)">盒子边框 → 内容</text>
+    <rect x="70" y="30" width="250" height="90" rx="8" fill="var(--surface-2)" stroke="var(--brand-light)" stroke-width="1.6"/>
+    <rect x="106" y="50" width="178" height="50" rx="5" fill="var(--brand-light)" opacity=".18" stroke="var(--brand-light)" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <text x="195" y="80" text-anchor="middle" font-size="11" fill="var(--text)">内容区</text>
+    <path d="M72 44h32m0 0-7-5m7 5-7 5" stroke="var(--brand-light)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="88" y="38" text-anchor="middle" font-size="9" fill="var(--brand-light)">padding</text>
+    <path d="M180 32v16m0 0-5-6m5 6 5-6" stroke="var(--brand-light)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="344" y="62" font-size="10" fill="var(--text-2)">padding 撑开盒子内部</text>
+    <text x="344" y="84" font-size="10" fill="var(--text-2)">背景色会铺满这一圈</text>
+    <text x="344" y="116" font-size="9" fill="var(--text-3)">不写就是 0，文字贴边</text>
+  </svg></figure></div>
+      <div id="g145" class="has-fig"><dt>线框图（Wireframe）</dt><dd>低保真页面结构草图，在视觉设计和内容填充前确定布局与功能元素位置</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="线框图示意">
+    <rect x="30" y="14" width="200" height="120" rx="6" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <rect x="42" y="26" width="176" height="20" rx="3" fill="var(--text-3)" opacity=".2"/>
+    <text x="130" y="41" text-anchor="middle" font-size="9.5" fill="var(--text-3)">导航</text>
+    <rect x="42" y="54" width="176" height="46" rx="3" fill="var(--text-3)" opacity=".3"/>
+    <text x="130" y="81" text-anchor="middle" font-size="10" fill="var(--text-2)">大图 / 主标题</text>
+    <g fill="var(--text-3)" opacity=".18">
+      <rect x="42" y="108" width="52" height="16" rx="2"/><rect x="104" y="108" width="52" height="16" rx="2"/><rect x="166" y="108" width="52" height="16" rx="2"/>
+    </g>
+    <text x="252" y="40" font-size="10" fill="var(--brand-light)">先定位置和优先级</text>
+    <text x="252" y="64" font-size="10" fill="var(--text-2)">不谈颜色、图片、字体</text>
+    <text x="252" y="88" font-size="10" fill="var(--text-2)">这三块谁先谁后</text>
+    <text x="252" y="112" font-size="10" fill="var(--text-2)">一眼就能吵明白</text>
+    <text x="252" y="136" font-size="9" fill="var(--text-3)">改线框便宜，改成品贵</text>
+  </svg></figure></div>
       <div id="g146" class="has-fig"><dt>容器（Container）</dt><dd>限制内容最大宽度并水平居中的外层盒子，保证不同屏宽下版心一致</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="固定宽度容器示意">
     <rect x="6" y="10" width="468" height="128" rx="8" fill="none" stroke="var(--border)" stroke-width="1.3" stroke-dasharray="4 3"/>
     <text x="16" y="25" font-size="9" fill="var(--text-3)">视口 viewport</text>
@@ -525,9 +677,33 @@
     <text x="370" y="145" text-anchor="middle" font-size="9" fill="var(--text-3)">先给形状，避免内容到位时页面猛地一跳</text>
   </svg></figure></div>
       <div id="g166"><dt>占位（Placeholder）</dt><dd>内容未就绪时的临时元素：占位图、占位文案、输入框提示文字，三者语境不同</dd></div>
-      <div id="g167"><dt>空状态（Empty State）</dt><dd>无数据时的专门页面/区块，需说明为什么空、下一步做什么</dd></div>
+      <div id="g167" class="has-fig"><dt>空状态（Empty State）</dt><dd>无数据时的专门页面/区块，需说明为什么空、下一步做什么</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="空状态示意">
+    <rect x="14" y="12" width="452" height="124" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <path d="M186 68h108l-12 34h-84z" fill="var(--brand-light)" opacity=".18" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <path d="M186 68l18-22h72l18 22" fill="none" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <text x="240" y="120" text-anchor="middle" font-size="10.5" fill="var(--text)">这里还没有内容</text>
+    <text x="60" y="52" font-size="10" fill="var(--text-2)">光说「暂无数据」</text>
+    <text x="60" y="76" font-size="10" fill="var(--text-2)">用户不知道下一步</text>
+    <text x="60" y="106" font-size="10" fill="var(--brand-light)">补一句为什么空，</text>
+    <text x="60" y="126" font-size="10" fill="var(--brand-light)">再给一个能点的按钮</text>
+    <path d="M196 84h-30m0 0 8-6m-8 6 8 6" stroke="var(--text-3)" stroke-width="1.3" fill="none"/>
+    <text x="350" y="52" font-size="10" fill="var(--text-2)">好设计会告诉你：</text>
+    <text x="350" y="76" font-size="10" fill="var(--text-2)">空是正常的，</text>
+    <text x="350" y="100" font-size="10" fill="var(--text-2)">而且有路可走</text>
+  </svg></figure></div>
       <div id="g168"><dt>宽高比（Aspect Ratio）</dt><dd>图片与视频容器的比例；预留比例可防止图片加载前布局跳动（CLS）</dd></div>
-      <div id="g169"><dt>层级（Z-index）</dt><dd>元素在垂直方向的堆叠顺序；应只保留少数几档（如 1 / 10 / 100 / 1000）</dd></div>
+      <div id="g169" class="has-fig"><dt>层级（Z-index）</dt><dd>元素在垂直方向的堆叠顺序；应只保留少数几档（如 1 / 10 / 100 / 1000）</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="z-index 叠放层级示意">
+    <rect x="52" y="34" width="200" height="80" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <text x="152" y="80" text-anchor="middle" font-size="10" fill="var(--text-3)">页面 z: auto</text>
+    <rect x="112" y="24" width="200" height="72" rx="7" fill="var(--brand-light)" opacity=".14" stroke="var(--brand-light)" stroke-width="1.2"/>
+    <text x="212" y="66" text-anchor="middle" font-size="10" fill="var(--brand-light)">导航 z: 10</text>
+    <rect x="168" y="50" width="120" height="50" rx="7" fill="var(--brand-light)" opacity=".32" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <text x="228" y="80" text-anchor="middle" font-size="10" fill="var(--text)">弹窗 z: 100</text>
+    <text x="312" y="58" font-size="10" fill="var(--text-2)">数字越大，越靠前</text>
+    <text x="312" y="80" font-size="10" fill="var(--text-2)">同一层叠上下文里</text>
+    <text x="312" y="102" font-size="10" fill="var(--text-2)">比较才有意义</text>
+    <text x="240" y="143" text-anchor="middle" font-size="9" fill="var(--text-3)">要生效还得有定位：position 不能是 static</text>
+  </svg></figure></div>
       <div id="g170"><dt>粘性 / 固定定位（Sticky / Fixed Position）</dt><dd>Sticky 到阈值才吸附，Fixed 相对视口不动；两者都会脱离正常文档流影响布局</dd></div>
     </div>
     <h2 class="gl-head" id="d3">D3 排版与字体<span class="n">26 条</span></h2>
@@ -568,10 +744,56 @@
       <div id="g179"><dt>字型（Typeface）</dt><dd>一整套设计风格统一的书体（如 Helvetica）；日常口语里被叫&quot;字体&quot;</dd></div>
       <div id="g180"><dt>字体文件 / 字重实例（Font）</dt><dd>Typeface 的具体实现，如 Helvetica Neue Regular 这个文件</dd></div>
       <div id="g181"><dt>字族（Font Family）</dt><dd>一个 Typeface 的全部字重与斜体变体集合</dd></div>
-      <div id="g182"><dt>字体栈（Font Stack）</dt><dd>CSS 中按优先级排列的字体列表，末尾必须落到通用族（sans-serif）兜底</dd></div>
+      <div id="g182" class="has-fig"><dt>字体栈（Font Stack）</dt><dd>CSS 中按优先级排列的字体列表，末尾必须落到通用族（sans-serif）兜底</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="字体栈回退顺序示意">
+    <text x="20" y="36" font-size="10.5" fill="var(--text-2)">font-family:</text>
+    <rect x="118" y="20" width="216" height="24" rx="5" fill="var(--brand-light)" opacity=".18" stroke="var(--brand-light)" stroke-width="1.2"/>
+    <text x="226" y="37" text-anchor="middle" font-size="9.5" fill="var(--brand-light)">Inter, 苹方, sans-serif</text>
+    <rect x="30" y="66" width="120" height="30" rx="6" fill="var(--brand-light)" opacity=".22" stroke="var(--brand-light)"/>
+    <text x="90" y="86" text-anchor="middle" font-size="10" fill="var(--text)">① 首选字体</text>
+    <path d="M158 81h28m0 0-8-6m8 6-8 6" stroke="var(--text-3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="172" y="72" text-anchor="middle" font-size="8.5" fill="var(--text-3)">没装</text>
+    <rect x="194" y="66" width="120" height="30" rx="6" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="254" y="86" text-anchor="middle" font-size="10" fill="var(--text-2)">② 后备字体</text>
+    <path d="M322 81h28m0 0-8-6m8 6-8 6" stroke="var(--text-3)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="336" y="72" text-anchor="middle" font-size="8.5" fill="var(--text-3)">也没有</text>
+    <rect x="358" y="66" width="106" height="30" rx="6" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="411" y="86" text-anchor="middle" font-size="10" fill="var(--text-2)">③ 兜底类别</text>
+    <text x="240" y="124" text-anchor="middle" font-size="10" fill="var(--text-2)">最后一项必须写通用类别，不然会露出浏览器默认字体</text>
+    <text x="240" y="142" text-anchor="middle" font-size="9" fill="var(--text-3)">中文字体栈记得给「微软雅黑 / PingFang SC」留位置</text>
+  </svg></figure></div>
       <div id="g183"><dt>字重（Font Weight）</dt><dd>笔画粗细档位（300 / 400 / 500 / 700）；正文用 400，标题才上 600–700</dd></div>
-      <div id="g184"><dt>字号阶梯（Type Scale）</dt><dd>按固定比例（如 1.25、1.333）推导出的一组字号，保证层级有节奏</dd></div>
-      <div id="g185"><dt>行宽（Measure / Line Length）</dt><dd>单行可容纳的字数，拉丁文 45–75 字符（约 66 最佳）最易读</dd></div>
+      <div id="g184" class="has-fig"><dt>字号阶梯（Type Scale）</dt><dd>按固定比例（如 1.25、1.333）推导出的一组字号，保证层级有节奏</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="字号阶梯示意">
+    <path d="M16 30v100" stroke="var(--border)" stroke-width="1"/>
+    <text x="28" y="46" font-size="26" fill="var(--text)">标题 H1</text>
+    <text x="344" y="44" font-size="10" fill="var(--brand-light)">32 / 40</text>
+    <text x="28" y="76" font-size="20" fill="var(--text)">小标题 H2</text>
+    <text x="344" y="74" font-size="10" fill="var(--text-2)">24 / 32</text>
+    <text x="28" y="102" font-size="15" fill="var(--text-2)">段落标题 H3</text>
+    <text x="344" y="100" font-size="10" fill="var(--text-2)">18 / 26</text>
+    <text x="28" y="124" font-size="12" fill="var(--text-3)">正文内容，读起来不累</text>
+    <text x="344" y="122" font-size="10" fill="var(--text-2)">14 / 24</text>
+    <text x="240" y="143" text-anchor="middle" font-size="9" fill="var(--text-3)">字号 / 行高成对定义，别每页现拍脑袋</text>
+  </svg></figure></div>
+      <div id="g185" class="has-fig"><dt>行宽（Measure / Line Length）</dt><dd>单行可容纳的字数，拉丁文 45–75 字符（约 66 最佳）最易读</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="阅读行宽示意">
+    <rect x="16" y="20" width="100" height="112" rx="6" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <g fill="var(--text-3)" opacity=".3">
+      <rect x="26" y="34" width="76" height="5" rx="2.5"/><rect x="26" y="46" width="76" height="5" rx="2.5"/><rect x="26" y="58" width="76" height="5" rx="2.5"/>
+    </g>
+    <text x="66" y="96" text-anchor="middle" font-size="9" fill="var(--text-3)">太窄：频繁换行</text>
+    <rect x="140" y="20" width="200" height="112" rx="6" fill="var(--brand-light)" opacity=".09" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <g fill="var(--text-2)" opacity=".5">
+      <rect x="152" y="34" width="176" height="5" rx="2.5"/><rect x="152" y="46" width="176" height="5" rx="2.5"/>
+      <rect x="152" y="58" width="176" height="5" rx="2.5"/><rect x="152" y="70" width="176" height="5" rx="2.5"/>
+    </g>
+    <text x="240" y="98" text-anchor="middle" font-size="10" fill="var(--brand-light)">45–75 字符</text>
+    <text x="240" y="116" text-anchor="middle" font-size="9" fill="var(--text-3)">眼睛跟得上换行</text>
+    <rect x="364" y="20" width="100" height="112" rx="6" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <g fill="var(--text-3)" opacity=".3">
+      <rect x="374" y="34" width="80" height="5" rx="2.5"/><rect x="374" y="46" width="80" height="5" rx="2.5"/><rect x="374" y="58" width="80" height="5" rx="2.5"/>
+    </g>
+    <text x="414" y="96" text-anchor="middle" font-size="9" fill="var(--text-3)">太宽：回到行首难</text>
+    <text x="240" y="144" text-anchor="middle" font-size="9" fill="var(--text-3)">身体正文控制在 45–75 字符，比设固定像素更靠谱</text>
+  </svg></figure></div>
       <div id="g186"><dt>对齐（Alignment）</dt><dd>左对齐（最易读）、右对齐、居中（只适合短标题）、两端对齐四类</dd></div>
       <div id="g187"><dt>两端对齐（Justified）</dt><dd>左右都齐平，容易产生字间&quot;河流&quot;，需配合连字符断词</dd></div>
       <div id="g188"><dt>参差边缘（Rag）</dt><dd>左对齐文本右侧不齐的轮廓，应尽量平缓避免尖锐锯齿</dd></div>
@@ -621,10 +843,42 @@
     <text x="356" y="89" text-anchor="middle" font-size="9" fill="var(--text-2)">文本</text>
     <text x="300" y="122" text-anchor="middle" font-size="9" fill="var(--text-3)">DOM：能脚本操作的树，JS 改的是树不是源码</text>
   </svg></figure></div>
-      <div id="g201"><dt>矢量图 / 位图（Vector / Raster）</dt><dd>矢量由路径与填充定义、可无限缩放（SVG、字体）；位图由像素网格构成（JPG、PNG）</dd></div>
+      <div id="g201" class="has-fig"><dt>矢量图 / 位图（Vector / Raster）</dt><dd>矢量由路径与填充定义、可无限缩放（SVG、字体）；位图由像素网格构成（JPG、PNG）</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="矢量图与位图放大对比">
+    <text x="56" y="18" text-anchor="middle" font-size="9.5" fill="var(--brand-light)">矢量放大：仍然光滑</text>
+    <circle cx="40" cy="70" r="38" fill="none" stroke="var(--brand-light)" stroke-width="2.4"/>
+    <path d="M16 70l18 18 30-38" fill="none" stroke="var(--brand-light)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="60" y="128" text-anchor="middle" font-size="9" fill="var(--text-3)">SVG，适合图标和 Logo</text>
+    <text x="300" y="18" text-anchor="middle" font-size="9.5" fill="#ef4444">位图放大：看出方块</text>
+    <g fill="var(--brand-light)" opacity=".42">
+      <rect x="282" y="32" width="14" height="14"/><rect x="296" y="32" width="14" height="14"/><rect x="310" y="32" width="14" height="14"/>
+      <rect x="268" y="46" width="14" height="14"/><rect x="282" y="46" width="14" height="14"/><rect x="296" y="46" width="14" height="14"/><rect x="310" y="46" width="14" height="14"/><rect x="324" y="46" width="14" height="14"/>
+      <rect x="268" y="60" width="14" height="14"/><rect x="282" y="60" width="14" height="14"/><rect x="296" y="60" width="14" height="14"/><rect x="310" y="60" width="14" height="14"/><rect x="324" y="60" width="14" height="14"/>
+      <rect x="282" y="74" width="14" height="14"/><rect x="296" y="74" width="14" height="14"/><rect x="310" y="74" width="14" height="14"/>
+    </g>
+    <text x="300" y="128" text-anchor="middle" font-size="9" fill="var(--text-3)">JPG / PNG，适合照片</text>
+    <text x="410" y="68" font-size="10" fill="var(--text-2)">位图按像素存，</text>
+    <text x="410" y="90" font-size="10" fill="var(--text-2)">放大就露马脚；</text>
+    <text x="410" y="112" font-size="9" fill="var(--text-3)">所以要出二倍图</text>
+  </svg></figure></div>
       <div id="g202"><dt>AVIF 图像格式（AVIF）</dt><dd>基于 AV1 的新一代格式，同画质下体积常小于 WebP，需准备回退格式</dd></div>
       <div id="g203"><dt>高清屏 / 二倍图（Retina / @2x）</dt><dd>高分屏按 2 倍像素输出图片，CSS 里仍按逻辑尺寸显示，避免发虚</dd></div>
-      <div id="g204"><dt>雪碧图（Image Sprite）</dt><dd>把小图标拼进一张大图、用背景定位取用；HTTP/2 时代多被 SVG 与图标集替代</dd></div>
+      <div id="g204" class="has-fig"><dt>雪碧图（Image Sprite）</dt><dd>把小图标拼进一张大图、用背景定位取用；HTTP/2 时代多被 SVG 与图标集替代</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="雪碧图裁切示意">
+    <text x="16" y="16" font-size="9.5" fill="var(--text-3)">一张大图，几个图标排在一起</text>
+    <rect x="30" y="28" width="112" height="112" rx="5" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <g stroke="var(--brand-light)" stroke-width="2" fill="none">
+      <rect x="38" y="36" width="44" height="44" rx="6"/><circle cx="98" cy="58" r="18"/>
+      <rect x="38" y="96" width="44" height="44" rx="6"/><path d="M80 128l36-22 12 26z"/>
+    </g>
+    <path d="M158 84h34m0 0-9-7m9 7-9 7" stroke="var(--brand-light)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+    <text x="175" y="72" text-anchor="middle" font-size="9" fill="var(--text-3)">挪背景</text>
+    <rect x="220" y="28" width="112" height="112" rx="5" fill="var(--surface-2)" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <rect x="244" y="52" width="44" height="44" rx="6" fill="none" stroke="var(--brand-light)" stroke-width="2"/>
+    <text x="276" y="124" text-anchor="middle" font-size="9" fill="var(--text-3)">只露其中一个</text>
+    <text x="358" y="60" font-size="10" fill="var(--text-2)">一次请求拿回全部图标</text>
+    <text x="358" y="84" font-size="10" fill="var(--text-2)">靠 background-position</text>
+    <text x="358" y="108" font-size="10" fill="var(--text-2)">定位到要显示的那个</text>
+    <text x="358" y="132" font-size="9" fill="var(--text-3)">HTTP/2 之后收益变小</text>
+  </svg></figure></div>
       <div id="g205" class="has-fig"><dt>响应式图片（Responsive Images / srcset）</dt><dd>用 srcset、sizes 让浏览器按屏宽与像素密度自选合适尺寸的图，避免大图小用</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="srcset 按屏幕挑选图片示意">
     <rect x="12" y="28" width="160" height="88" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
     <text x="26" y="48" font-size="10" fill="var(--brand-light)">img srcset=</text>
@@ -662,12 +916,40 @@
       <div id="g210"><dt>重定向（Redirect）</dt><dd>旧链接指向新地址；改版换 URL 必须用 301 保住既有搜索权重</dd></div>
       <div id="g211"><dt>404 页（404 Page）</dt><dd>找不到页面时的兜底页，应给出返回入口与推荐内容，而非只写&quot;页面不存在&quot;</dd></div>
       <div id="g212"><dt>元标签（Meta Tags）</dt><dd>head 里描述页面属性的标签集合（字符集、视口、描述、分享卡片、robots）</dd></div>
-      <div id="g213"><dt>替代文本（Alt Text）</dt><dd>图片的文字说明，供屏幕阅读器朗读、供图片加载失败时显示，也是图片 SEO 的主要依据</dd></div>
+      <div id="g213" class="has-fig"><dt>替代文本（Alt Text）</dt><dd>图片的文字说明，供屏幕阅读器朗读、供图片加载失败时显示，也是图片 SEO 的主要依据</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="替代文本兜底示意">
+    <rect x="16" y="18" width="200" height="110" rx="7" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <path d="M36 38l26 26M62 38L36 64" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+    <text x="116" y="58" text-anchor="middle" font-size="11" fill="var(--text-2)">团队合影：左起…</text>
+    <text x="116" y="82" text-anchor="middle" font-size="9" fill="var(--text-3)">图片加载失败时显示</text>
+    <text x="116" y="106" text-anchor="middle" font-size="9" fill="var(--brand-light)">alt="团队合影：左起…"</text>
+    <path d="M232 72h32m0 0-9-7m9 7-9 7" stroke="var(--brand-light)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <text x="286" y="48" font-size="10" fill="var(--text-2)">屏幕阅读器也读它</text>
+    <text x="286" y="72" font-size="10" fill="var(--text-2)">搜索爬虫也看它</text>
+    <text x="286" y="96" font-size="10" fill="var(--text-2)">纯装饰图写 alt=""</text>
+    <text x="286" y="126" font-size="9" fill="var(--text-3)">别写「图片 01」这种废话</text>
+  </svg></figure></div>
       <div id="g214"><dt>规范链接（Canonical）</dt><dd>告诉搜索引擎&quot;多个相似 URL 中哪个是正本&quot;，避免重复内容分散权重</dd></div>
       <div id="g215"><dt>爬虫规则文件（robots.txt）</dt><dd>站点根目录的文本文件，声明允许/禁止抓取的路径与 sitemap 位置</dd></div>
       <div id="g216"><dt>站点地图文件（sitemap.xml）</dt><dd>列出全站可索引 URL 的 XML，供搜索引擎发现深层页面</dd></div>
       <div id="g217"><dt>结构化数据（Structured Data / JSON-LD）</dt><dd>用 JSON-LD 标注文章、产品、FAQ 等类型，让搜索结果出现富摘要</dd></div>
-      <div id="g218"><dt>语义化标记（Semantic HTML）</dt><dd>用 header、nav、main、section、article 等标签表达结构，利于无障碍与 SEO</dd></div>
+      <div id="g218" class="has-fig"><dt>语义化标记（Semantic HTML）</dt><dd>用 header、nav、main、section、article 等标签表达结构，利于无障碍与 SEO</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="语义化标签示意">
+    <text x="18" y="18" font-size="9.5" fill="var(--text-3)">全是 div</text>
+    <g fill="var(--text-3)" opacity=".22" stroke="var(--border)" stroke-width="1">
+      <rect x="18" y="28" width="190" height="18" rx="3"/><rect x="18" y="52" width="190" height="18" rx="3"/><rect x="18" y="76" width="190" height="48" rx="3"/>
+    </g>
+    <text x="113" y="106" text-anchor="middle" font-size="9.5" fill="var(--text-3)">div div div</text>
+    <path d="M222 74h30m0 0-9-7m9 7-9 7" stroke="var(--brand-light)" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+    <text x="272" y="18" font-size="9.5" fill="var(--brand-light)">语义化标签</text>
+    <g stroke="var(--brand-light)" stroke-width="1.2">
+      <rect x="272" y="28" width="190" height="18" rx="3" fill="var(--brand-light)" opacity=".22"/>
+      <rect x="272" y="52" width="190" height="18" rx="3" fill="var(--brand-light)" opacity=".3"/>
+      <rect x="272" y="76" width="190" height="48" rx="3" fill="var(--brand-light)" opacity=".16"/>
+    </g>
+    <g font-size="9.5" fill="var(--text)">
+      <text x="282" y="42">header</text><text x="282" y="66">nav</text><text x="282" y="102">main</text>
+    </g>
+    <text x="240" y="143" text-anchor="middle" font-size="9.5" fill="var(--text-2)">标签本身就在说「我是什么」，辅助技术和爬虫不用猜</text>
+  </svg></figure></div>
       <div id="g219"><dt>站点清单（Web App Manifest）</dt><dd>声明名称、图标、主题色的 JSON，决定&quot;添加到主屏幕&quot;后的表现</dd></div>
       <div id="g220"><dt>字体子集化（Font Subsetting）</dt><dd>只打包页面实际用到的字符，中文字体动辄数 MB，必须裁剪</dd></div>
     </div>
@@ -713,8 +995,34 @@
       <div id="g231"><dt>过渡（Transition）</dt><dd>属性值变化时的补间动画；时长通常 150–300ms，超过 500ms 会显得迟钝</dd></div>
       <div id="g232"><dt>缓动（Easing）</dt><dd>过渡的速度曲线（ease-out 入场、ease-in 出场、linear 匀速），决定动效&quot;手感&quot;</dd></div>
       <div id="g233"><dt>关键帧（Keyframe）</dt><dd>用 0%–100% 定义多段动画的节点，配合 animation 使用</dd></div>
-      <div id="g234"><dt>轻提示（Toast / Snackbar）</dt><dd>短暂浮出、自动消失的提示条，不阻断操作，适合&quot;已保存&quot;这类弱反馈</dd></div>
-      <div id="g235"><dt>工具提示（Tooltip）</dt><dd>悬停或聚焦时出现的小黑框解释，只承载补充说明，不能放必须读的信息</dd></div>
+      <div id="g234" class="has-fig"><dt>轻提示（Toast / Snackbar）</dt><dd>短暂浮出、自动消失的提示条，不阻断操作，适合&quot;已保存&quot;这类弱反馈</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="轻提示示意">
+    <rect x="14" y="12" width="452" height="124" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <g fill="var(--text-3)" opacity=".24">
+      <rect x="30" y="30" width="180" height="8" rx="4"/><rect x="30" y="48" width="300" height="6" rx="3"/>
+      <rect x="30" y="62" width="260" height="6" rx="3"/>
+    </g>
+    <text x="240" y="54" text-anchor="middle" font-size="10" fill="var(--text-2)">从底部冒出来，几秒后自己消失</text>
+    <text x="240" y="74" text-anchor="middle" font-size="9" fill="var(--text-3)">不打断当前操作，也别塞长文案</text>
+    <rect x="110" y="94" width="260" height="34" rx="7" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.3"/>
+    <circle cx="130" cy="110" r="7" fill="#22c55e" opacity=".24"/>
+    <path d="M126 110l3 3 6-7" stroke="#22c55e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="146" y="115" font-size="10" fill="var(--text)">已保存草稿</text>
+    <text x="286" y="115" font-size="10" fill="var(--brand-light)">撤销</text>
+    <path d="M110 125h124" stroke="var(--brand-light)" stroke-width="2" opacity=".7"/>
+  </svg></figure></div>
+      <div id="g235" class="has-fig"><dt>工具提示（Tooltip）</dt><dd>悬停或聚焦时出现的小黑框解释，只承载补充说明，不能放必须读的信息</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="工具提示示意">
+    <rect x="60" y="86" width="120" height="34" rx="7" fill="var(--brand-light)" opacity=".8"/>
+    <text x="120" y="108" text-anchor="middle" font-size="11" fill="#04211d">保存</text>
+    <path d="M120 82V70" stroke="var(--brand-light)" stroke-width="1.2"/>
+    <rect x="52" y="34" width="136" height="34" rx="6" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <path d="M116 68l6 7 6-7" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.4"/>
+    <text x="120" y="56" text-anchor="middle" font-size="10" fill="var(--text)">保存当前草稿</text>
+    <path d="M94 124l12 20 6-10 10 2z" fill="var(--text-3)" opacity=".7"/>
+    <text x="240" y="52" font-size="10" fill="var(--text-2)">悬停或聚焦才出现</text>
+    <text x="240" y="76" font-size="10" fill="var(--text-2)">只放一句补充说明</text>
+    <text x="240" y="100" font-size="10" fill="var(--text-2)">别把关键操作藏进去</text>
+    <text x="240" y="128" font-size="9" fill="var(--text-3)">触屏没有 hover，得留别的入口</text>
+  </svg></figure></div>
       <div id="g236"><dt>气泡浮层（Popover）</dt><dd>比 Tooltip 重、比 Modal 轻的浮层，可含按钮与表单</dd></div>
       <div id="g237"><dt>下拉菜单（Dropdown）</dt><dd>点开后展开的选项列表，用于导航分组或筛选</dd></div>
       <div id="g238"><dt>汉堡菜单（Hamburger Menu）</dt><dd>三条横线的菜单入口，移动端常用；展开后需可关闭且有明确当前页标记</dd></div>
@@ -739,10 +1047,31 @@
       <div id="g242"><dt>分页（Pagination）</dt><dd>把长列表切页并给出总数与当前位置，同时保留可分享的页码 URL</dd></div>
       <div id="g243"><dt>无限滚动（Infinite Scroll）</dt><dd>触底自动续载，沉浸感强但难回到上次位置，重要列表页慎用</dd></div>
       <div id="g244"><dt>键盘导航（Keyboard Navigation）</dt><dd>仅用 Tab、方向键、回车完成全部操作的能力，是验收硬指标</dd></div>
-      <div id="g245"><dt>跳转链接（Skip Link）</dt><dd>页面首个可聚焦元素，让键盘用户跳过导航直达正文</dd></div>
+      <div id="g245" class="has-fig"><dt>跳转链接（Skip Link）</dt><dd>页面首个可聚焦元素，让键盘用户跳过导航直达正文</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="跳转链接示意">
+    <text x="240" y="20" text-anchor="middle" font-size="10" fill="var(--text-2)">平时藏着不碍眼，键盘用户第一下就能用</text>
+    <rect x="14" y="30" width="452" height="104" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <rect x="26" y="42" width="120" height="22" rx="5" fill="var(--brand-light)" opacity=".9"/>
+    <text x="86" y="58" text-anchor="middle" font-size="10" fill="#04211d">跳到正文</text>
+    <text x="160" y="58" font-size="9.5" fill="var(--text-3)">← 按第一下 Tab 时出现</text>
+    <path d="M26 74h428" stroke="var(--border)" stroke-width="1.2"/>
+    <g fill="var(--text-3)" opacity=".25">
+      <rect x="26" y="86" width="180" height="8" rx="4"/><rect x="26" y="102" width="400" height="6" rx="3"/><rect x="26" y="116" width="360" height="6" rx="3"/>
+    </g>
+    <text x="240" y="145" text-anchor="middle" font-size="9.5" fill="var(--text-3)">别让用户按几十次 Tab 才能跳过导航</text>
+  </svg></figure></div>
       <div id="g246"><dt>无障碍（A11y (Accessibility)）</dt><dd>让视觉、听觉、运动能力受限者也能用；含对比度、替代文本、键盘可达、语义标签</dd></div>
       <div id="g247"><dt>无障碍属性（ARIA）</dt><dd>给无法用原生语义表达的自定义组件补 role、aria-label 等说明</dd></div>
-      <div id="g248"><dt>对比度（Contrast Ratio）</dt><dd>文字与背景的亮度比；正文 ≥ 4.5:1，大字号（≥ 24px 或 18.66px 粗体）≥ 3:1</dd></div>
+      <div id="g248" class="has-fig"><dt>对比度（Contrast Ratio）</dt><dd>文字与背景的亮度比；正文 ≥ 4.5:1，大字号（≥ 24px 或 18.66px 粗体）≥ 3:1</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="文字对比度示意">
+    <rect x="20" y="24" width="200" height="92" rx="7" fill="#f5f5f5"/>
+    <text x="36" y="62" font-size="16" fill="#111">正文文字</text>
+    <text x="36" y="86" font-size="10" fill="#555">次级说明文字</text>
+    <text x="36" y="105" font-size="9" fill="#16a34a">✓ 4.5:1 以上，合格</text>
+    <rect x="260" y="24" width="200" height="92" rx="7" fill="#f5f5f5"/>
+    <text x="276" y="62" font-size="16" fill="#bbb">正文文字</text>
+    <text x="276" y="86" font-size="10" fill="#ccc">次级说明文字</text>
+    <text x="276" y="105" font-size="9" fill="#ef4444">✗ 2.1:1，看不清</text>
+    <text x="240" y="140" text-anchor="middle" font-size="9.5" fill="var(--text-2)">正文至少 4.5:1，大字至少 3:1；浅灰字在白底上常不合格</text>
+  </svg></figure></div>
       <div id="g249" class="has-fig"><dt>触控目标（Touch Target）</dt><dd>可点击区域的最小尺寸，iOS 建议 ≥ 44×44 pt，Android 建议 ≥ 48×48 dp</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="触控目标最小尺寸示意">
     <circle cx="96" cy="70" r="11" fill="var(--text-3)" opacity=".35" stroke="#ef4444" stroke-width="1.5"/>
     <text x="96" y="112" text-anchor="middle" font-size="9.5" fill="#ef4444">太小：手指点不准</text>
@@ -770,12 +1099,38 @@
       <div id="g258"><dt>标注（Redline / Spec）</dt><dd>在设计稿上标出尺寸、间距、色值、字号，供开发取值；令牌化后标注逐步被替代</dd></div>
       <div id="g259"><dt>交付（Handoff）</dt><dd>设计向开发的移交，交付物应含状态图、边界情况、切图与令牌，而非只有一张漂亮图</dd></div>
       <div id="g260"><dt>设计走查（Design Review / Walkthrough）</dt><dd>上线前逐项核对实现的偏差，含间距、字号、颜色、状态与文案</dd></div>
-      <div id="g261"><dt>信息架构（IA (Information Architecture)）</dt><dd>内容的分类、层级与命名体系，决定用户能不能&quot;想到去哪找&quot;</dd></div>
+      <div id="g261" class="has-fig"><dt>信息架构（IA (Information Architecture)）</dt><dd>内容的分类、层级与命名体系，决定用户能不能&quot;想到去哪找&quot;</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="站点信息架构树示意">
+    <rect x="186" y="14" width="108" height="24" rx="5" fill="var(--brand-light)" opacity=".22" stroke="var(--brand-light)"/>
+    <text x="240" y="31" text-anchor="middle" font-size="10" fill="var(--text)">首页</text>
+    <path d="M240 38v16M104 54h272M104 54v8M240 54v8M376 54v8" stroke="var(--border)" stroke-width="1.2" fill="none"/>
+    <rect x="54" y="62" width="100" height="22" rx="5" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="104" y="78" text-anchor="middle" font-size="9.5" fill="var(--text-2)">课程</text>
+    <rect x="190" y="62" width="100" height="22" rx="5" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="240" y="78" text-anchor="middle" font-size="9.5" fill="var(--text-2)">门禁与红线</text>
+    <rect x="326" y="62" width="100" height="22" rx="5" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="376" y="78" text-anchor="middle" font-size="9.5" fill="var(--text-2)">术语表</text>
+    <g font-size="8.5" fill="var(--text-3)" text-anchor="middle">
+      <text x="104" y="102">M01…M32</text><text x="240" y="102">四道门禁</text><text x="376" y="102">292 条</text>
+    </g>
+    <text x="240" y="132" text-anchor="middle" font-size="10" fill="var(--text-2)">先把东西放哪儿定下来，再谈页面长什么样</text>
+  </svg></figure></div>
       <div id="g262"><dt>站点结构图（Sitemap（设计侧））</dt><dd>全站页面清单与层级关系图，与技术侧的 sitemap.xml 不是一回事</dd></div>
       <div id="g263"><dt>用户旅程（User Journey）</dt><dd>用户从认知到完成目标的完整路径与情绪起伏，用于发现断点</dd></div>
       <div id="g264"><dt>用户画像（Persona）</dt><dd>基于调研抽象出的典型用户档案，用于在争论时回到&quot;给谁做&quot;</dd></div>
       <div id="g265"><dt>用户流程（User Flow）</dt><dd>单个任务的分步路径图（含分支与异常），比旅程更聚焦操作</dd></div>
-      <div id="g266"><dt>A/B 测试（A/B Test）</dt><dd>同流量下对比两个版本的表现，一次只改一个变量，需足够样本才有结论</dd></div>
+      <div id="g266" class="has-fig"><dt>A/B 测试（A/B Test）</dt><dd>同流量下对比两个版本的表现，一次只改一个变量，需足够样本才有结论</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="A/B 测试分流示意">
+    <rect x="184" y="16" width="112" height="26" rx="6" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="240" y="34" text-anchor="middle" font-size="10" fill="var(--text)">进站访客</text>
+    <path d="M226 42v16l-70 16M254 42v16l70 16" stroke="var(--brand-light)" stroke-width="1.3" fill="none"/>
+    <text x="240" y="56" text-anchor="middle" font-size="9" fill="var(--text-3)">各 50%</text>
+    <rect x="70" y="78" width="140" height="44" rx="6" fill="var(--brand-light)" opacity=".16" stroke="var(--brand-light)"/>
+    <text x="140" y="98" text-anchor="middle" font-size="11" fill="var(--text)">A 版</text>
+    <text x="140" y="114" text-anchor="middle" font-size="9" fill="var(--text-3)">转化率 3.1%</text>
+    <rect x="270" y="78" width="140" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border)"/>
+    <text x="340" y="98" text-anchor="middle" font-size="11" fill="var(--text)">B 版</text>
+    <text x="340" y="114" text-anchor="middle" font-size="9" fill="var(--text-3)">转化率 4.4%</text>
+    <text x="240" y="143" text-anchor="middle" font-size="9.5" fill="var(--text-2)">只改一个变量；样本量不够就别急着宣布谁赢了</text>
+  </svg></figure></div>
       <div id="g267"><dt>转化率（Conversion Rate）</dt><dd>完成目标动作的人数占访问人数的比例，是落地页的核心度量</dd></div>
       <div id="g268"><dt>漏斗（Funnel）</dt><dd>从曝光到成交的分层转化，用于定位&quot;哪一层在漏&quot;</dd></div>
     </div>
@@ -831,10 +1186,35 @@
       <div id="g285"><dt>首字节时间（TTFB (Time to First Byte)）</dt><dd>请求发出到收到第一个字节的时间，反映服务端与网络链路</dd></div>
       <div id="g286"><dt>首次绘制 / 首次内容绘制（First Paint / FCP）</dt><dd>页面开始出现像素、出现第一块内容的时间</dd></div>
       <div id="g287"><dt>页面体积（Page Weight）</dt><dd>单页需下载的总字节数（含图片、字体、脚本），是移动端体验的总闸门</dd></div>
-      <div id="g288"><dt>渲染阻塞（Render Blocking）</dt><dd>阻塞首屏渲染的 CSS 与同步脚本，应内联关键 CSS 并给脚本加 defer/async</dd></div>
+      <div id="g288" class="has-fig"><dt>渲染阻塞（Render Blocking）</dt><dd>阻塞首屏渲染的 CSS 与同步脚本，应内联关键 CSS 并给脚本加 defer/async</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="渲染阻塞时间线示意">
+    <path d="M30 70h420" stroke="var(--border)" stroke-width="1.2"/>
+    <circle cx="40" cy="70" r="4" fill="var(--brand-light)"/>
+    <circle cx="180" cy="70" r="5" fill="#ef4444"/>
+    <circle cx="300" cy="70" r="4" fill="var(--brand-light)"/>
+    <circle cx="440" cy="70" r="4" fill="var(--brand-light)"/>
+    <g font-size="9.5" text-anchor="middle">
+      <text x="40" y="58" fill="var(--text-2)">HTML 解析</text>
+      <text x="180" y="58" fill="#ef4444">遇到 CSS / JS</text>
+      <text x="300" y="58" fill="var(--text-2)">继续解析</text>
+      <text x="440" y="58" fill="var(--text-2)">首屏出现</text>
+    </g>
+    <path d="M180 84h110" stroke="#ef4444" stroke-width="3"/>
+    <text x="235" y="104" text-anchor="middle" font-size="9.5" fill="#ef4444">这段时间是白屏</text>
+    <text x="240" y="132" text-anchor="middle" font-size="10" fill="var(--text-2)">CSS 放 head，脚本加 defer，别让它们挡住第一屏</text>
+  </svg></figure></div>
       <div id="g289"><dt>性能审计工具（Lighthouse）</dt><dd>浏览器内置的综合审计，给出性能、无障碍、SEO 分数与改进清单</dd></div>
       <div id="g290"><dt>搜索引擎优化（SEO）</dt><dd>让页面可被抓取、可被理解、可被排序的一组技术与内容工作</dd></div>
-      <div id="g291"><dt>搜索结果页（SERP）</dt><dd>搜索关键词后呈现的列表页，标题、描述、富摘要决定点击率</dd></div>
+      <div id="g291" class="has-fig"><dt>搜索结果页（SERP）</dt><dd>搜索关键词后呈现的列表页，标题、描述、富摘要决定点击率</dd><figure class="gl-fig"><svg viewBox="0 0 480 148" role="img" aria-label="搜索结果页构成示意">
+    <rect x="14" y="12" width="452" height="124" rx="8" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1.2"/>
+    <rect x="28" y="24" width="300" height="22" rx="11" fill="var(--surface)" stroke="var(--brand-light)" stroke-width="1.2"/>
+    <text x="42" y="40" font-size="10" fill="var(--text-3)">网站建设 实训课</text>
+    <rect x="340" y="24" width="112" height="22" rx="6" fill="var(--brand-light)" opacity=".8"/>
+    <text x="396" y="40" text-anchor="middle" font-size="9.5" fill="#04211d">搜索</text>
+    <rect x="28" y="58" width="424" height="24" rx="4" fill="var(--brand-light)" opacity=".13" stroke="var(--brand-light)" stroke-width="1" stroke-dasharray="3 2"/>
+    <text x="38" y="75" font-size="9.5" fill="var(--text-3)">广告位（会标「广告」）</text>
+    <text x="30" y="102" font-size="11" fill="var(--brand-light)">自然结果第一条 · 标题</text>
+    <text x="30" y="120" font-size="9" fill="var(--text-3)">www.example.com › 路径 · 摘要 + 富摘要（评分 / 价格 / 步骤）</text>
+  </svg></figure></div>
       <div id="g292"><dt>搜索引擎营销（SEM）</dt><dd>付费搜索广告，与 SEO 是两条并行路径，落地页往往共用</dd></div>
     </div>
   </div>
@@ -983,7 +1363,7 @@
     <div class="bar">
       <span class="cr">© 2026 从 0 到上线 · 网站建设实训课</span>
       <span class="meta-right">
-        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.8.0</span>
+        <span class="ver" title="站点版本号（源：data/course.mjs 的 META.version）">v2.9.0</span>
       </span>
     </div>
 
