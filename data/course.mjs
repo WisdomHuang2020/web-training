@@ -16,7 +16,7 @@
  */
 
 export const META = {
-  "version": "v3.2.0",
+  "version": "v3.3.0",
   "date": "2026-11-24",
   "title": "从 0 到上线：网站建设实训课",
   "basis": "素材基准：llc-design-tool（构建型单页应用，CI 推送）与 wx-seastar（零构建多页站 + 内容后台）",
@@ -2262,6 +2262,11 @@ export const GLOSSARY = [
   [
     "href（Hypertext Reference）",
     "HTML 属性，用来指定地址：<a href> 决定点击后跳到哪里，<link href> 指向要加载的 CSS / favicon 等资源；值可以是绝对 URL、相对路径或 #锚点。写相对路径时，基准是当前页面地址，不是站点根目录",
+    "D4"
+  ],
+  [
+    "TSC（TypeScript Compiler）",
+    "TypeScript 编译器，缩写 tsc。做两件事：类型检查（查出类型错误）与编译（把 .ts 转成浏览器能跑的 .js）。这里特指前者：在合并 / rebase 之后跑 tsc 无报错，说明类型系统是干净的。为什么特意提它：git 能成功合并只代表文本没冲突，类型冲突或引用丢失它管不着；所以合并后第一时间跑一遍 tsc 验证，再把代码推到远端，是标准的 CI/CD 流程。只做检查、不产出文件用 tsc --noEmit，配合 CI 最常用",
     "D4"
   ],
   [
