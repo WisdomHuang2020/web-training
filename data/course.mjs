@@ -16,8 +16,8 @@
  */
 
 export const META = {
-  "version": "v3.1.0",
-  "date": "2026-11-19",
+  "version": "v3.2.0",
+  "date": "2026-11-24",
   "title": "从 0 到上线：网站建设实训课",
   "basis": "素材基准：llc-design-tool（构建型单页应用，CI 推送）与 wx-seastar（零构建多页站 + 内容后台）",
   "delivery": "交付形态：网页（可交互总览）+ 培训课件（PPT，SEA☆STAR 品牌版式），用于发给同事当课件"
@@ -2257,6 +2257,11 @@ export const GLOSSARY = [
   [
     "字体子集化（Font Subsetting）",
     "只打包页面实际用到的字符，中文字体动辄数 MB，必须裁剪",
+    "D4"
+  ],
+  [
+    "href（Hypertext Reference）",
+    "HTML 属性，用来指定地址：<a href> 决定点击后跳到哪里，<link href> 指向要加载的 CSS / favicon 等资源；值可以是绝对 URL、相对路径或 #锚点。写相对路径时，基准是当前页面地址，不是站点根目录",
     "D4"
   ],
   [
